@@ -6,6 +6,7 @@ import "./globals.css";
 // import { Provider } from "react-redux";
 // import { store } from "../redux/store";
 import ReduxProvider from "./Provider/ReduxProvider/ReduxProvider";
+import Layout from "./Components/Layout/Layout";
 
 
 const geistSans = Geist({
@@ -33,11 +34,13 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-          <ReduxProvider>
-              {children}
-          </ReduxProvider>
-        
- 
+        <ReduxProvider>
+          <Layout>
+            {children}
+          </Layout>
+        </ReduxProvider>
+
+
       </body>
     </html>
   );
