@@ -1,7 +1,7 @@
 
 
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Poppins,Rubik } from "next/font/google";
 import "./globals.css";
 // import { Provider } from "react-redux";
 // import { store } from "../redux/store";
@@ -9,14 +9,19 @@ import ReduxProvider from "./Provider/ReduxProvider/ReduxProvider";
 import Layout from "./Components/Layout/Layout";
 
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+export const poppins = Poppins({
+  weight: ['400', '500', '600', '700', '800'],
+  style: ['normal', 'italic'],
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-poppins',
 });
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+export const rubik = Rubik({
+  weight: ['400', '500', '600', '700'],
+  style: ['normal', 'italic'],
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-rubik',
 });
 
 export const metadata: Metadata = {
@@ -32,7 +37,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${poppins.variable} ${rubik.variable}`}
       >
         <ReduxProvider>
           <Layout>
