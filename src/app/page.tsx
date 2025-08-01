@@ -1,9 +1,11 @@
-import Image from "next/image";
+import Banner from "@/app/Components/Banner/Banner";
+
+
 
 export default function Home() {
   return (
   <div>
-    hello nextjs
+    <Banner/>
   </div>
   );
 }

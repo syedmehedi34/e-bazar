@@ -21,3 +21,24 @@
 body{
   font-family: var(--font-poppins);
 }
+
+.fixed-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  
+  animation: slideDown 3s ease-out forwards; 
+
+  z-index: 999;
+  color: black !important;
+}
+
+@keyframes slideDown {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}

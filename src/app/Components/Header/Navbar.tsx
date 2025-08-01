@@ -1,25 +1,50 @@
+'use client'
 import Link from 'next/link'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Logo from '../Logo/Logo'
+import { usePathname } from 'next/navigation'
+
 
 const Navbar = () => {
 
+  const [scrollY, setScrollY] = useState(0);
+  const path = usePathname()
+
+
+  useEffect(() => {
+    const handleScrollY = () => {
+      setScrollY(window.scrollY);
+    }
+
+    window.addEventListener('scroll', handleScrollY);
+
+    return () => {
+      window.removeEventListener('scroll', handleScrollY)
+    }
+
+  }, [])
 
   const navitem = <>
     <ul className='lg:flex items-center gap-10 rubik '>
-      <li className='text-[15px] font-medium leading-6 text-gray-950 '><Link href={'/'}>Home</Link></li>
-      <li className='text-[15px] font-medium leading-6 text-gray-950 '> <Link href={'/'}>Shop</Link></li>
-      <li className='text-[15px] font-medium leading-6 text-gray-950 '>  <Link href={'/'}>About Us</Link></li>
-      <li className='text-[15px] font-medium leading-6 text-gray-950 '><Link href={'/'}>Blog</Link></li>
-      <li className='text-[15px] font-medium leading-6 text-gray-950 '>  <Link href={'/'}>Contact</Link></li>
+      <Link className='text-[15px] font-medium leading-6 text-gray-950 ' href={'/'}>Home</Link>
+      <Link className='text-[15px] font-medium leading-6 text-gray-950 ' href={'/'}>Shop</Link>
+      <Link className='text-[15px] font-medium leading-6 text-gray-950 ' href={'/page/about'}>About Us</Link>
+      <Link className='text-[15px] font-medium leading-6 text-gray-950 ' href={'/'}>Blog</Link>
+      <Link className='text-[15px] font-medium leading-6 text-gray-950 ' href={'/'}>Contact</Link>
     </ul>
 
   </>
 
-  
   return (
-    <div className='bg-base-100 shadow-sm'>
-      <div className="w-11/12 mx-auto flex items-center py-4 ">
+    <header  className={`z-100  ${path === "/"
+        ? scrollY > 50
+          ? "fixed-nav bg-white shadow"
+          : "absolute top-0 left-0 bg-transparent w-full"
+        : scrollY > 50
+          ? "fixed-nav bg-white shadow"
+          : "bg-white shadow"
+        }`}>
+      <div className="w-11/12 mx-auto flex items-center py-4  ">
         <div className="navbar-start">
           <div className="dropdown">
             <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -32,7 +57,7 @@ const Navbar = () => {
             </div>
           </div>
           <Link href={'/'}>
-            <Logo/>
+            <Logo />
           </Link>
         </div>
         <div className="navbar-center hidden lg:flex">
@@ -64,7 +89,7 @@ const Navbar = () => {
           </div>
         </div>
       </div>
-    </div>
+    </header>
   )
 }
 
