@@ -3,11 +3,10 @@
 import type { Metadata } from "next";
 import { Poppins, Rubik } from "next/font/google";
 import "./globals.css";
-import ReduxProvider from "./Provider/ReduxProvider/ReduxProvider";
 
-import Navbar from "./Components/Header/Navbar";
-import Footer from "./Components/Footer/Footer";
-
+import ReduxProvider from "@/Provider/ReduxProvider/ReduxProvider"
+import Navbar from "@/Components/Header/Navbar";
+import Footer from "@/Components/Footer/Footer";
 
 export const poppins = Poppins({
   weight: ['400', '500', '600', '700', '800'],
@@ -42,7 +41,7 @@ export default function RootLayout({
       >
 
         <ReduxProvider>
-          <Navbar />
+            <Navbar/>
           {children}
           <Footer />
         </ReduxProvider>

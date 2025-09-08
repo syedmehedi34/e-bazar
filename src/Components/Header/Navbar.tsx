@@ -5,12 +5,19 @@ import Logo from '../Logo/Logo'
 import { usePathname } from 'next/navigation'
 import { BsCartCheckFill } from "react-icons/bs";
 import { FaHeartCircleCheck } from "react-icons/fa6";
+import { BsBoxArrowInRight } from "react-icons/bs";
+import LoginPage from '../Login/login'
 
 const Navbar = () => {
 
   const [scrollY, setScrollY] = useState(0);
+  const [isOpen, setIsOpen] = useState(false)
   const path = usePathname()
 
+
+  const handletoggle = () => {
+    setIsOpen(!isOpen)
+  }
 
   useEffect(() => {
     const handleScrollY = () => {
@@ -43,7 +50,7 @@ const Navbar = () => {
         : "absolute top-0 left-0 bg-transparent w-full"
       : scrollY > 50
         ? "fixed-nav bg-white shadow"
-        : "bg-white shadow"
+        : "bg-white/80 shadow text-black"
       }`}>
       <div className="w-11/12 mx-auto flex items-center py-4  ">
         <div className="navbar-start">
@@ -68,28 +75,35 @@ const Navbar = () => {
         </div>
         <div className="navbar-end">
           <div className='mr-10 flex items-center gap-5'>
-            <div>
+            <div className='relative'>
               <Link href={'/car'}>
-                <BsCartCheckFill size={24}/>
+                <BsCartCheckFill size={24} />
               </Link>
+              <div className='absolute -top-2 -right-2 font-bold'>0</div>
             </div>
-            <div>
+            <div className='relative'>
               <Link href={'/car'}>
-                <FaHeartCircleCheck size={24}/>
+                <FaHeartCircleCheck size={24} />
+
               </Link>
+              <div className='absolute -top-2 -right-2 font-bold'>0</div>
             </div>
           </div>
           <div className="dropdown dropdown-end">
-            <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
+            <button onClick={handletoggle} className="justify-center text-rubik font-bold text-gray-900 btn-outline btn text-white">
+              <BsBoxArrowInRight />
+              Login
+            </button>
+            {/* <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
               <div className="w-10 rounded-full">
                 <img
                   alt="Tailwind CSS Navbar component"
                   src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
               </div>
-            </div>
-            <ul
+            </div> */}
+            {/* <ul
               tabIndex={0}
-              className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow cursor-pointer">
+              className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 py-4 space-y-4 shadow cursor-pointer">
               <li>
                 <Link href={'#'} className="justify-between text-rubik font-bold text-gray-900">
                   Profile
@@ -97,11 +111,17 @@ const Navbar = () => {
                 </Link>
               </li>
               <li><Link href={"#"} className="justify-between text-rubik font-bold text-gray-900">Settings</Link></li>
-              <li><Link href={'#'} className="justify-between text-rubik font-bold text-gray-900">Logout</Link></li>
-            </ul>
+              <li>
+              
+                </li>
+            </ul> */}
           </div>
         </div>
       </div>
+
+      {
+        isOpen && <LoginPage onClose={handletoggle} />
+      }
     </header>
   )
 }

@@ -1,4 +1,4 @@
-import Banner from "@/app/Components/Banner/Banner";
+import Banner from "@/Components/Banner/Banner";
 
 
 
