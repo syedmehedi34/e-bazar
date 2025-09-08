@@ -3,7 +3,8 @@ import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 import Logo from '../Logo/Logo'
 import { usePathname } from 'next/navigation'
-
+import { BsCartCheckFill } from "react-icons/bs";
+import { FaHeartCircleCheck } from "react-icons/fa6";
 
 const Navbar = () => {
 
@@ -26,24 +27,24 @@ const Navbar = () => {
 
   const navitem = <>
     <ul className='lg:flex items-center gap-10 rubik '>
-      <Link className='text-[15px] font-medium leading-6 text-gray-950 ' href={'/'}>Home</Link>
-      <Link className='text-[15px] font-medium leading-6 text-gray-950 ' href={'/'}>Shop</Link>
-      <Link className='text-[15px] font-medium leading-6 text-gray-950 ' href={'/page/about'}>About Us</Link>
-      <Link className='text-[15px] font-medium leading-6 text-gray-950 ' href={'/'}>Blog</Link>
-      <Link className='text-[15px] font-medium leading-6 text-gray-950 ' href={'/'}>Contact</Link>
+      <Link className='text-[15px] font-medium leading-6 ' href={'/'}>Home</Link>
+      <Link className='text-[15px] font-medium leading-6 ' href={'/'}>Shop</Link>
+      <Link className='text-[15px] font-medium leading-6 ' href={'/about'}>About Us</Link>
+      <Link className='text-[15px] font-medium leading-6 ' href={'/'}>Blog</Link>
+      <Link className='text-[15px] font-medium leading-6 ' href={'/login'}>login</Link>
     </ul>
 
   </>
 
   return (
-    <header  className={`z-100  ${path === "/"
-        ? scrollY > 50
-          ? "fixed-nav bg-white shadow"
-          : "absolute top-0 left-0 bg-transparent w-full"
-        : scrollY > 50
-          ? "fixed-nav bg-white shadow"
-          : "bg-white shadow"
-        }`}>
+    <header className={`z-100  ${path === "/"
+      ? scrollY > 50
+        ? "fixed-nav bg-white shadow"
+        : "absolute top-0 left-0 bg-transparent w-full"
+      : scrollY > 50
+        ? "fixed-nav bg-white shadow"
+        : "bg-white shadow"
+      }`}>
       <div className="w-11/12 mx-auto flex items-center py-4  ">
         <div className="navbar-start">
           <div className="dropdown">
@@ -66,6 +67,18 @@ const Navbar = () => {
 
         </div>
         <div className="navbar-end">
+          <div className='mr-10 flex items-center gap-5'>
+            <div>
+              <Link href={'/car'}>
+                <BsCartCheckFill size={24}/>
+              </Link>
+            </div>
+            <div>
+              <Link href={'/car'}>
+                <FaHeartCircleCheck size={24}/>
+              </Link>
+            </div>
+          </div>
           <div className="dropdown dropdown-end">
             <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
               <div className="w-10 rounded-full">
@@ -76,15 +89,15 @@ const Navbar = () => {
             </div>
             <ul
               tabIndex={0}
-              className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
+              className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow cursor-pointer">
               <li>
-                <a className="justify-between">
+                <Link href={'#'} className="justify-between text-rubik font-bold text-gray-900">
                   Profile
-                  <span className="badge">New</span>
-                </a>
+
+                </Link>
               </li>
-              <li><a>Settings</a></li>
-              <li><a>Logout</a></li>
+              <li><Link href={"#"} className="justify-between text-rubik font-bold text-gray-900">Settings</Link></li>
+              <li><Link href={'#'} className="justify-between text-rubik font-bold text-gray-900">Logout</Link></li>
             </ul>
           </div>
         </div>

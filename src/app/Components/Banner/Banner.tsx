@@ -34,7 +34,7 @@ const banners = [
 
 const Banner = () => {
   return (
-    <div className='bg-gradient-to-tr to-red-50 from-red-500/15 min-h-screen'>
+    <div className=' min-h-screen'>
 
   
     <div className=" py-8">
@@ -49,17 +49,17 @@ const Banner = () => {
       >
         {banners.map((item, index) => (
           <SwiperSlide key={index}>
-            <div className=" w-11/12 mx-auto  lg:flex justify-between lg:flex-row-reverse flex-row items-center gap-8 mt-10">
+            <div className=" w-11/12 mx-auto  lg:flex justify-between lg:flex-row-reverse flex-row items-center gap-8 mt-14">
               {/* Left Side - Image */}
               <div className="">
-                <Image src={item.image} alt={item.title} width={500} height={600}/>
+                <Image src={item.image} alt={item.title} width={500} height={500}/>
               </div>
 
               {/* Right Side - Content */}
               <div className="space-y-3 rubik max-lg:text-center mt-5">
-                <p className="text-gray-900 font-bold">{item.subtitle}</p>
-                <h2 className="text-2xl md:text-6xl font-bold text-gray-950 tracking-wide">{item.title}</h2>
-                <p className="text-gray-700 text-[16px] leading-6 tracking-wide">{item.short_description}</p>
+                <p className=" font-bold">{item.subtitle}</p>
+                <h2 className="text-2xl md:text-6xl font-bold  tracking-wide">{item.title}</h2>
+                <p className=" text-[16px] leading-6 tracking-wide">{item.short_description}</p>
                   <Button text={item.button}/>
               </div>
             </div>

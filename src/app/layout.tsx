@@ -1,12 +1,12 @@
 
 
 import type { Metadata } from "next";
-import { Poppins,Rubik } from "next/font/google";
+import { Poppins, Rubik } from "next/font/google";
 import "./globals.css";
-// import { Provider } from "react-redux";
-// import { store } from "../redux/store";
 import ReduxProvider from "./Provider/ReduxProvider/ReduxProvider";
-import Layout from "./Components/Layout/Layout";
+
+import Navbar from "./Components/Header/Navbar";
+import Footer from "./Components/Footer/Footer";
 
 
 export const poppins = Poppins({
@@ -37,12 +37,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${poppins.variable} ${rubik.variable}`}
+        className={`${poppins.variable} ${rubik.variable} text-white`}
+        style={{ background: "radial-gradient(125% 125% at 50% 100%, #000000 40%, #350136 100%)",}}
       >
+
         <ReduxProvider>
-          <Layout>
-            {children}
-          </Layout>
+          <Navbar />
+          {children}
+          <Footer />
         </ReduxProvider>
 
 

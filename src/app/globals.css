@@ -20,6 +20,7 @@
 
 body{
   font-family: var(--font-poppins);
+   background: "radial-gradient(125% 125% at 50% 100%, #000000 40%, #350136 100%)",
 }
 
 .fixed-nav {
@@ -42,3 +43,5 @@ body{
     transform: translateY(0);
   }
 }
+
+
