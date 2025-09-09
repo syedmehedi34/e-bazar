@@ -46,11 +46,11 @@ const Navbar = () => {
   return (
     <header className={`z-100  ${path === "/"
       ? scrollY > 50
-        ? "fixed-nav bg-white shadow"
+        ? "fixed-nav bg-gradient text-white  shadow-gray-700 shadow-sm"
         : "absolute top-0 left-0 bg-transparent w-full"
       : scrollY > 50
         ? "fixed-nav bg-white shadow"
-        : "bg-white/80 shadow text-black"
+        : "bg-gradient shadow "
       }`}>
       <div className="w-11/12 mx-auto flex items-center py-4  ">
         <div className="navbar-start">
@@ -90,7 +90,7 @@ const Navbar = () => {
             </div>
           </div>
           <div className="dropdown dropdown-end">
-            <button onClick={handletoggle} className="justify-center text-rubik font-bold text-gray-900 btn-outline btn text-white">
+            <button onClick={handletoggle} className={`justify-center text-rubik font-bold ${path === '/'? "btn btn-outline rounded hover:bg-red-600 hover:text-white":"btn btn-outline rounded hover:bg-red-600 hover:text-white"}`}>
               <BsBoxArrowInRight />
               Login
             </button>

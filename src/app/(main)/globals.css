@@ -9,7 +9,9 @@
   --font-poppins: 'Poppins', sans-serif;
   --font-rubik: 'Rubik', sans-serif;
 }
-
+@theme{
+  --color-gradient:"radial-gradient(125% 125% at 50% 100%, #000000 40%, #350136 100%)"
+}
 .poppins {
   font-family: var(--font-poppins);
 }
@@ -32,7 +34,7 @@ body{
   animation: slideDown 3s ease-out forwards; 
 
   z-index: 999;
-  color: black !important;
+  color: white !important;
 }
 
 @keyframes slideDown {

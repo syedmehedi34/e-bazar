@@ -36,7 +36,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${poppins.variable} ${rubik.variable} text-white`}
+        className={`${poppins.variable} ${rubik.variable} text-white relative`}
         style={{ background: "radial-gradient(125% 125% at 50% 100%, #000000 40%, #350136 100%)",}}
       >
 
