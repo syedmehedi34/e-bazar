@@ -20,8 +20,8 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenRegisterPage, setIsOpenRegisterPage] = useState(false)
   const path = usePathname()
-  const {data: session, status} = useSession()
-console.log('navber session', session)
+  const { data: session, status } = useSession()
+
 
   const handletoggle = () => {
     setIsOpen(!isOpen)
@@ -49,7 +49,7 @@ console.log('navber session', session)
       <Link className='text-[15px] font-medium leading-6 ' href={'/'}>Shop</Link>
       <Link className='text-[15px] font-medium leading-6 ' href={'/about'}>About Us</Link>
       <Link className='text-[15px] font-medium leading-6 ' href={'/'}>Blog</Link>
-      <Link className='text-[15px] font-medium leading-6 ' href={'/login'}>login</Link>
+      
     </ul>
 
   </>
@@ -57,7 +57,7 @@ console.log('navber session', session)
   return (
     <header className={`z-100  ${path === "/"
       ? scrollY > 50
-        ? "fixed-nav bg-gradient text-white  shadow-gray-700 shadow-sm"
+        ? "fixed-nav bg-black/70 text-white  shadow-gray-700 shadow-sm"
         : "absolute top-0 left-0 bg-transparent w-full"
       : scrollY > 50
         ? "fixed-nav bg-white shadow"
@@ -101,35 +101,65 @@ console.log('navber session', session)
             </div>
           </div>
           <div className="dropdown dropdown-end">
-            <button onClick={handletoggle} className={`justify-center text-rubik font-bold ${path === '/' ? "btn btn-outline rounded hover:bg-red-600 hover:text-white" : "btn btn-outline rounded hover:bg-red-600 hover:text-white"}`}>
-              <BsBoxArrowInRight />
-              Login
-            </button>
-            {/* <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
-              <div className="w-10 rounded-full">
-                <img
-                  alt="Tailwind CSS Navbar component"
-                  src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
-              </div>
-            </div> */}
-            {/* <ul
-              tabIndex={0}
-              className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 py-4 space-y-4 shadow cursor-pointer">
-              <li>
-                <Link href={'#'} className="justify-between text-rubik font-bold text-gray-900">
-                  Profile
+            {
+              !session?.user && (
+                <button onClick={handletoggle} className={`justify-center text-rubik font-bold ${path === '/' ? "btn btn-outline rounded hover:bg-red-600 hover:text-white" : "btn btn-outline rounded hover:bg-red-600 hover:text-white"}`}>
+                  <BsBoxArrowInRight />
+                  Login
+                </button>
+              )
+            }
 
-                </Link>
-              </li>
-              <li><Link href={"#"} className="justify-between text-rubik font-bold text-gray-900">Settings</Link></li>
-              <li>
-              
-                </li>
-            </ul> */}
-            <button onClick={handleToggleRegisterPage} className={`justify-center ml-4 text-rubik font-bold ${path === '/' ? "btn btn-outline rounded hover:bg-red-600 hover:text-white" : "btn btn-outline rounded hover:bg-red-600 hover:text-white"}`}>
-              <BsBoxArrowInRight />
-              Register
-            </button>
+            {
+              session?.user && (
+                <div>
+                  <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
+                    <div className="w-10 rounded-full">
+                      <img
+                        alt="Tailwind CSS Navbar component"
+                        src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+                    </div>
+                  </div>
+                  <ul
+                    tabIndex={0}
+                    className="menu menu-sm dropdown-content bg-gradient shadow-red-300 text-white  rounded-box z-1 mt-3 w-52 py-4 space-y-4 shadow cursor-pointer">
+                    <li>
+                      <Link href={'#'} className="justify-between text-rubik font-bold ">
+                        Profile
+
+                      </Link>
+                    </li>
+                  
+                    <li>
+                      <Link href={"#"} className="justify-between text-rubik font-bold ">
+                          Dashboard
+                      </Link>
+                      </li>
+
+                    <li className=''>
+                      <Link href={"#"} className=" text-rubik font-bold  btn btn-outline text-center border-none bg-red-600 hover:bg-red-800 hover:text-white transition-all duration-300">
+                        Logout
+                      </Link>
+                    </li>
+
+                  </ul>
+                </div>
+              )
+            }
+
+            {!session?.user && (
+              <button
+                onClick={handleToggleRegisterPage}
+                className={`justify-center ml-4 text-rubik font-bold ${path === '/'
+                  ? "btn btn-outline rounded hover:bg-red-600 hover:text-white"
+                  : "btn btn-outline rounded hover:bg-red-600 hover:text-white"
+                  }`}
+              >
+                <BsBoxArrowInRight />
+                Register
+              </button>
+            )}
+
 
           </div>
         </div>
@@ -137,10 +167,10 @@ console.log('navber session', session)
 
       {
         isOpen && (<LoginPage onClose={handletoggle} />)
-       
+
       }
       {
-         isOpenRegisterPage && <Register onClose={handleToggleRegisterPage}/>
+        isOpenRegisterPage && <Register onClose={handleToggleRegisterPage} />
       }
     </header>
   )
