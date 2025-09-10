@@ -6,17 +6,26 @@ import { usePathname } from 'next/navigation'
 import { BsCartCheckFill } from "react-icons/bs";
 import { FaHeartCircleCheck } from "react-icons/fa6";
 import { BsBoxArrowInRight } from "react-icons/bs";
-import LoginPage from '../Login/login'
+import dynamic from "next/dynamic";
+import Register from '../Register/Register'
+
+const LoginPage = dynamic(() => import("@/Components/Login/login"), {
+  ssr: false,
+});
 
 const Navbar = () => {
 
   const [scrollY, setScrollY] = useState(0);
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(false);
+  const [isOpenRegisterPage, setIsOpenRegisterPage] = useState(false)
   const path = usePathname()
 
 
   const handletoggle = () => {
     setIsOpen(!isOpen)
+  }
+  const handleToggleRegisterPage = () => {
+    setIsOpenRegisterPage(!isOpenRegisterPage)
   }
 
   useEffect(() => {
@@ -76,13 +85,13 @@ const Navbar = () => {
         <div className="navbar-end">
           <div className='mr-10 flex items-center gap-5'>
             <div className='relative'>
-              <Link href={'/car'}>
+              <Link href={'/cart'}>
                 <BsCartCheckFill size={24} />
               </Link>
               <div className='absolute -top-2 -right-2 font-bold'>0</div>
             </div>
             <div className='relative'>
-              <Link href={'/car'}>
+              <Link href={'/cart'}>
                 <FaHeartCircleCheck size={24} />
 
               </Link>
@@ -90,7 +99,7 @@ const Navbar = () => {
             </div>
           </div>
           <div className="dropdown dropdown-end">
-            <button onClick={handletoggle} className={`justify-center text-rubik font-bold ${path === '/'? "btn btn-outline rounded hover:bg-red-600 hover:text-white":"btn btn-outline rounded hover:bg-red-600 hover:text-white"}`}>
+            <button onClick={handletoggle} className={`justify-center text-rubik font-bold ${path === '/' ? "btn btn-outline rounded hover:bg-red-600 hover:text-white" : "btn btn-outline rounded hover:bg-red-600 hover:text-white"}`}>
               <BsBoxArrowInRight />
               Login
             </button>
@@ -115,12 +124,21 @@ const Navbar = () => {
               
                 </li>
             </ul> */}
+            <button onClick={handleToggleRegisterPage} className={`justify-center ml-4 text-rubik font-bold ${path === '/' ? "btn btn-outline rounded hover:bg-red-600 hover:text-white" : "btn btn-outline rounded hover:bg-red-600 hover:text-white"}`}>
+              <BsBoxArrowInRight />
+              Register
+            </button>
+
           </div>
         </div>
       </div>
 
       {
-        isOpen && <LoginPage onClose={handletoggle} />
+        isOpen && (<LoginPage onClose={handletoggle} />)
+       
+      }
+      {
+         isOpenRegisterPage && <Register onClose={handleToggleRegisterPage}/>
       }
     </header>
   )
