@@ -10,168 +10,97 @@ import dynamic from "next/dynamic";
 import Register from '../Register/Register'
 import { useSession } from 'next-auth/react'
 
-const LoginPage = dynamic(() => import("@/Components/Login/login"), {
-  ssr: false,
-});
+const LoginPage = dynamic(() => import("@/Components/Login/login"), { ssr: false });
 
 const Navbar = () => {
-
   const [scrollY, setScrollY] = useState(0);
-  const [isOpen, setIsOpen] = useState(false);
-  const [isOpenRegisterPage, setIsOpenRegisterPage] = useState(false)
+  const [isOpen, setIsOpen] = useState(false); // Login modal
+  const [isOpenRegisterPage, setIsOpenRegisterPage] = useState(false); // Register modal
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false); // Mobile menu toggle
+
   const path = usePathname()
-  const { data: session, status } = useSession()
-
-
-  const handletoggle = () => {
-    setIsOpen(!isOpen)
-  }
-  const handleToggleRegisterPage = () => {
-    setIsOpenRegisterPage(!isOpenRegisterPage)
-  }
+  const { data: session } = useSession()
 
   useEffect(() => {
-    const handleScrollY = () => {
-      setScrollY(window.scrollY);
-    }
-
+    const handleScrollY = () => setScrollY(window.scrollY);
     window.addEventListener('scroll', handleScrollY);
-
-    return () => {
-      window.removeEventListener('scroll', handleScrollY)
-    }
-
+    return () => window.removeEventListener('scroll', handleScrollY);
   }, [])
 
-  const navitem = <>
-    <ul className='lg:flex items-center gap-10 rubik '>
-      <Link className='text-[15px] font-medium leading-6 ' href={'/'}>Home</Link>
-      <Link className='text-[15px] font-medium leading-6 ' href={'/'}>Shop</Link>
-      <Link className='text-[15px] font-medium leading-6 ' href={'/about'}>About Us</Link>
-      <Link className='text-[15px] font-medium leading-6 ' href={'/'}>Blog</Link>
-      
-    </ul>
-
-  </>
+  const navItems = (
+    <>
+      <Link href={'/'} className='text-[15px] font-medium leading-6'>Home</Link>
+      <Link href={'/'} className='text-[15px] font-medium leading-6'>Shop</Link>
+      <Link href={'/about'} className='text-[15px] font-medium leading-6'>About Us</Link>
+      <Link href={'/'} className='text-[15px] font-medium leading-6'>Blog</Link>
+    </>
+  )
 
   return (
-    <header className={`z-100  ${path === "/"
-      ? scrollY > 50
-        ? "fixed-nav bg-black/70 text-white  shadow-gray-700 shadow-sm"
-        : "absolute top-0 left-0 bg-transparent w-full"
-      : scrollY > 50
-        ? "fixed-nav bg-white shadow"
-        : "bg-gradient shadow "
-      }`}>
-      <div className="w-11/12 mx-auto flex items-center py-4  ">
-        <div className="navbar-start">
-          <div className="dropdown">
-            <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h8m-8 6h16" /> </svg>
-            </div>
-            <div
-              tabIndex={0}
-              className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow ">
-              {navitem}
-            </div>
-          </div>
-          <Link href={'/'}>
-            <Logo />
-          </Link>
+    <header className={`w-full z-50 ${path === "/" ? (scrollY > 50 ? "fixed bg-black/70 text-white shadow" : "absolute bg-transparent") : (scrollY > 50 ? "fixed bg-white shadow" : "bg-gradient shadow")}`}>
+      <div className="w-11/12 mx-auto flex items-center justify-between py-4">
+      <div className='flex items-center gap-4'>
+        {/* Mobile Menu Button */}
+          <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="lg:hidden  cursor-pointer">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={mobileMenuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"} />
+            </svg>
+          </button>
+        {/* Logo */}
+        <Link href={'/'}>
+          <Logo />
+        </Link>
         </div>
-        <div className="navbar-center hidden lg:flex">
 
-          {navitem}
+        {/* Desktop Nav */}
+        <nav className="hidden lg:flex gap-10">{navItems}</nav>
 
-        </div>
-        <div className="navbar-end">
-          <div className='mr-10 flex items-center gap-5'>
-            <div className='relative'>
-              <Link href={'/cart'}>
-                <BsCartCheckFill size={24} />
-              </Link>
-              <div className='absolute -top-2 -right-2 font-bold'>0</div>
-            </div>
-            <div className='relative'>
-              <Link href={'/cart'}>
-                <FaHeartCircleCheck size={24} />
-
-              </Link>
-              <div className='absolute -top-2 -right-2 font-bold'>0</div>
-            </div>
+        {/* Icons + Auth Buttons */}
+        <div className="flex items-center gap-4">
+          <div className="relative">
+            <Link href={'/cart'}><BsCartCheckFill size={24} /></Link>
+            <span className='absolute -top-2 -right-2 font-bold'>0</span>
           </div>
-          <div className="dropdown dropdown-end">
-            {
-              !session?.user && (
-                <button onClick={handletoggle} className={`justify-center text-rubik font-bold ${path === '/' ? "btn btn-outline rounded hover:bg-red-600 hover:text-white" : "btn btn-outline rounded hover:bg-red-600 hover:text-white"}`}>
-                  <BsBoxArrowInRight />
-                  Login
-                </button>
-              )
-            }
+          <div className="relative">
+            <Link href={'/cart'}><FaHeartCircleCheck size={24} /></Link>
+            <span className='absolute -top-2 -right-2 font-bold'>0</span>
+          </div>
 
-            {
-              session?.user && (
-                <div>
-                  <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
-                    <div className="w-10 rounded-full">
-                      <img
-                        alt="Tailwind CSS Navbar component"
-                        src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
-                    </div>
-                  </div>
-                  <ul
-                    tabIndex={0}
-                    className="menu menu-sm dropdown-content bg-gradient shadow-red-300 text-white  rounded-box z-1 mt-3 w-52 py-4 space-y-4 shadow cursor-pointer">
-                    <li>
-                      <Link href={'#'} className="justify-between text-rubik font-bold ">
-                        Profile
-
-                      </Link>
-                    </li>
-                  
-                    <li>
-                      <Link href={"#"} className="justify-between text-rubik font-bold ">
-                          Dashboard
-                      </Link>
-                      </li>
-
-                    <li className=''>
-                      <Link href={"#"} className=" text-rubik font-bold  btn btn-outline text-center border-none bg-red-600 hover:bg-red-800 hover:text-white transition-all duration-300">
-                        Logout
-                      </Link>
-                    </li>
-
-                  </ul>
+          {/* Login / Register */}
+          {!session?.user ? (
+            <>
+              <button onClick={() => setIsOpen(true)} className="btn btn-outline">Login</button>
+              <button onClick={() => setIsOpenRegisterPage(true)} className="btn btn-outline">Register</button>
+            </>
+          ) : (
+            <div className="dropdown dropdown-end ">
+              <div tabIndex={0} className="btn btn-ghost btn-circle avatar">
+                <div className="w-10 rounded-full">
+                  <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" alt="Avatar"/>
                 </div>
-              )
-            }
+              </div>
+              <ul tabIndex={0} className="dropdown-content menu p-2 shadow bg-gradient shadow-amber-600 text-white rounded-box w-52 mt-4 space-y-4">
+                <li><Link href="#">Profile</Link></li>
+                <li><Link href="#">Dashboard</Link></li>
+                <li><Link href="#" className="btn btn-outline border-none w-full bg-red-600 hover:bg-red-800 text-white">Logout</Link></li>
+              </ul>
+            </div>
+          )}
 
-            {!session?.user && (
-              <button
-                onClick={handleToggleRegisterPage}
-                className={`justify-center ml-4 text-rubik font-bold ${path === '/'
-                  ? "btn btn-outline rounded hover:bg-red-600 hover:text-white"
-                  : "btn btn-outline rounded hover:bg-red-600 hover:text-white"
-                  }`}
-              >
-                <BsBoxArrowInRight />
-                Register
-              </button>
-            )}
-
-
-          </div>
+        
         </div>
       </div>
 
-      {
-        isOpen && (<LoginPage onClose={handletoggle} />)
+      {/* Mobile Menu */}
+      {mobileMenuOpen && (
+        <div className="lg:hidden bg-black/80 text-white w-full py-4 flex flex-col gap-4 items-center">
+          {navItems}
+        </div>
+      )}
 
-      }
-      {
-        isOpenRegisterPage && <Register onClose={handleToggleRegisterPage} />
-      }
+      {/* Modals */}
+      {isOpen && <LoginPage onClose={() => setIsOpen(false)} />}
+      {isOpenRegisterPage && <Register onClose={() => setIsOpenRegisterPage(false)} />}
     </header>
   )
 }
