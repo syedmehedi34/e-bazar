@@ -8,6 +8,7 @@ import React, { useState } from 'react'
 import { FaGooglePlusG } from 'react-icons/fa6';
 
 import { IoClose } from 'react-icons/io5'
+import Swal from 'sweetalert2';
 
 
 interface LoginPageProps { onClose: () => void; }
@@ -31,7 +32,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onClose }) => {
     }
 
     const userData = { email, password };
-    console.log("User Data:", userData);
+
 
     // Call the login API
     const result = await signIn("credentials", {
@@ -39,13 +40,22 @@ const LoginPage: React.FC<LoginPageProps> = ({ onClose }) => {
       password,
       redirect: false, 
     });
-     setLoading(false); 
+  
     if (result?.ok && !result.error) {
-      alert("Login successful! 🎉");
+      Swal.fire({
+        icon:"success",
+        title:"Login Successfully !"
+      })
+         setLoading(false); 
+         onClose();
+
       
 
     } else {
-      alert("Invalid credentials!");
+      Swal.fire({
+        icon:"error",
+        title:"Invalid credentials!"
+      })
     }
   };
 

@@ -1,35 +1,70 @@
 import NextAuth from 'next-auth'
 import GoogleProvider from 'next-auth/providers/google'
 import axios from 'axios'
-console.log(process.env.GOOGLE_CLIENT_ID ,process.env.GOOGLE_CLIENT_SECRET ,process.env.NEXTAUTH_SECRET)
+import CredentialsProvider from 'next-auth/providers/credentials'
+
+
 const handler = NextAuth({
   providers: [
+    CredentialsProvider({
+      name: 'Credentials',
+      credentials: {
+        email: { label: 'Email', type: 'email', placeholder: 'your@email.com' },
+        password: { label: 'Password', type: 'password' }
+      },
+      async authorize (credentials) {
+        // Replace this with your actual user authentication logic
+        if (!credentials?.email || !credentials?.password) {
+          return null
+        }
+
+        try {
+          const userInfo = {
+            email: credentials?.email,
+            password: credentials?.password
+          }
+          const res = await axios.post(`http://localhost:5000/login`, userInfo)
+          if (res.status === 200) {
+            console.log(res.data)
+            return res?.data.user
+          }
+        } catch (error) {
+          console.error(error)
+          return null
+        }
+      }
+    }),
+
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID as string,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string
     })
   ],
-   secret: process.env.NEXTAUTH_SECRET as string,
 
-   callbacks: {
-  async signIn({ user }) {
-    // if (!user) return false;
+  pages: {
+    signIn: '/src/Components/Login/login.tsx'
+  },
+  session: {
+    strategy: 'jwt',
+    maxAge: 24 * 60 * 60
+  },
+  secret: process.env.NEXTAUTH_SECRET as string,
 
-    // try {
-    //   const res = await axios.post("http://localhost:5000/create/user", {
-    //     name: user.name,
-    //     email: user.email,
-    //   });
-    //   console.log("User API Response:", res.data);
-    // } catch (error: any) {
-    //   console.error("Error while creating user:", error.response?.data || error.message);
-    //   return false;
-    // }
-
-    return true; // Sign in allow
+  callbacks: {
+    async jwt ({ token, user }) {
+      if (user) token.id = user.id
+      return token
+    },
+    async session ({ session, token }) {
+      if (token) {
+        ;(session.user as any).id = token.id
+      }
+      return session
+    },
+    async signIn ({ user }) {
+      return true
+    }
   }
-}
-
 })
 
-export { handler as GET, handler as POST };
+export { handler as GET, handler as POST }

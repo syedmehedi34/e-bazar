@@ -8,6 +8,8 @@ import ReduxProvider from "@/Provider/ReduxProvider/ReduxProvider"
 import Navbar from "@/Components/Header/Navbar";
 import Footer from "@/Components/Footer/Footer";
 
+import SessionWrapper from "../SessionWrapper/page";
+
 export const poppins = Poppins({
   weight: ['400', '500', '600', '700', '800'],
   style: ['normal', 'italic'],
@@ -37,14 +39,17 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={`${poppins.variable} ${rubik.variable} text-white relative`}
-        style={{ background: "radial-gradient(125% 125% at 50% 100%, #000000 40%, #350136 100%)",}}
+        style={{ background: "radial-gradient(125% 125% at 50% 100%, #000000 40%, #350136 100%)", }}
       >
 
-        <ReduxProvider>
-            <Navbar/>
-          {children}
-          <Footer />
-        </ReduxProvider>
+        <SessionWrapper>
+          <ReduxProvider>
+            <Navbar />
+            {children}
+            <Footer />
+          </ReduxProvider>
+        </SessionWrapper>
+
 
 
       </body>

@@ -5,8 +5,9 @@ import React, { useState } from 'react'
 import { FaGooglePlusG } from 'react-icons/fa6';
 import { IoClose } from 'react-icons/io5'
 import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
+import axios from 'axios';
 
-
+import Swal from 'sweetalert2'
 
 interface RegisterProps { onClose: () => void; }
 const Register: React.FC<RegisterProps> = ({ onClose }) => {
@@ -28,33 +29,40 @@ const Register: React.FC<RegisterProps> = ({ onClose }) => {
             email,
             password
         }
-
         console.log(userInfo)
 
-
-        // if (!email || !password) {
-        //     alert("Email and password are required");
-        //     setLoading(false);
-        //     return;
-        // }
-
-        // const userData = { email, password };
-        // console.log("User Data:", userData);
-
-        // // Call the login API
-        // const result = await signIn("credentials", {
-        //     email,
-        //     password,
-        //     redirect: false,
-        // });
-        // setLoading(false);
-        // if (result?.ok && !result.error) {
-        //     alert("Login successful! 🎉");
+        try {
+            const res = await axios.post(`http://localhost:5000/create/user`, userInfo);
+            if (res.status === 201) {
+                Swal.fire({
+                    icon: "success",
+                    title: `${res.data.message}`
+                })
 
 
-        // } else {
-        //     alert("Invalid credentials!");
-        // }
+                setLoading(false)
+                form.reset()
+                onClose()
+            }
+            if (res.status === 200) {
+                Swal.fire({
+                    icon: "success",
+                    title: `${res.data.message}`
+                })
+
+                setLoading(false)
+                form.reset()
+                onClose()
+            }
+        } catch (error) {
+            Swal.fire({
+                icon: "error",
+                title: `${error}`
+            })
+        }
+
+
+
     };
 
     const handleLoginWithGoogle = async () => {

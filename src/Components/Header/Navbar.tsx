@@ -8,6 +8,7 @@ import { FaHeartCircleCheck } from "react-icons/fa6";
 import { BsBoxArrowInRight } from "react-icons/bs";
 import dynamic from "next/dynamic";
 import Register from '../Register/Register'
+import { useSession } from 'next-auth/react'
 
 const LoginPage = dynamic(() => import("@/Components/Login/login"), {
   ssr: false,
@@ -19,7 +20,8 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenRegisterPage, setIsOpenRegisterPage] = useState(false)
   const path = usePathname()
-
+  const {data: session, status} = useSession()
+console.log('navber session', session)
 
   const handletoggle = () => {
     setIsOpen(!isOpen)
