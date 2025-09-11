@@ -8,7 +8,8 @@ import { FaHeartCircleCheck } from "react-icons/fa6";
 import { BsBoxArrowInRight } from "react-icons/bs";
 import dynamic from "next/dynamic";
 import Register from '../Register/Register'
-import { useSession } from 'next-auth/react'
+import { signOut, useSession } from 'next-auth/react'
+import Swal from 'sweetalert2'
 
 const LoginPage = dynamic(() => import("@/Components/Login/login"), { ssr: false });
 
@@ -27,6 +28,20 @@ const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScrollY);
   }, [])
 
+  const handleLogout = async () => {
+    try {
+      await signOut();
+      Swal.fire({
+        icon: 'success',
+        title: "Logout successfully!"
+      })
+    } catch (error) {
+      Swal.fire({
+        icon: 'error',
+        title: "Logout Failed!"
+      })
+    }
+  }
   const navItems = (
     <>
       <Link href={'/'} className='text-[15px] font-medium leading-6'>Home</Link>
@@ -39,17 +54,17 @@ const Navbar = () => {
   return (
     <header className={`w-full z-50 ${path === "/" ? (scrollY > 50 ? "fixed bg-black/70 text-white shadow" : "absolute bg-transparent") : (scrollY > 50 ? "fixed bg-white shadow" : "bg-gradient shadow")}`}>
       <div className="w-11/12 mx-auto flex items-center justify-between py-4">
-      <div className='flex items-center gap-4'>
-        {/* Mobile Menu Button */}
+        <div className='flex items-center gap-4'>
+          {/* Mobile Menu Button */}
           <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="lg:hidden  cursor-pointer">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={mobileMenuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"} />
             </svg>
           </button>
-        {/* Logo */}
-        <Link href={'/'}>
-          <Logo />
-        </Link>
+          {/* Logo */}
+          <Link href={'/'}>
+            <Logo />
+          </Link>
         </div>
 
         {/* Desktop Nav */}
@@ -68,33 +83,41 @@ const Navbar = () => {
 
           {/* Login / Register */}
           {!session?.user ? (
-            <>
-              <button onClick={() => setIsOpen(true)} className="btn btn-outline">Login</button>
-              <button onClick={() => setIsOpenRegisterPage(true)} className="btn btn-outline">Register</button>
-            </>
+            <div className='hidden lg:block'>
+              <button onClick={() => setIsOpen(true)} className="btn btn-outline hover:bg-red-600 hover:border-none rounded-md hover:text-white transition-all duration-300">Login</button>
+              <button onClick={() => setIsOpenRegisterPage(true)} className="btn btn-outline  hover:bg-red-600 hover:border-none rounded-md hover:text-white transition-all duration-300">Register</button>
+            </div>
           ) : (
             <div className="dropdown dropdown-end ">
               <div tabIndex={0} className="btn btn-ghost btn-circle avatar">
                 <div className="w-10 rounded-full">
-                  <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" alt="Avatar"/>
+                  <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" alt="Avatar" />
                 </div>
               </div>
               <ul tabIndex={0} className="dropdown-content menu p-2 shadow bg-gradient shadow-amber-600 text-white rounded-box w-52 mt-4 space-y-4">
                 <li><Link href="#">Profile</Link></li>
                 <li><Link href="#">Dashboard</Link></li>
-                <li><Link href="#" className="btn btn-outline border-none w-full bg-red-600 hover:bg-red-800 text-white">Logout</Link></li>
+                <li><button onClick={() => handleLogout()} className="btn btn-outline border-none w-full bg-red-600 hover:bg-red-800 text-white">Logout</button></li>
               </ul>
             </div>
           )}
 
-        
+
         </div>
       </div>
 
       {/* Mobile Menu */}
       {mobileMenuOpen && (
-        <div className="lg:hidden bg-black/80 text-white w-full py-4 flex flex-col gap-4 items-center">
+        <div className="lg:hidden bg-black/80 text-white w-[70%]  py-10 px-4 flex flex-col gap-4 items-center">
           {navItems}
+          {
+            !session?.user && (
+              <div className=' lg:hidden flex flex-col w-full gap-2 '>
+                <button onClick={() => setIsOpen(true)} className="btn btn-outline hover:bg-red-600 hover:border-none rounded-md hover:text-white transition-all duration-300">Login</button>
+                <button onClick={() => setIsOpenRegisterPage(true)} className="btn btn-outline  hover:bg-red-600 hover:border-none rounded-md hover:text-white transition-all duration-300">Register</button>
+              </div>
+            )
+          }
         </div>
       )}
 
