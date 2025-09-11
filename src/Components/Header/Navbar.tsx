@@ -21,6 +21,7 @@ const Navbar = () => {
 
   const path = usePathname()
   const { data: session } = useSession()
+  console.log(session)
 
   useEffect(() => {
     const handleScrollY = () => setScrollY(window.scrollY);
@@ -84,7 +85,7 @@ const Navbar = () => {
           {/* Login / Register */}
           {!session?.user ? (
             <div className='hidden lg:block'>
-              <button onClick={() => setIsOpen(true)} className="btn btn-outline hover:bg-red-600 hover:border-none rounded-md hover:text-white transition-all duration-300">Login</button>
+              <button onClick={() => setIsOpen(true)} className="btn btn-outline hover:bg-red-600 hover:border-none rounded-md hover:text-white transition-all duration-300 mr-2">Login</button>
               <button onClick={() => setIsOpenRegisterPage(true)} className="btn btn-outline  hover:bg-red-600 hover:border-none rounded-md hover:text-white transition-all duration-300">Register</button>
             </div>
           ) : (
@@ -96,7 +97,7 @@ const Navbar = () => {
               </div>
               <ul tabIndex={0} className="dropdown-content menu p-2 shadow bg-gradient shadow-amber-600 text-white rounded-box w-52 mt-4 space-y-4">
                 <li><Link href="#">Profile</Link></li>
-                <li><Link href="#">Dashboard</Link></li>
+                <li><Link href="/dashboard">Dashboard</Link></li>
                 <li><button onClick={() => handleLogout()} className="btn btn-outline border-none w-full bg-red-600 hover:bg-red-800 text-white">Logout</button></li>
               </ul>
             </div>

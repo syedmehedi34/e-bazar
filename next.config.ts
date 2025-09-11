@@ -19,6 +19,11 @@ const nextConfig: NextConfig = {
         hostname: "i.postimg.cc",
        
       },
+      {
+        protocol: 'https',
+        hostname: "static.vecteezy.com",
+       
+      },
     ],
   }
 };

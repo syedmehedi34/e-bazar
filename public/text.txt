@@ -1,0 +1,55 @@
+Hero Section (Top Banner)
+
+বড় একটি ব্যানার ইমেজ/স্লাইডার (Women / Men / Electronics products এর হাইলাইট)।
+
+CTA বাটন যেমন "Shop Now", "Explore Collection"।
+
+Category Highlights
+
+Women, Men, Electrical – তিনটা আলাদা category card/section।
+
+প্রতিটা কার্ডে ছবি + ছোট CTA ("Shop Women", "Shop Men", "Shop Electronics")।
+
+Featured Products / Best Sellers
+
+হোম পেজে কিছু বেস্ট সেলিং বা ট্রেন্ডিং প্রোডাক্ট দেখানো।
+
+“Add to Cart” / “View Details” অপশন।
+
+Special Offers / Deals of the Day
+
+Discount banner, Limited time deal, Flash sale।
+
+New Arrivals
+
+প্রতিটি ক্যাটাগরি থেকে নতুন প্রোডাক্টের সেকশন।
+
+Why Choose Us / Trust Section
+
+Free Delivery, Cash on Delivery, Easy Returns, Secure Payment – এসব USP (Unique Selling Points)।
+
+Testimonials / Customer Reviews
+
+২-৩ জন কাস্টমারের রিভিউ/রেটিং।
+
+Newsletter Subscription / Call to Action
+
+“Subscribe to get special offers” → Email box।
+
+Blog / Tips Section (Optional)
+
+Fashion tips, Electronics buying guide ইত্যাদি।
+
+Footer Section
+
+Quick Links (About, Contact, FAQ, Return Policy)।
+
+Social Media Icons।
+
+Payment methods (Bkash, Nagad, Visa, Mastercard)।
+
+
+Women Fashion 👗 (Dress, Saree, Shoes, Bags, Jewelry) Men Fashion 👕 (Shirt, Pant, Shoes, T-shirt Watch, Sunglasses) Electronics 🔌 (Mobile, Laptop, Accessories, Gadgets) Home & Kitchen 🍳 (Cookware, Appliances, Decor, Furniture) Beauty & Personal Care 💄 (Cosmetics, Skin Care, Hair Care) Kids & Baby 🧸 (Toys, Clothes, School Items, Baby Products) Sports & Fitness 🏋️ (Gym Equipment, Sportswear, Outdoor Items) Groceries & Essentials 🛒 (Food, Drinks, Household Essentials)
+
+
+give me 5 json data category: , subcategory: 

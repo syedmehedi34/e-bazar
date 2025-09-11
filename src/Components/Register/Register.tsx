@@ -15,55 +15,46 @@ const Register: React.FC<RegisterProps> = ({ onClose }) => {
     const [loading, setLoading] = useState(false);
 
 
-    const handleCredentialsLogin = async (e: React.FormEvent<HTMLElement>) => {
-        e.preventDefault();
-        setLoading(true);
-        const form = e.target as HTMLFormElement;
-        const formData = new FormData(form)
-        const name = formData.get('name') as string
-        const email = formData.get('email') as string
-        const password = formData.get('password') as string
+   const handleCredentialsLogin = async (e: React.FormEvent<HTMLElement>) => {
+  e.preventDefault();
+  setLoading(true);
 
-        const userInfo = {
-            name,
-            email,
-            password
-        }
-        console.log(userInfo)
+  const form = e.target as HTMLFormElement;
+  const formData = new FormData(form);
 
-        try {
-            const res = await axios.post(`http://localhost:5000/create/user`, userInfo);
-            if (res.status === 201) {
-                Swal.fire({
-                    icon: "success",
-                    title: `${res.data.message}`
-                })
+  const name = formData.get("name") as string;
+  const email = formData.get("email") as string;
+  const password = formData.get("password") as string;
 
+  const userInfo = {
+    name,
+    email,
+    password,
+     role: ["user"], 
+  };
 
-                setLoading(false)
-                form.reset()
-                onClose()
-            }
-            if (res.status === 200) {
-                Swal.fire({
-                    icon: "success",
-                    title: `${res.data.message}`
-                })
+  try {
+    const res = await axios.post(`http://localhost:5000/create/user`, userInfo);
 
-                setLoading(false)
-                form.reset()
-                onClose()
-            }
-        } catch (error) {
-            Swal.fire({
-                icon: "error",
-                title: `${error}`
-            })
-        }
+    if (res.status === 200 || res.status === 201) {
+      Swal.fire({
+        icon: "success",
+        title: res.data.message || "User created successfully!",
+      });
 
+      form.reset();
+      onClose();
+    }
+  } catch (error: any) {
+    Swal.fire({
+      icon: "error",
+      title: error.response?.data?.message || error.message || "Something went wrong",
+    });
+  } finally {
+    setLoading(false);
+  }
+};
 
-
-    };
 
     const handleLoginWithGoogle = async () => {
         try {
