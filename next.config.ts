@@ -39,6 +39,11 @@ const nextConfig: NextConfig = {
         hostname: "www.shutterstock.com",
        
       },
+      {
+        protocol: 'https',
+        hostname: "ibb.co.com",
+       
+      },
     ],
   }
 };
