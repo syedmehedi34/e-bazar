@@ -1,6 +1,8 @@
 "use client";
+import axios from "axios";
 import React from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
+import Swal from "sweetalert2";
 
 interface Review {
   user: string;
@@ -20,9 +22,9 @@ interface ProductFormInputs {
   rating: number;
   stock: number;
   featured: boolean;
-  sizes: string[];
-  images: string[];
-  tags: string[];
+  sizes: string | string[];
+  images: string | string[];
+  tags: string | string[];
   
 }
 
@@ -33,9 +35,29 @@ const ProductForm = () => {
     formState: { errors },
   } = useForm<ProductFormInputs>();
 
-  const onSubmit: SubmitHandler<ProductFormInputs> = (data) => {
-    console.log("Product Data:", data);
-    alert("Product submitted successfully!");
+  const onSubmit: SubmitHandler<ProductFormInputs> = async (data) => {
+   try {
+    const payload = {
+      ...data,
+      sizes: typeof data.sizes === "string" ? data.sizes.split(",").map(s => s.trim()) : [],
+      images: typeof data.images === "string" ? data.images.split(",").map(i => i.trim()) : [],
+      tags: typeof data.tags === "string" ? data.tags.split(",").map(t => t.trim()) : [],
+    }
+    console.log(payload)
+      const res = await axios.post('http://localhost:5000/admin/add-products', payload);
+      if(res.status === 200){
+        Swal.fire({
+          icon:"success",
+          title:`${res.data.message || "Data Add Successful!!"} `
+        })
+      }
+   } catch (error) {
+    console.log(error)
+     Swal.fire({
+          icon:"error",
+          title:`${(error as any).response.data.message || "Data Add Faild!!"} `
+        })
+   }
   };
 
   return (
