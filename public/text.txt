@@ -49,7 +49,6 @@ Social Media Icons।
 Payment methods (Bkash, Nagad, Visa, Mastercard)।
 
 
-Women Fashion 👗 (Dress, Saree, Shoes, Bags, Jewelry) Men Fashion 👕 (Shirt, Pant, Shoes, T-shirt Watch, Sunglasses) Electronics 🔌 (Mobile, Laptop, Accessories, Gadgets) Home & Kitchen 🍳 (Cookware, Appliances, Decor, Furniture) Beauty & Personal Care 💄 (Cosmetics, Skin Care, Hair Care) Kids & Baby 🧸 (Toys, Clothes, School Items, Baby Products) Sports & Fitness 🏋️ (Gym Equipment, Sportswear, Outdoor Items) Groceries & Essentials 🛒 (Food, Drinks, Household Essentials)
-
+ 👗 (Dress, Saree, Bags, ) Men Fashion 👕 (Shirt, Pant, Shoes, T-shirt , ) Electronics 🔌 (Mobile, Gadgets) 
 
 give me 5 json data category: , subcategory: 

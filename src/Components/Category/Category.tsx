@@ -2,7 +2,13 @@ import React from 'react'
 
 const Category = () => {
 
-    const category =[]
+    const category =[
+        {
+            images:'',
+            tittle:"",
+            actionText:""
+        }
+    ]
   return (
     <div>Category</div>
   )

@@ -24,6 +24,21 @@ const nextConfig: NextConfig = {
         hostname: "static.vecteezy.com",
        
       },
+      {
+        protocol: 'https',
+        hostname: "m.media-amazon.com",
+       
+      },
+      {
+        protocol: 'https',
+        hostname: "img.drz.lazcdn.com",
+       
+      },
+      {
+        protocol: 'https',
+        hostname: "www.shutterstock.com",
+       
+      },
     ],
   }
 };

@@ -51,7 +51,7 @@ const Banner = () => {
           <SwiperSlide key={index}>
             <div className=" w-11/12 mx-auto  lg:flex justify-between lg:flex-row-reverse flex-row items-center gap-8 mt-14">
               {/* Left Side - Image */}
-              <div className="">
+              <div className="flex justify-center md:justify-end items-center w-full">
                 <Image src={item.image} alt={item.title} width={500} height={500}/>
               </div>
 

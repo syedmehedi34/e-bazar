@@ -913,7 +913,7 @@
     "stock": 25,
     "featured": true,
     "sizes": [39, 40, 41, 42, 43, 44],
-    "images": ["https://m.media-amazon.com/images/I/414egjgn-uL._AC_SY575_.jpg", "https://m.media-amazon.com/images/I/61BsmaqqTIL._AC_SY575_.jpg", "https://m.media-amazon.com/images/I/51iD9iepCvL._AC_SY575_.jpg"],
+    "images": ["https://img.drz.lazcdn.com/static/bd/p/ca7af084d2c6e7f2402bf44a5fe8278f.jpg_400x400q75.avif", "https://m.media-amazon.com/images/I/61BsmaqqTIL._AC_SY575_.jpg", "https://m.media-amazon.com/images/I/51iD9iepCvL._AC_SY575_.jpg"],
     "reviews": [
       {"user": "Irfan Hossain", "rating": 5, "comment": "Very comfortable and supportive for running."},
       {"user": "Shuvo Alam", "rating": 4, "comment": "Lightweight and stylish. Perfect for gym."},
