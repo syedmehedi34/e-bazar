@@ -2,6 +2,7 @@ import Banner from "@/Components/Banner/Banner";
 import Faq from "@/Components/Faq/Faq";
 import Offers from "@/Components/Offers/Offers";
 import Products from "@/Components/Products/Products";
+import Testimonial from "@/Components/Testimonial/Testimonial";
 import TrustCard from "@/Components/Trustcard/TrustCard";
 
 
@@ -16,6 +17,7 @@ export default function Home() {
     <Products/>
     <Offers/>
     <Faq/>
+    <Testimonial/>
     
   </div>
   );

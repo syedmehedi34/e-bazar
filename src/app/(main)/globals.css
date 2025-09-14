@@ -47,3 +47,14 @@ body{
 }
 
 
+.swiper-pagination-bullet {
+  background: #7322c0 !important; 
+  opacity: 0.10;
+}
+
+.swiper-pagination-bullet-active {
+  background: #7e22ce !important; 
+  opacity: 1;
+}
+
+

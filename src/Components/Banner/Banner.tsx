@@ -1,7 +1,7 @@
 'use client'
 // BannerSlider.tsx
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation,Autoplay } from 'swiper/modules';
+import { Navigation, Autoplay } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import Image from 'next/image';
@@ -20,8 +20,8 @@ const banners = [
     title: "Women's Exclusive Wear",
     short_description: "Upgrade your wardrobe with our elegant and trendy women's fashion collection.",
     button: "Explore Collection",
-    image: 
-    "https://i.postimg.cc/G2FT0xCn/fashion-portrait-two-smiling-brunette-women-models-summer-casual-hipster-overcoat-posing-gray-Photor.png"
+    image:
+      "https://i.postimg.cc/G2FT0xCn/fashion-portrait-two-smiling-brunette-women-models-summer-casual-hipster-overcoat-posing-gray-Photor.png"
   },
   {
     subtitle: "Top Deals",
@@ -36,38 +36,38 @@ const Banner = () => {
   return (
     <div className=' min-h-[0vh]'>
 
-  
-    <div className=" py-8">
-      <Swiper
-       modules={[Autoplay]}
-       effect="fade" 
-      speed={2000} 
-        autoplay= {{delay:4000, }}
-        loop
-    
-        className="w-full"
-      >
-        {banners.map((item, index) => (
-          <SwiperSlide key={index}>
-            <div className=" w-11/12 mx-auto  lg:flex justify-between lg:flex-row-reverse flex-row items-center gap-8 mt-14">
-              {/* Left Side - Image */}
-              <div className="flex justify-center lg:justify-end items-center w-full md:h-[500px]">
-                <Image src={item.image} alt={item.title} width={700} height={500}/>
-              </div>
 
-              {/* Right Side - Content */}
-              <div className="space-y-3 rubik max-lg:text-center mt-5">
-                <p className=" font-bold">{item.subtitle}</p>
-                <h2 className="text-2xl md:text-6xl font-bold  tracking-wide">{item.title}</h2>
-                <p className=" text-[16px] leading-6 tracking-wide">{item.short_description}</p>
-                  <Button text={item.button}/>
+      <div className=" py-8">
+        <Swiper
+          modules={[Autoplay]}
+          effect="fade"
+          speed={2000}
+          autoplay={{ delay: 4000, }}
+          loop
+
+          className="w-full"
+        >
+          {banners.map((item, index) => (
+            <SwiperSlide key={index}>
+              <div className=" w-11/12 mx-auto  lg:flex justify-between lg:flex-row-reverse flex-row items-center gap-8 mt-14">
+                {/* Left Side - Image */}
+                <div className="flex justify-center lg:justify-end items-center w-full md:h-[500px]">
+                  <Image src={item.image} alt={item.title} width={700} height={500} />
+                </div>
+
+                {/* Right Side - Content */}
+                <div className="space-y-3 rubik max-lg:text-center mt-5">
+                  <p className=" font-bold">{item.subtitle}</p>
+                  <h2 className="text-2xl md:text-6xl font-bold  tracking-wide">{item.title}</h2>
+                  <p className=" text-[16px] leading-6 tracking-wide">{item.short_description}</p>
+                  <Button text={item.button} />
+                </div>
               </div>
-            </div>
-          </SwiperSlide>
-        ))}
-      </Swiper>
-    </div>
+            </SwiperSlide>
+          ))}
+        </Swiper>
       </div>
+    </div>
   );
 };
 
