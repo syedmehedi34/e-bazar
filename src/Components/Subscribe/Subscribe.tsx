@@ -1,12 +1,28 @@
+"use client"
 import Image from "next/image";
-import React from "react";
+import React, { useState } from "react";
 import Button from "../Button/Button";
+import Swal from "sweetalert2";
+
 
 const Subscribe = () => {
+    const [email, setEmail] = useState('');
+
+    const handleSubscribe = () =>{
+       if(email){
+            Swal.fire({
+                icon:"success",
+                title:`Thanks You Subscribe! `,
+                text:`${email}`
+            })
+
+            setEmail('')
+       }
+    }
   return (
     <div className="py-16 ">
       <div className="w-11/12 mx-auto">
-        <div className="flex flex-col-reverse md:flex-row justify-between items-center gap-10 md:gap-16 shadow-md shadow-purple-600 p-5">
+        <div className="flex flex-col-reverse md:flex-row justify-between items-center gap-10 md:gap-16 shadow-md shadow-purple-600 p-5 rubik">
           {/* Left Content */}
           <div className="text-center md:text-left space-y-4 md:space-y-6 max-w-lg">
             <h3 className="text-lg font-medium ">
@@ -24,11 +40,14 @@ const Subscribe = () => {
               <div className="flex items-center flex-col sm:flex-row gap-3">
                 <input
                   type="email"
+                  name="email"
+                  onChange={(e)=>setEmail(e.target.value)}
                   placeholder="mail@site.com"
                   required
+                  value={email}
                   className=" bg-gray-900  input-bordered w-full sm:w-auto flex-1 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-500"
                 />
-                <Button text={"Join"} type={"submit"}/>
+                <Button text={"Join"} type={"button"} action={handleSubscribe}/>
               </div>
             </form>
           </div>
