@@ -104,7 +104,7 @@ const Testimonial = () => {
         >
           {testimonials.map((t, index) => (
             <SwiperSlide key={index}>
-              <div className="card  shadow-md border border-gray-600 hover:shadow-lg  py-5 px-2 rubik h-full my-10 hover:shadow-purple-600 hover:scale-105 transition-all duration-300 cursor-pointer">
+              <div className="card  shadow-md border border-gray-800 hover:shadow-lg  py-5 px-2 rubik h-full my-10 hover:shadow-purple-600 hover:scale-105 transition-all duration-300 cursor-pointer">
                 <div className="flex items-center gap-3 mb-3">
                   <img
                     src={t.image}
