@@ -7,7 +7,7 @@ const Offers = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-8 rounded-2xl p-8 shadow-lg shadow-purple-600 relative rubik ">
 
                 {/* Left Content */}
-                <div className="space-y-4 relative z-100">
+                <div className="space-y-4 relative z-50">
                     <p className="text-sm  font-medium uppercase tracking-wide">
                         Special Offer
                     </p>
@@ -22,7 +22,7 @@ const Offers = () => {
                     {/* Price Section */}
                     <div className="flex items-center gap-3 relative">
                         <span className="text-lg font-medium text-gray-400 line-through">
-                            ৳1200
+                            ৳1500
                         </span>
                         <span className="text-2xl font-bold text-purple-600">
                             ৳999

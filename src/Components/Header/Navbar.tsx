@@ -53,7 +53,7 @@ const Navbar = () => {
   )
 
   return (
-    <header className={`w-full z-50 ${path === "/" ? (scrollY > 50 ? "fixed bg-black/70 text-white shadow" : "absolute bg-transparent") : (scrollY > 50 ? "fixed bg-white shadow" : "bg-gradient shadow")}`}>
+    <header className={`w-full z-100 ${path === "/" ? (scrollY > 50 ? "fixed bg-black/70 text-white shadow" : "absolute bg-transparent") : (scrollY > 50 ? "fixed bg-white shadow" : "bg-gradient shadow")}`}>
       <div className="w-11/12 mx-auto flex items-center justify-between py-4">
         <div className='flex items-center gap-4'>
           {/* Mobile Menu Button */}

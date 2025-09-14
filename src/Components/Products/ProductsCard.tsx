@@ -20,7 +20,7 @@ const ProductsCard: React.FC<ProductsCardProps> = ({ product }) => {
     const { title, images, price, discountPrice, rating, stock } = product;
 
     return (
-        <div className=" rounded-lg shadow-md text-sm  shadow-white rubik cursor-pointer hover:shadow-purple-600 transition-all duration-300  p-2">
+        <div className="  rounded-lg shadow-md text-sm  border border-gray-800 rubik cursor-pointer hover:shadow-purple-600 transition-all duration-300  p-2">
             {/* Fixed card width (same size) */}
             <div className=" sm:h-45 h-[300px] overflow-hidden flex items-center justify-center mx-auto">
                 <Image
@@ -28,14 +28,14 @@ const ProductsCard: React.FC<ProductsCardProps> = ({ product }) => {
                     width={100}
                     height={100}
                     alt={title}
-                    className=" w-full h-full object-cover rounded-md mx-auto "
+                    className=" w-full h-full object-contain rounded-md mx-auto "
                 />
             </div>
             <div className="">
                 <h2 className="mt-2 font-medium line-clamp-1 ">{title}</h2>
                 <div className="flex justify-between items-center">
                     <p className="text-xl my-2 font-bold">৳ {price}</p>
-                    {rating && <p className="text-red-500 flex justify-center">{rating}<MdOutlineStar /> </p>}
+                    <p className="text-red-500">{rating} </p>
                 </div>
                 <div className="flex items-center justify-between gap-4">
                     {stock && <p>{stock} stock</p>}

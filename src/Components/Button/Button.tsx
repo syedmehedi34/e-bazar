@@ -2,10 +2,10 @@
 
 type buttonProps = {
     type?:'button' | 'submit'| 'reset' ,
-    text:string,
-    Icon: string,
-    className: string,
-    action: ()=>void
+    text?:string,
+    Icon?: string,
+    className?: string,
+    action?: ()=>void
 }
 
 const Button: React.FC<buttonProps> =  ({ type = 'button', text, Icon, className, action }) => {

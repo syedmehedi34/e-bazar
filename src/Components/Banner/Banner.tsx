@@ -13,7 +13,7 @@ const banners = [
     title: "Men's Fashion Collection",
     short_description: "Explore the latest trends in men's fashion. From streetwear to formal styles, we've got it all.",
     button: "Shop Now",
-    image: "https://i.postimg.cc/KvMW72Yt/fashionable-man-winter-knitted-clothes-removebg-preview.png"
+    image: "https://i.postimg.cc/L5hSkmvQ/young-men-laying-hands-shoulders-woman-smiling.png"
   },
   {
     subtitle: "Style Redefined",
@@ -21,14 +21,14 @@ const banners = [
     short_description: "Upgrade your wardrobe with our elegant and trendy women's fashion collection.",
     button: "Explore Collection",
     image: 
-    "https://i.postimg.cc/9Mq9gVnj/portrait-young-stylish-girl-model-casual-summer-clothes-brown-hat-with-natural-makeup-isolated-remov.png"
+    "https://i.postimg.cc/G2FT0xCn/fashion-portrait-two-smiling-brunette-women-models-summer-casual-hipster-overcoat-posing-gray-Photor.png"
   },
   {
     subtitle: "Top Deals",
     title: "Smart Electronics & Gadgets",
     short_description: "Grab the best deals on the latest electronics and gadgets. Limited time offers!",
     button: "Browse Now",
-    image: "https://i.postimg.cc/qqX30qL8/headphone.png"
+    image: "https://i.postimg.cc/7hCvGmYp/low-angle-daughter-mother-listening-music.png"
   }
 ];
 
@@ -51,8 +51,8 @@ const Banner = () => {
           <SwiperSlide key={index}>
             <div className=" w-11/12 mx-auto  lg:flex justify-between lg:flex-row-reverse flex-row items-center gap-8 mt-14">
               {/* Left Side - Image */}
-              <div className="flex justify-center lg:justify-end items-center w-full">
-                <Image src={item.image} alt={item.title} width={500} height={500}/>
+              <div className="flex justify-center lg:justify-end items-center w-full md:h-[500px]">
+                <Image src={item.image} alt={item.title} width={700} height={500}/>
               </div>
 
               {/* Right Side - Content */}

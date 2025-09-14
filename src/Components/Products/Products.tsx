@@ -1,3 +1,4 @@
+import Button from "../Button/Button";
 import ProductsCard from "./ProductsCard";
 
 const Products = async () => {
@@ -14,6 +15,9 @@ const Products = async () => {
                     products?.map((product: any)=>(
                         <ProductsCard key={product._id} product={product}/>
                     ))}
+            </div>
+            <div className="flex justify-center my-4">
+              <Button text={"See More"}/>
             </div>
        </div>
     </div>
