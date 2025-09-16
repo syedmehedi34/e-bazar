@@ -4,12 +4,12 @@ import Logo from "../Logo/Logo";
 
 const Footer = () => {
   return (
-    <div className="text-white rubik" style={{ background: "radial-gradient(125% 125% at 50% 100%, #000000 40%, #350136 100%)", }}>
+    <div className="rubik bg-gray-800 text-white" >
       {/* Top Footer */}
       <footer className="footer sm:footer-horizontal py-10  w-11/12 mx-auto">
         {/* Logo & Description */}
         <aside className="flex flex-col items-start space-y-2">
-            <Logo/>
+            <Logo logoColor={'white'} />
           <p className="text-sm">
             E-Bazaar Industries Ltd.
             <br />
