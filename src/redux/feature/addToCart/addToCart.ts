@@ -5,7 +5,8 @@ export interface addToCartState {
   value: any[]
 }
 
-const loadFromLocalStorage = () =>JSON.parse(globalThis?.localStorage?.getItem('shopping-cart') || '[]')
+const loadFromLocalStorage = () =>
+  JSON.parse(globalThis?.localStorage?.getItem('shopping-cart') || '[]')
 
 const savedLocalStorage = (payload: any) => {
   if (typeof window === 'undefined') return
@@ -13,9 +14,7 @@ const savedLocalStorage = (payload: any) => {
 
   const existCart = carts.find((cart: any) => cart._id === payload._id)
   if (!existCart) {
-    const updatedCarts = [...carts, payload]
-    localStorage.setItem('shopping-cart', JSON.stringify(updatedCarts))
-    
+    localStorage.setItem('shopping-cart', JSON.stringify(payload))
   }
 }
 
@@ -27,12 +26,35 @@ export const addToCartSlice = createSlice({
   initialState,
   reducers: {
     addToCart: (state, action) => {
-      const exist = state.value.find(cart => cart._id === action.payload._id);
-      if (!exist) {
-        state.value.push(action.payload); 
-        savedLocalStorage(action.payload); 
+      const exist = state.value.find(cart => cart._id === action.payload._id)
+      if (exist) {
+        exist.quantity += 1
+      } else {
+        state.value.push({ ...action.payload, quantity: 1 })
+      }
+      savedLocalStorage(state.value)
+    },
+    incrementQuantity: (state, action) => {
+      const exist = state.value.find(cart => cart._id === action.payload)
+      if (exist) {
+        exist.quantity += 1
+        savedLocalStorage(state.value)
+        state.value
+      }
+    },
+
+    decrementQuantity: (state, action) => {
+      const exist = state.value.find(cart => cart._id === action.payload)
+      if (exist && exist.quantity > 1) {
+        exist.quantity -= 1
+        savedLocalStorage(state.value)
+      }
+    },
+    removeFromCart: (state, action) => {
+      state.value = state.value.filter(cart => cart._id !== action.payload);
+      savedLocalStorage(state.value);
     }
   }
-}})
-export const { addToCart } = addToCartSlice.actions
+})
+export const { addToCart,incrementQuantity, decrementQuantity, removeFromCart } = addToCartSlice.actions
 export default addToCartSlice.reducer

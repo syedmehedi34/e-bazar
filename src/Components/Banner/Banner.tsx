@@ -35,10 +35,10 @@ const banners = [
 
 const Banner = () => {
   return (
-    <div className=' min-h-[0vh]'>
+    <div className=''>
 
 
-      <div className=" py-8 relative">
+      <div className=" py-8 relative min-h-[80vh] ">
         <div className="absolute top-0 right-0 h-full w-[60%] bg-gray-200 clip-path   ">
         </div>
 
