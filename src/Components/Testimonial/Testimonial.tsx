@@ -104,23 +104,23 @@ const Testimonial = () => {
         >
           {testimonials.map((t, index) => (
             <SwiperSlide key={index}>
-              <div className="card  shadow-md border border-gray-800 hover:shadow-lg  py-5 px-2 rubik h-full my-10 hover:shadow-purple-600 hover:scale-105 transition-all duration-300 cursor-pointer">
+              <div className="card  shadow-md hover:shadow-lg  py-5 px-2 rubik h-full my-10 hover:shadow-gray-800 hover:scale-105 transition-all duration-300 cursor-pointer">
                 <div className="flex items-center gap-3 mb-3">
                   <img
                     src={t.image}
                     alt={t.name}
-                    className="w-14 h-14 rounded-tl-[160px] rounded-tr-[150px]  rounded-bl-[150px] border-b-4 border-purple-600 "
+                    className="w-14 h-14 rounded-tl-[160px] rounded-tr-[150px]  rounded-bl-[150px] border-b-4 border-gray-800 "
                   />
                   <div>
                     <h3 className="font-semibold">{t.name}</h3>
-                    <p className="text-xs text-gray-300">{t.location}</p>
-                    <p className="text-xs text-gray-400">{t.date}</p>
+                    <p className="text-xs text-gray-600">{t.location}</p>
+                    <p className="text-xs text-gray-600">{t.date}</p>
                   </div>
                 </div>
-                <p className="text-sm text-gray-100 mb-2 line-clamp-2">{t.description}</p>
+                <p className="text-sm text-gray-800 mb-2 line-clamp-2">{t.description}</p>
                 <div className="flex">
                   {Array.from({ length: t.rating }).map((_, i) => (
-                    <span key={i} className="text-purple-600">
+                    <span key={i} className="text-gray-800">
                       ★
                     </span>
                   ))}

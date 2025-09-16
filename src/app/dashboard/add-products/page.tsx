@@ -200,7 +200,7 @@ const ProductForm = () => {
         {/* Submit */}
         <button
           type="submit"
-          className="w-full py-3 bg-purple-600 text-white font-bold rounded hover:bg-red-700 transition"
+          className="w-full py-3 bg-gray-800 text-white font-bold rounded hover:bg-red-700 transition"
         >
           Submit Product
         </button>

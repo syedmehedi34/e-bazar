@@ -27,18 +27,18 @@ const TrustCard = () => {
         }
     ]
   return (
-    <div className='my-5'>
+    <div className='mt-16'>
         <div className='w-11/12 mx-auto'>
             <div className='grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4'>
                 {
                     cards.map((card)=>{
                         return(
-                            <div key={card.title} className='flex items-center gap-4 shadow shadow-white py-6 px-4 rounded-md cursor-pointer'>
-                                <div className='text-3xl bg-purple-600 p-2 rounded-md'>
+                            <div key={card.title} className='flex items-center gap-4 bg-gray-200 py-8 6 px-4 rounded-md cursor-pointer'>
+                                <div className='text-3xl bg-gray-800 text-white p-2 rounded-md'>
                                     {card.icons}
                                 </div>
                                 <div className=''>
-                                    <p className='text-lg font-bold'>{card.title}</p>
+                                    <p className='text-lg font-bold '>{card.title}</p>
                                     <p className='text-sm '>{card.description}</p>
                                 </div>
                             </div>

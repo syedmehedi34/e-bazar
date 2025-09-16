@@ -38,7 +38,10 @@ const Banner = () => {
     <div className=' min-h-[0vh]'>
 
 
-      <div className=" py-8">
+      <div className=" py-8 relative">
+        <div className="absolute top-0 right-0 h-full w-[60%] bg-gray-200 clip-path   ">
+        </div>
+
         <Swiper
           modules={[Autoplay]}
           effect="fade"
@@ -52,10 +55,12 @@ const Banner = () => {
             <SwiperSlide key={index}>
               <div className=" w-11/12 mx-auto  lg:flex justify-between lg:flex-row-reverse flex-row items-center gap-8 mt-14 ">
                 {/* Left Side - Image */}
-                <motion.div 
-                animate={{x:[0,40,0]}}
-                transition={{duration:5, repeat:Infinity, repeatType: "loop", }}
-                className="flex justify-center lg:justify-end items-center w-full md:h-[500px]">
+                <motion.div
+                  animate={{ x: [0, 40, 0] }}
+                  transition={{ duration: 5, repeat: Infinity, repeatType: "loop", }}
+                  className="flex justify-center lg:justify-end items-center w-full md:h-[500px] 
+                
+                ">
                   <Image src={item.image} alt={item.title} width={700} height={500} priority />
                 </motion.div>
 

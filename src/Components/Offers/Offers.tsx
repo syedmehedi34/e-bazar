@@ -4,17 +4,17 @@ import React from "react";
 const Offers = () => {
     return (
         <div className="w-11/12 mx-auto my-12 relative">
-            <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-8 rounded-2xl p-8 shadow-lg shadow-purple-600 relative rubik ">
+            <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-8 rounded-2xl p-8 shadow-lg shadow-gray-800 relative rubik ">
 
                 {/* Left Content */}
                 <div className="space-y-4 relative z-50">
                     <p className="text-sm  font-medium uppercase tracking-wide">
                         Special Offer
                     </p>
-                    <h2 className="text-3xl md:text-4xl font-bold text-gray-100 leading-tight">
-                        Get the Best Deals on <span className="text-purple-600">Headphones</span>
+                    <h2 className="text-3xl md:text-4xl font-bold text-gray-800 leading-tight">
+                        Get the Best Deals on <span className="text-gray-800">Headphones</span>
                     </h2>
-                    <p className="text-gray-100 text-sm md:text-base">
+                    <p className="text-gray-800 text-sm md:text-base">
                         Upgrade your sound experience with our premium headphones.
                         Limited time offer, don’t miss out on this chance to save big.
                     </p>
@@ -24,7 +24,7 @@ const Offers = () => {
                         <span className="text-lg font-medium text-gray-400 line-through">
                             ৳1500
                         </span>
-                        <span className="text-2xl font-bold text-purple-600">
+                        <span className="text-2xl font-bold text-gray-800">
                             ৳999
                         </span>
 
@@ -32,10 +32,10 @@ const Offers = () => {
 
                     </div>
 
-                    <button className="mt-4 px-6 py-2 bg-purple-600 hover:bg-purple-700 text-white text-sm font-medium rounded-full shadow-md transition">
+                    <button className="mt-4 px-6 py-2 bg-gray-800 hover:bg-purple-700 text-white text-sm font-medium rounded-full shadow-md transition">
                         Shop Now
                     </button>
-                    <p className="absolute   text-gray-800 font-bold top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]  sm:text-[20vw] text-[40vw] z-[-1]">
+                    <p className="absolute   text-gray-100 font-bold top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]  sm:text-[20vw] text-[40vw] z-[-1]">
                         35%
                     </p>
                 </div>

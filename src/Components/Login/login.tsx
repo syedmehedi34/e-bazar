@@ -73,7 +73,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onClose }) => {
       <div className="bg-black py-10 border border-gray-600 rounded-2xl shadow-lg w-[400px] max-w-full p-6 relative">
         {/* Close Button */}
         <button
-          className="absolute top-3 right-3 cursor-pointer hover:text-gray-800 transition bg-purple-600 p-1 rounded-2xl text-white font-bold"
+          className="absolute top-3 right-3 cursor-pointer hover:text-gray-800 transition bg-gray-800 p-1 rounded-2xl text-white font-bold"
           onClick={onClose}
         >
           <IoClose />
@@ -125,7 +125,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onClose }) => {
         {/* Google */}
         <button
           onClick={handleLoginWithGoogle}
-          className="btn btn-block  rounded-md bg-purple-600 border-none text-white hover:bg-red-800  ">
+          className="btn btn-block  rounded-md bg-gray-800 border-none text-white hover:bg-red-800  ">
           <FaGooglePlusG size={30} />
           Login with Google
         </button>

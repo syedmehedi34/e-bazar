@@ -53,7 +53,7 @@ const Navbar = () => {
   )
 
   return (
-    <header className={`w-full z-100 text-white ${path === "/" ? (scrollY > 50 ? "fixed-nav bg-black/70 text-white shadow" : "absolute bg-transparent") : (scrollY > 50 ? "fixed bg-white shadow" : "bg-gradient shadow")}`}>
+    <header className={`w-full z-100  ${path === "/" ? (scrollY > 50 ? "fixed-nav bg-gray-200  shadow" : "absolute bg-transparent") : (scrollY > 50 ? "fixed bg-white shadow" : "bg-gradient shadow")}`}>
       <div className="w-11/12 mx-auto flex items-center justify-between py-4">
         <div className='flex items-center gap-4'>
           {/* Mobile Menu Button */}
@@ -85,8 +85,8 @@ const Navbar = () => {
           {/* Login / Register */}
           {!session?.user ? (
             <div className='hidden lg:block'>
-              <button onClick={() => setIsOpen(true)} className="btn btn-outline hover:bg-purple-600 hover:border-none rounded-md hover:text-white transition-all duration-300 mr-2">Login</button>
-              <button onClick={() => setIsOpenRegisterPage(true)} className="btn btn-outline  hover:bg-purple-600 hover:border-none rounded-md hover:text-white transition-all duration-300">Register</button>
+              <button onClick={() => setIsOpen(true)} className="btn btn-outline hover:bg-gray-800  rounded-md hover:text-white transition-all duration-300 mr-2">Login</button>
+              <button onClick={() => setIsOpenRegisterPage(true)} className="btn btn-outline  hover:bg-gray-800 rounded-md hover:text-white transition-all duration-300">Register</button>
             </div>
           ) : (
             <div className="dropdown dropdown-end ">
@@ -98,7 +98,7 @@ const Navbar = () => {
               <ul tabIndex={0} className="dropdown-content menu p-2 shadow bg-gradient shadow-amber-600 text-white rounded-box w-52 mt-4 space-y-4">
                 <li><Link href="#">Profile</Link></li>
                 <li><Link href="/dashboard">Dashboard</Link></li>
-                <li><button onClick={() => handleLogout()} className="btn btn-outline border-none w-full bg-purple-600 hover:bg-red-800 text-white">Logout</button></li>
+                <li><button onClick={() => handleLogout()} className="btn btn-outline border-none w-full bg-gray-800 hover:bg-red-800 text-white">Logout</button></li>
               </ul>
             </div>
           )}
@@ -114,8 +114,8 @@ const Navbar = () => {
           {
             !session?.user && (
               <div className=' lg:hidden flex flex-col w-full gap-2 '>
-                <button onClick={() => setIsOpen(true)} className="btn btn-outline hover:bg-purple-600 hover:border-none rounded-md hover:text-white transition-all duration-300">Login</button>
-                <button onClick={() => setIsOpenRegisterPage(true)} className="btn btn-outline  hover:bg-purple-600 hover:border-none rounded-md hover:text-white transition-all duration-300">Register</button>
+                <button onClick={() => setIsOpen(true)} className="btn btn-outline hover:bg-gray-800 hover:border-none rounded-md hover:text-white transition-all duration-300">Login</button>
+                <button onClick={() => setIsOpenRegisterPage(true)} className="btn btn-outline  hover:bg-gray-800 hover:border-none rounded-md hover:text-white transition-all duration-300">Register</button>
               </div>
             )
           }

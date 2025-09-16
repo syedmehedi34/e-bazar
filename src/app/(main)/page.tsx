@@ -1,6 +1,6 @@
 import Banner from "@/Components/Banner/Banner";
 import Faq from "@/Components/Faq/Faq";
-import Offers from "@/Components/Offers/Offers";
+// import Offers from "@/Components/Offers/Offers";
 import Products from "@/Components/Products/Products";
 import Subscribe from "@/Components/Subscribe/Subscribe";
 import Testimonial from "@/Components/Testimonial/Testimonial";
@@ -16,7 +16,7 @@ export default function Home() {
     <Banner/>
     <TrustCard/>
     <Products/>
-    <Offers/>
+    {/* <Offers/> */}
     <Faq/>
     <Testimonial/>
     <Subscribe/>
