@@ -13,6 +13,8 @@
     "@reduxjs/toolkit": "^2.8.2",
     "axios": "^1.11.0",
     "daisyui": "^5.0.50",
+    "framer-motion": "^12.23.12",
+    "motion": "^12.23.12",
     "next": "15.4.5",
     "next-auth": "^4.24.11",
     "react": "19.1.0",

@@ -47,6 +47,8 @@ const Offers = () => {
                         width={400}
                         height={300}
                         alt="offers images"
+                        priority
+                      
                         className="w-full max-w-sm object-contain drop-shadow-lg"
                     />
                 </div>

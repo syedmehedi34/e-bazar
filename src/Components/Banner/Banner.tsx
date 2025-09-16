@@ -6,6 +6,7 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import Image from 'next/image';
 import Button from '../Button/Button';
+import { motion } from "framer-motion";
 
 const banners = [
   {
@@ -49,11 +50,14 @@ const Banner = () => {
         >
           {banners.map((item, index) => (
             <SwiperSlide key={index}>
-              <div className=" w-11/12 mx-auto  lg:flex justify-between lg:flex-row-reverse flex-row items-center gap-8 mt-14">
+              <div className=" w-11/12 mx-auto  lg:flex justify-between lg:flex-row-reverse flex-row items-center gap-8 mt-14 ">
                 {/* Left Side - Image */}
-                <div className="flex justify-center lg:justify-end items-center w-full md:h-[500px]">
-                  <Image src={item.image} alt={item.title} width={700} height={500} />
-                </div>
+                <motion.div 
+                animate={{x:[0,40,0]}}
+                transition={{duration:5, repeat:Infinity, repeatType: "loop", }}
+                className="flex justify-center lg:justify-end items-center w-full md:h-[500px]">
+                  <Image src={item.image} alt={item.title} width={700} height={500} priority />
+                </motion.div>
 
                 {/* Right Side - Content */}
                 <div className="space-y-3 rubik max-lg:text-center mt-5">
