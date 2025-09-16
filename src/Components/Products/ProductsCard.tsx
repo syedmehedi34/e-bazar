@@ -1,6 +1,10 @@
+"use client"
+
+import { addToCart } from "@/redux/feature/addToCart/addToCart";
 import Image from "next/image";
 import React from "react";
 import { BsFillCartCheckFill } from "react-icons/bs";
+import { useDispatch } from "react-redux";
 
 interface Product {
     id: string;
@@ -19,6 +23,7 @@ interface ProductsCardProps {
 
 const ProductsCard: React.FC<ProductsCardProps> = ({ product }) => {
     const { title, images, price, discountPrice, rating, stock} = product;
+    const dispatch = useDispatch()
 
     return (
         <div className="  rounded-lg shadow-sm text-sm   rubik cursor-pointer hover:shadow-gray-800 transition-all duration-300  p-2">
@@ -43,7 +48,9 @@ const ProductsCard: React.FC<ProductsCardProps> = ({ product }) => {
                 <div className="flex items-center justify-between gap-4">
                     {stock && <p>{stock} stock</p>}
                     
-                    <button className="text-[12px] p-2 bg-gray-800 rounded-full cursor-pointer hover:bg-red-800 ">
+                    <button 
+                    onClick={()=>dispatch(addToCart(product))}
+                    className="text-[12px] p-2 bg-gray-800 rounded-full cursor-pointer hover:bg-red-800 ">
                         <BsFillCartCheckFill size={14} color="white"/>
                     </button>
                 </div>

@@ -10,19 +10,19 @@ import dynamic from "next/dynamic";
 import Register from '../Register/Register'
 import { signOut, useSession } from 'next-auth/react'
 import Swal from 'sweetalert2'
+import { useSelector } from 'react-redux'
 
 const LoginPage = dynamic(() => import("@/Components/Login/login"), { ssr: false });
 
 const Navbar = () => {
   const [scrollY, setScrollY] = useState(0);
-  const [isOpen, setIsOpen] = useState(false); // Login modal
-  const [isOpenRegisterPage, setIsOpenRegisterPage] = useState(false); // Register modal
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false); // Mobile menu toggle
-
+  const [isOpen, setIsOpen] = useState(false); 
+  const [isOpenRegisterPage, setIsOpenRegisterPage] = useState(false); 
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false); 
+  const shoppingCart = useSelector((state: any) => state.cart.value);
   const path = usePathname()
   const { data: session } = useSession()
-  console.log(session)
-
+  
   useEffect(() => {
     const handleScrollY = () => setScrollY(window.scrollY);
     window.addEventListener('scroll', handleScrollY);
@@ -64,7 +64,7 @@ const Navbar = () => {
           </button>
           {/* Logo */}
           <Link href={'/'}>
-            <Logo logoColor={'white'} />
+            <Logo/>
           </Link>
         </div>
 
@@ -74,8 +74,8 @@ const Navbar = () => {
         {/* Icons + Auth Buttons */}
         <div className="flex items-center gap-4">
           <div className="relative">
-            <Link href={'/cart'}><BsCartCheckFill size={24} /></Link>
-            <span className='absolute -top-2 -right-2 font-bold'>0</span>
+            <Link href={'/shopping-cart'}><BsCartCheckFill size={24} /></Link>
+            <span className='absolute -top-2 -right-2 font-bold'>{shoppingCart?.length || 0}</span>
           </div>
           <div className="relative">
             <Link href={'/cart'}><FaHeartCircleCheck size={24} /></Link>
