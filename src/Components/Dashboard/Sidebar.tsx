@@ -16,7 +16,7 @@ const Sidebar = () => {
     ];
 
 
-    if ((session?.user as any)?.role?.includes('admin')) {
+    if ((session?.user )?.role?.includes('admin')) {
         menuItems.push(
             { name: "Products", path: "/dashboard/products" },
             { name: "Add Products", path: "/dashboard/add-products" },
@@ -27,7 +27,7 @@ const Sidebar = () => {
             { name: "Support", path: "/dashboard/support" },
         )
     }
-    if ((session?.user as any)?.role?.includes('use')) {
+    if ((session?.user )?.role?.includes('use')) {
         menuItems.push(
             { name: "My Order", path: "/dashboard/add-products" },
             { name: "Settings", path: "/dashboard/settings" },

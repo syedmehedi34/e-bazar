@@ -5,12 +5,14 @@ import Logo from '../Logo/Logo'
 import { usePathname } from 'next/navigation'
 import { BsCartCheckFill } from "react-icons/bs";
 import { FaHeartCircleCheck } from "react-icons/fa6";
-import { BsBoxArrowInRight } from "react-icons/bs";
 import dynamic from "next/dynamic";
 import Register from '../Register/Register'
 import { signOut, useSession } from 'next-auth/react'
 import Swal from 'sweetalert2'
 import { useSelector } from 'react-redux'
+import { RootState } from '@/redux/store'
+import { AxiosError } from 'axios'
+import Image from 'next/image'
 
 const LoginPage = dynamic(() => import("@/Components/Login/login"), { ssr: false });
 
@@ -19,7 +21,7 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false); 
   const [isOpenRegisterPage, setIsOpenRegisterPage] = useState(false); 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false); 
-  const shoppingCart = useSelector((state: any) => state.cart.value);
+  const shoppingCart = useSelector((state: RootState) => state.cart.value) ;
   const path = usePathname()
   const { data: session } = useSession()
   
@@ -37,9 +39,10 @@ const Navbar = () => {
         title: "Logout successfully!"
       })
     } catch (error) {
+      const err = error as AxiosError<{message:string}>;
       Swal.fire({
         icon: 'error',
-        title: "Logout Failed!"
+        title: err.response?.data?.message || "Logout Failed!"
       })
     }
   }
@@ -92,7 +95,7 @@ const Navbar = () => {
             <div className="dropdown dropdown-end ">
               <div tabIndex={0} className="btn btn-ghost btn-circle avatar">
                 <div className="w-10 rounded-full">
-                  <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" alt="Avatar" />
+                  <Image src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" alt="Avatar" />
                 </div>
               </div>
               <ul tabIndex={0} className="dropdown-content menu p-2 shadow bg-gradient shadow-amber-600 text-white rounded-box w-52 mt-4 space-y-4">
