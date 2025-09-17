@@ -1,11 +1,11 @@
 "use client";
 import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination, Autoplay } from "swiper/modules";
+import {  Pagination, Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-
+import Image from "next/image";
 const testimonials = [
   {
     name: "Rahim Uddin",
@@ -106,9 +106,10 @@ const Testimonial = () => {
             <SwiperSlide key={index}>
               <div className="card  shadow-md hover:shadow-lg  py-5 px-2 rubik h-full my-10 hover:shadow-gray-800 hover:scale-105 transition-all duration-300 cursor-pointer">
                 <div className="flex items-center gap-3 mb-3">
-                  <img
-                    src={t.image}
+                  <Image src={t.image}
                     alt={t.name}
+                    width={100}
+                    height={100}
                     className="w-14 h-14 rounded-tl-[160px] rounded-tr-[150px]  rounded-bl-[150px] border-b-4 border-gray-800 "
                   />
                   <div>

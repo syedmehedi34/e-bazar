@@ -5,7 +5,7 @@ import React, { useState } from 'react'
 import { FaGooglePlusG } from 'react-icons/fa6';
 import { IoClose } from 'react-icons/io5'
 import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 
 import Swal from 'sweetalert2'
 
@@ -45,10 +45,11 @@ const Register: React.FC<RegisterProps> = ({ onClose }) => {
       form.reset();
       onClose();
     }
-  } catch (error: any) {
+  } catch (error) {
+    const err = error as AxiosError<{message:string}>;
     Swal.fire({
       icon: "error",
-      title: error.response?.data?.message || error.message || "Something went wrong",
+      title: err.response?.data?.message ||  "Something went wrong",
     });
   } finally {
     setLoading(false);

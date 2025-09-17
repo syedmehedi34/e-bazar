@@ -44,6 +44,11 @@ const nextConfig: NextConfig = {
         hostname: "ibb.co.com",
        
       },
+      {
+        protocol: 'https',
+        hostname: "randomuser.me",
+       
+      },
     ],
   }
 };

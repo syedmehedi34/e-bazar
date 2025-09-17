@@ -1,21 +1,26 @@
 'use client'
 import { createSlice } from '@reduxjs/toolkit'
 
-export interface addToCartState {
-  value: any[]
+export interface CartItem {
+  _id: string;
+  title: string;
+  brand?: string;
+  price: number;
+  discountPrice?: number;
+  quantity: number;
+  images: string[];
 }
 
-const loadFromLocalStorage = () =>
+export interface addToCartState {
+  value: CartItem[]
+}
+
+const loadFromLocalStorage = () : CartItem[] =>
   JSON.parse(globalThis?.localStorage?.getItem('shopping-cart') || '[]')
 
-const savedLocalStorage = (payload: any) => {
-  if (typeof window === 'undefined') return
-  const carts = JSON.parse(localStorage.getItem('shopping-cart') || '[]')
-
-  const existCart = carts.find((cart: any) => cart._id === payload._id)
-  if (!existCart) {
-    localStorage.setItem('shopping-cart', JSON.stringify(payload))
-  }
+const savedLocalStorage = (payload: CartItem[]) => {
+  if (typeof window === 'undefined') return;
+  localStorage.setItem('shopping-cart', JSON.stringify(payload));
 }
 
 const initialState: addToCartState = {

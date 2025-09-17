@@ -35,11 +35,9 @@ const banners = [
 
 const Banner = () => {
   return (
-    <div className=''>
-
-
-      <div className=" py-8 relative min-h-[80vh] ">
-        <div className="absolute top-0 right-0 h-full w-[60%] bg-gray-200 clip-path   ">
+  
+      <div className=" py-8 relative h-[100vh] ">
+        <div className="absolute top-0 right-0 h-full lg:w-[60%] w-[70%] bg-gray-200 clip-path   ">
         </div>
 
         <Swiper
@@ -76,7 +74,7 @@ const Banner = () => {
           ))}
         </Swiper>
       </div>
-    </div>
+  
   );
 };
 
