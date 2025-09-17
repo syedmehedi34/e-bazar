@@ -1,12 +1,8 @@
 "use client";
 import { signIn } from 'next-auth/react';
 import Link from 'next/link';
-
-
 import React, { useState } from 'react'
-
 import { FaGooglePlusG } from 'react-icons/fa6';
-
 import { IoClose } from 'react-icons/io5'
 import Swal from 'sweetalert2';
 
@@ -20,41 +16,34 @@ const LoginPage: React.FC<LoginPageProps> = ({ onClose }) => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
-
- const handleCredentialsLogin = async (e:React.FormEvent<HTMLElement>) => {
+  const handleCredentialsLogin = async (e: React.FormEvent<HTMLElement>) => {
     e.preventDefault();
-    setLoading(true); 
+    setLoading(true);
 
     if (!email || !password) {
       alert("Email and password are required");
-      setLoading(false); 
+      setLoading(false);
       return;
     }
-
-  
-
-
     // Call the login API
     const result = await signIn("credentials", {
       email,
       password,
-      redirect: false, 
+      redirect: false,
     });
-  
+
     if (result?.ok && !result.error) {
       Swal.fire({
-        icon:"success",
-        title:"Login Successfully !"
+        icon: "success",
+        title: "Login Successfully !"
       })
-         setLoading(false); 
-         onClose();
-
-      
+      setLoading(false);
+      onClose();
 
     } else {
       Swal.fire({
-        icon:"error",
-        title:"Invalid credentials!"
+        icon: "error",
+        title: "Invalid credentials!"
       })
     }
   };
@@ -131,7 +120,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onClose }) => {
         </button>
 
         <p className='text-sm text-center mt-4'>
-          <span>Dot't have an account please? <Link href={'#'} className='text-red-400 underline'>create account</Link></span>
+          <span>Dot&apos;t have an account please? <Link href={'#'} className='text-red-400 underline'>create account</Link></span>
         </p>
 
 
