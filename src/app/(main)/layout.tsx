@@ -8,6 +8,7 @@ import ReduxProvider from "@/Provider/ReduxProvider/ReduxProvider"
 import Navbar from "@/Components/Header/Navbar";
 import Footer from "@/Components/Footer/Footer";
 import SessionWrapper from "@/Components/SessionWrapper/SessionWrapper";
+import ToastProvider from "@/Components/ToastProvider/ToastProvider";
 
 
 
@@ -47,6 +48,7 @@ export default function RootLayout({
           <ReduxProvider>
             <Navbar />
             {children}
+            <ToastProvider/>
             <Footer />
           </ReduxProvider>
         </SessionWrapper>

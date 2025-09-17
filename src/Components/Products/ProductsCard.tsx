@@ -1,19 +1,22 @@
 "use client"
 
 import { addToCart } from "@/redux/feature/addToCart/addToCart";
+import { RootState } from "@/redux/store";
 import Image from "next/image";
 import React from "react";
 import { BsFillCartCheckFill } from "react-icons/bs";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 interface Product {
-    id: string;
+ 
     title: string;
     images: string[];
     price: number;
     discountPrice?: number;
     rating?: number;
     stock?:number;
+    _id:string
    
 }
 
@@ -22,8 +25,20 @@ interface ProductsCardProps {
 }
 
 const ProductsCard: React.FC<ProductsCardProps> = ({ product }) => {
-    const { title, images, price,  rating, stock} = product;
+    const { title, images, price,  rating, stock,} = product;
     const dispatch = useDispatch()
+
+ const cartItems = useSelector((state: RootState) => state.cart.value); 
+    const handledTwoCartItem = (product: Product) => {
+        const exist = cartItems.find((item) => item._id === product._id); 
+        if (exist) {
+            toast.info("This item is already in your cart! quantity update");
+        } else {
+            dispatch(addToCart({ ...product,  quantity: 1 }));
+            toast.success("✅ Item added to cart!");
+        }
+    };
+  
 
     return (
         <div className="  rounded-lg shadow-sm text-sm   rubik cursor-pointer hover:shadow-gray-800 transition-all duration-300  p-2">
@@ -49,7 +64,7 @@ const ProductsCard: React.FC<ProductsCardProps> = ({ product }) => {
                     {stock && <p>{stock} stock</p>}
                     
                     <button 
-                    onClick={()=>dispatch(addToCart(product))}
+                    onClick={()=>handledTwoCartItem(product)}
                     className="text-[12px] p-2 bg-gray-800 rounded-full cursor-pointer hover:bg-red-800 ">
                         <BsFillCartCheckFill size={14} color="white"/>
                     </button>

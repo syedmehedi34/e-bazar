@@ -58,8 +58,12 @@ export const addToCartSlice = createSlice({
     removeFromCart: (state, action) => {
       state.value = state.value.filter(cart => cart._id !== action.payload);
       savedLocalStorage(state.value);
+    },
+    removeAllFromCart :(state)=>{
+      state.value= [];
+      localStorage.removeItem('shopping-cart'); 
     }
   }
 })
-export const { addToCart,incrementQuantity, decrementQuantity, removeFromCart } = addToCartSlice.actions
+export const { addToCart,incrementQuantity, decrementQuantity, removeFromCart,removeAllFromCart } = addToCartSlice.actions
 export default addToCartSlice.reducer
