@@ -3,22 +3,21 @@ import GoogleProvider from 'next-auth/providers/google'
 import axios from 'axios'
 import CredentialsProvider from 'next-auth/providers/credentials'
 
-declare module "next-auth" {
+declare module 'next-auth' {
   interface User {
-    role?: string;
-    id?: string;
+    role?: string
+    id?: string
   }
   interface Session {
     user: {
-      id?: string;
-      role?: string;
-      email?: string;
-      name?: string;
-      image?: string;
-    };
+      id?: string
+      role?: string
+      email?: string
+      name?: string
+      image?: string
+    }
   }
 }
-
 
 const handler = NextAuth({
   providers: [
@@ -27,7 +26,6 @@ const handler = NextAuth({
       credentials: {
         email: { label: 'Email', type: 'email', placeholder: 'your@email.com' },
         password: { label: 'Password', type: 'password' }
-
       },
       async authorize (credentials) {
         // Replace this with your actual user authentication logic
@@ -42,12 +40,10 @@ const handler = NextAuth({
           }
           const res = await axios.post(`http://localhost:5000/login`, userInfo)
           if (res.status === 200) {
-            console.log(res.data)
             return res?.data.user
           }
         } catch (error) {
-          console.error(error)
-          return null
+          if(error) return  null
         }
       }
     }),
@@ -70,20 +66,21 @@ const handler = NextAuth({
   callbacks: {
     async jwt ({ token, user }) {
       if (user) {
-      token.id = user.id;
-      token.role = user.role; 
-    }
+        token.id = user.id as string
+        token.role = user.role as string
+      }
       return token
     },
     async session ({ session, token }) {
       if (token) {
-        (session.user as any).id = token.id;
-        (session.user as any).role = token.role;
+        session.user.id = token.id as string
+        session.user.role = token.role as string
       }
       return session
     },
-    async signIn ({ user }) {
-      return true
+    async signIn ({user}) {
+      if (user) return true
+      return false
     }
   }
 })
