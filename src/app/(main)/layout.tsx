@@ -7,8 +7,9 @@ import "./globals.css";
 import ReduxProvider from "@/Provider/ReduxProvider/ReduxProvider"
 import Navbar from "@/Components/Header/Navbar";
 import Footer from "@/Components/Footer/Footer";
+import SessionWrapper from "@/Components/SessionWrapper/SessionWrapper";
 
-import SessionWrapper from "../SessionWrapper/page";
+
 
 export const poppins = Poppins({
   weight: ['400', '500', '600', '700', '800'],

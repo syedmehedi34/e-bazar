@@ -22,7 +22,7 @@ interface ProductsCardProps {
 }
 
 const ProductsCard: React.FC<ProductsCardProps> = ({ product }) => {
-    const { title, images, price, discountPrice, rating, stock} = product;
+    const { title, images, price,  rating, stock} = product;
     const dispatch = useDispatch()
 
     return (

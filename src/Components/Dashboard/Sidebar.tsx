@@ -6,8 +6,8 @@ import { usePathname } from "next/navigation";
 
 const Sidebar = () => {
     const pathname = usePathname();
-    const { data: session, status } = useSession();
-    console.log(session)
+    const { data: session } = useSession();
+   
     const menuItems = [
 
         { name: "Dashboard", path: "/dashboard" },

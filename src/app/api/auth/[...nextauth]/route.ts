@@ -3,6 +3,22 @@ import GoogleProvider from 'next-auth/providers/google'
 import axios from 'axios'
 import CredentialsProvider from 'next-auth/providers/credentials'
 
+declare module "next-auth" {
+  interface User {
+    role?: string;
+    id?: string;
+  }
+  interface Session {
+    user: {
+      id?: string;
+      role?: string;
+      email?: string;
+      name?: string;
+      image?: string;
+    };
+  }
+}
+
 
 const handler = NextAuth({
   providers: [

@@ -31,7 +31,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onClose }) => {
       return;
     }
 
-    const userData = { email, password };
+  
 
 
     // Call the login API

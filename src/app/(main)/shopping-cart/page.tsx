@@ -6,16 +6,28 @@ import { MdDeleteForever } from "react-icons/md";
 import { decrementQuantity, incrementQuantity } from '@/redux/feature/addToCart/addToCart';
 import Button from '@/Components/Button/Button';
 import { MdArrowRightAlt } from "react-icons/md";
+import { RootState } from '@/redux/store';
+
+interface CartItem {
+  _id: string;
+  title: string;
+  brand: string;
+  price: number;
+  discountPrice: number;
+  quantity: number;
+  images: string[];
+}
+
 const ShoppingCart = () => {
-  const cartItems = useSelector((state: any) => state.cart.value);
+  const cartItems = useSelector((state: RootState) => state.cart.value as CartItem[]);
   const dispatch = useDispatch()
   const subTotal = () => {
-    const total = cartItems.reduce((acc: number, cart: any) => acc + cart.price * cart.quantity, 0);
+    const total = cartItems.reduce((acc, cart) => acc + cart.price * cart.quantity, 0);
     
     return total;
   }
   const discount = () => {
-    const total = cartItems.reduce((acc: number, cart: any) => acc + cart.discountPrice * cart.quantity, 0);
+    const total = cartItems.reduce((acc, cart) => acc + cart.discountPrice * cart.quantity, 0);
     
     return total;
   }
@@ -45,7 +57,7 @@ const ShoppingCart = () => {
               <div>
                 <div className='space-y-4 rubik list bg-base-100 rounded-box '>
                   {
-                    cartItems.map((cart: any) => (
+                    cartItems.map((cart) => (
                       <li key={cart._id} className="list-row">
                         <div>
                           <Image className='size-10 rounded-box shadow' src={cart.images[0] || cart.images[1]} width={30} height={30} alt={cart.title} />

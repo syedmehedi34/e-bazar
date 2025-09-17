@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Logo = ({logoColor }: any) => {
+const Logo = ({logoColor }:any) => {
   return (
     <div>
         <h2 className='font-bold rubik '><span className={`text-3xl ${logoColor ? `text-${logoColor}`:""}`}>E</span>-bazaar</h2>

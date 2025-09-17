@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 import Link from "next/link";
 
 export default function NotFound() {
@@ -18,9 +19,11 @@ export default function NotFound() {
         Go Back Home
       </Link>
       <div className="mt-10">
-        <img
+        <Image
           src="https://cdn.dribbble.com/users/285475/screenshots/2083086/dribbble_1.gif"
           alt="404 Illustration"
+          width={100}
+          height={100}
           className="w-80 md:w-96"
         />
       </div>

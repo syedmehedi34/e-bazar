@@ -4,11 +4,7 @@ import React from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import Swal from "sweetalert2";
 
-interface Review {
-  user: string;
-  rating: number;
-  comment: string;
-}
+
 
 interface ProductFormInputs {
   title: string;
@@ -43,7 +39,7 @@ const ProductForm = () => {
       images: typeof data.images === "string" ? data.images.split(",").map(i => i.trim()) : [],
       tags: typeof data.tags === "string" ? data.tags.split(",").map(t => t.trim()) : [],
     }
-    console.log(payload)
+
       const res = await axios.post('http://localhost:5000/admin/add-products', payload);
       if(res.status === 200){
         Swal.fire({
@@ -52,7 +48,7 @@ const ProductForm = () => {
         })
       }
    } catch (error) {
-    console.log(error)
+   
      Swal.fire({
           icon:"error",
           title:`${(error as any).response.data.message || "Data Add Faild!!"} `

@@ -1,8 +1,9 @@
 
 import Sidebar from '@/Components/Dashboard/Sidebar'
 import '../(main)/globals.css'
-import SessionWrapper from '../SessionWrapper/page'
+
 import Navber from '@/Components/Dashboard/Navber'
+import SessionWrapper from '@/Components/SessionWrapper/SessionWrapper'
 
 
 export default function DashboardLayout({
