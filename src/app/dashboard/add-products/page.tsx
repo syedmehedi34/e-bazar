@@ -1,5 +1,5 @@
 "use client";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import React from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import Swal from "sweetalert2";
@@ -28,7 +28,7 @@ const ProductForm = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+   
   } = useForm<ProductFormInputs>();
 
   const onSubmit: SubmitHandler<ProductFormInputs> = async (data) => {
@@ -48,10 +48,10 @@ const ProductForm = () => {
         })
       }
    } catch (error) {
-   
+    const err = error as AxiosError<{message:string}>;
      Swal.fire({
-          icon:"error",
-          title:`${(error as any).response.data.message || "Data Add Faild!!"} `
+          icon: "error",
+          title: err.response?.data?.message || "Data Add Faild!!"
         })
    }
   };
