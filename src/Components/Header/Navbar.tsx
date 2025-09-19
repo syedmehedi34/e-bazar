@@ -49,7 +49,7 @@ const Navbar = () => {
   const navItems = (
     <>
       <Link href={'/'} className='text-[15px] font-medium leading-6'>Home</Link>
-      <Link href={'/'} className='text-[15px] font-medium leading-6'>Shop</Link>
+      <Link href={'/shopping'} className='text-[15px] font-medium leading-6'>Shop</Link>
       <Link href={'/about'} className='text-[15px] font-medium leading-6'>About Us</Link>
       <Link href={'/'} className='text-[15px] font-medium leading-6'>Blog</Link>
     </>
