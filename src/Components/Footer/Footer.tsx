@@ -6,7 +6,7 @@ const Footer = () => {
   return (
     <div className="rubik bg-gray-800 text-white py-10" >
       {/* Top Footer */}
-      <footer className="footer sm:footer-horizontal   w-11/12 mx-auto">
+      <div className="footer sm:footer-horizontal   w-11/12 mx-auto py-4 ">
         {/* Logo & Description */}
         <aside className="flex flex-col items-start space-y-2">
             <Logo logoColor={'white'} />
@@ -42,7 +42,7 @@ const Footer = () => {
           <Link href="#" className="link link-hover">Privacy policy</Link>
           <Link href="#" className="link link-hover">Cookie policy</Link>
         </nav>
-      </footer>
+      </div>
 
       {/* Bottom Footer */}
       <div className="footer sm:footer-horizontal footer-center  border-t border-gray-600 p-4" > 

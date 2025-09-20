@@ -2,9 +2,10 @@
 import { signIn } from 'next-auth/react';
 import Link from 'next/link';
 import React, { useState } from 'react'
-import { FaGooglePlusG } from 'react-icons/fa6';
+import { FcGoogle } from "react-icons/fc";
 import { IoClose } from 'react-icons/io5'
 import Swal from 'sweetalert2';
+import Logo from '../Logo/Logo';
 
 
 interface LoginPageProps { onClose: () => void; }
@@ -57,9 +58,9 @@ const LoginPage: React.FC<LoginPageProps> = ({ onClose }) => {
     }
   };
   return (
-    <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50">
+    <div className="fixed top-0 w-full h-full bg-black/80 flex items-center justify-center z-50">
       {/* Modal Box */}
-      <div className="bg-black py-10 border border-gray-600 rounded-2xl shadow-lg w-[400px] max-w-full p-6 relative">
+      <div className="bg-white py-10 border border-gray-600 rounded-2xl shadow-lg w-[400px] max-w-full p-6 relative">
         {/* Close Button */}
         <button
           className="absolute top-3 right-3 cursor-pointer hover:text-gray-800 transition bg-gray-800 p-1 rounded-2xl text-white font-bold"
@@ -68,11 +69,13 @@ const LoginPage: React.FC<LoginPageProps> = ({ onClose }) => {
           <IoClose />
         </button>
 
-        <h2 className="text-xl font-semibold text-gray-100 mb-4 rubik text-center">Login</h2>
+        <h2 className="text-xl font-semibold text-gray-800 mb-4 rubik r">
+          <Logo/>
+        </h2>
         <form onSubmit={handleCredentialsLogin} className="space-y-4">
           {/* Email */}
           <div>
-            <label className="block text-gray-300 mb-1">Email</label>
+            <label className="block text-gray-600 mb-1">Email</label>
             <input
               type="email"
               placeholder="Enter your email"
@@ -85,7 +88,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onClose }) => {
 
           {/* Password */}
           <div>
-            <label className="block text-gray-300 mb-1">Password</label>
+            <label className="block text-gray-600 mb-1">Password</label>
             <input
               type="password"
               placeholder="Enter your password"
@@ -101,7 +104,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onClose }) => {
             type="submit"
             className="w-full bg-gray-800 text-white font-semibold py-2 rounded-lg hover:bg-gray-900 transition cursor-pointer"
           >
-            {loading ? "sign in..." : "sign in"}
+            {loading ? "Sign in..." : "Sign in"}
           </button>
         </form>
         {/* Divider */}
@@ -114,8 +117,8 @@ const LoginPage: React.FC<LoginPageProps> = ({ onClose }) => {
         {/* Google */}
         <button
           onClick={handleLoginWithGoogle}
-          className="btn btn-block  rounded-md bg-gray-800 border-none text-white hover:bg-red-800  ">
-          <FaGooglePlusG size={30} />
+          className="btn btn-block  rounded-md bg-gray-800 border-none text-white hover:bg-gray-800  ">
+          <FcGoogle size={30} />
           Login with Google
         </button>
 

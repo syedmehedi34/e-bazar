@@ -49,6 +49,15 @@ const nextConfig: NextConfig = {
         hostname: "randomuser.me",
        
       },
+      {
+        protocol: 'https',
+        hostname: "img.daisyui.com",
+       
+      },
+        {
+        protocol: 'https',
+        hostname: 'lh3.googleusercontent.com',
+      },
     ],
   }
 };

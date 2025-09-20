@@ -9,11 +9,11 @@ import Pricerange from '@/Components/Shopping/Pricerange';
 import { getCategory } from '@/hook/Category/CategoryFetch';
 import axios from 'axios';
 import Pagination from '@/Components/Pagination/Pagination';
-
-
-
+import { useRouter, useSearchParams } from 'next/navigation';
 const Shopping = () => {
-
+    const searchParams = useSearchParams();
+    const search = searchParams.get('search') || '';
+    const router = useRouter()
     const [products, setProducts] = useState([])
     const [category, setCategory] = useState([])
     const [sort, setSort] = useState('');
@@ -40,7 +40,7 @@ const Shopping = () => {
             if (maxPrice) params.set('maxPrice', maxPrice);
             if (currentPage) params.set('page', currentPage.toString());
             if (perPage) params.set('limit', perPage.toString());
-
+            if (search) params.set('search', search);
             const res = await axios.get(`http://localhost:5000/shopping?${params.toString()}`);
             setProducts(res?.data?.product);
             setCount(res?.data?.total)
@@ -53,13 +53,17 @@ const Shopping = () => {
 
     useEffect(() => {
         fetchData()
-    }, [sort, selectedCategory, minPrice, maxPrice, currentPage, perPage])
+    }, [sort, selectedCategory, minPrice, maxPrice, currentPage, perPage, search])
     const handleReset = () => {
         setSort('');
         setSelectedCategory('');
         setMinPrice('');
         setMaxPrice('');
         setCurrentPage(1);
+        const params = new URLSearchParams(searchParams.toString());
+
+        params.delete('search'); // search param remove
+        router.push(`/shopping?${params.toString()}`);
 
     };
 

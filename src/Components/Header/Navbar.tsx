@@ -5,7 +5,7 @@ import Logo from '../Logo/Logo'
 import { usePathname } from 'next/navigation'
 import { BsCartCheckFill } from "react-icons/bs";
 import { FaHeartCircleCheck } from "react-icons/fa6";
-import dynamic from "next/dynamic";
+
 import Register from '../Register/Register'
 import { signOut, useSession } from 'next-auth/react'
 import Swal from 'sweetalert2'
@@ -13,8 +13,11 @@ import { useSelector } from 'react-redux'
 import { RootState } from '@/redux/store'
 import { AxiosError } from 'axios'
 import Image from 'next/image'
+import { FaSearch } from 'react-icons/fa'
+import SearchInput from '../SearchInput/SearchInput'
+import LoginPage from '../Login/login'
 
-const LoginPage = dynamic(() => import("@/Components/Login/login"), { ssr: false });
+
 
 const Navbar = () => {
   const [scrollY, setScrollY] = useState(0);
@@ -22,6 +25,7 @@ const Navbar = () => {
   const [isOpenRegisterPage, setIsOpenRegisterPage] = useState(false); 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false); 
   const shoppingCart = useSelector((state: RootState) => state.cart.value) ;
+  const [searchBox, setSearchBox] = useState(false)
   const path = usePathname()
   const { data: session } = useSession()
   
@@ -55,8 +59,10 @@ const Navbar = () => {
     </>
   )
 
+
+
   return (
-    <header className={`w-full z-100  ${path === "/" ? (scrollY > 50 ? "fixed-nav bg-gray-800 text-white  shadow" : "absolute bg-transparent") : (scrollY > 50 ? "fixed bg-white shadow" : "bg-gradient shadow")}`}>
+    <header className={`w-full z-100 relative ${path === "/" ? (scrollY > 50 ? "fixed-nav bg-gray-800 text-white  shadow" : "absolute bg-transparent") : (scrollY > 50 ? "fixed bg-white shadow" : "bg-gradient shadow")}`}>
       <div className="w-11/12 mx-auto flex items-center justify-between py-4">
         <div className='flex items-center gap-4'>
           {/* Mobile Menu Button */}
@@ -76,6 +82,10 @@ const Navbar = () => {
 
         {/* Icons + Auth Buttons */}
         <div className="flex items-center gap-4">
+          <div className="">
+            <button className='cursor-pointer mt-2' onClick={()=>setSearchBox(!searchBox)} ><FaSearch size={20} /></button>
+            
+          </div>
           <div className="relative">
             <Link href={'/shopping-cart'}><BsCartCheckFill size={24} /></Link>
             <span className='absolute -top-2 -right-2 font-bold'>{shoppingCart?.length || 0}</span>
@@ -94,8 +104,8 @@ const Navbar = () => {
           ) : (
             <div className="dropdown dropdown-end ">
               <div tabIndex={0} className="btn btn-ghost btn-circle avatar">
-                <div className="w-10 rounded-full">
-                  <Image src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" alt="Avatar" />
+                <div className="w-10 h-10 rounded-full">
+                  <Image src={session?.user?.image  || "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"} alt="Avatar" fill className='rounded-full' />
                 </div>
               </div>
               <ul tabIndex={0} className="dropdown-content menu p-2 shadow bg-gradient shadow-amber-600 text-white rounded-box w-52 mt-4 space-y-4">
@@ -128,6 +138,7 @@ const Navbar = () => {
       {/* Modals */}
       {isOpen && <LoginPage onClose={() => setIsOpen(false)} />}
       {isOpenRegisterPage && <Register onClose={() => setIsOpenRegisterPage(false)} />}
+        {searchBox && <SearchInput setSearchBox={setSearchBox} searchBox={searchBox} />}
     </header>
   )
 }
