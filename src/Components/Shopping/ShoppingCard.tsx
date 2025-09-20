@@ -10,7 +10,8 @@ interface Products {
     rating: number,
     stock: number,
     images: string[]
-    category: string
+    category: string,
+    _id?:string
 }
 
 type ProductsProps = {
@@ -21,7 +22,7 @@ const ShoppingCard: React.FC<ProductsProps> = ({ products }) => {
         <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4'>
             {
                 products.map((product) => (
-                    <div className="  rounded-lg shadow  hover:shadow-md text-sm   rubik cursor-pointer  transition-all duration-300  p-2">
+                    <div key={product._id} className="  rounded-lg shadow  hover:shadow-md text-sm   rubik cursor-pointer  transition-all duration-300  p-2">
                         {/* Fixed card width (same size) */}
                         <div className=" sm:h-45 h-[300px] overflow-hidden flex items-center justify-center mx-auto">
                             <Image

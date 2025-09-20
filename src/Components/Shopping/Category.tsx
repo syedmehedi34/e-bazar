@@ -1,5 +1,5 @@
 "use client"
-import { useRouter } from 'next/navigation';
+
 import React, { useState } from 'react'
 import { MdOutlineArrowDropDown, MdOutlineArrowRight } from "react-icons/md";
 
@@ -8,19 +8,22 @@ type Product = {
     category: string;
     subCategory: string;
 };
-type CategoryProps = {
+
+
+interface CategoryProps {
     products: Product[];
-    searchParams: any;
-};
+    setSelectedCategory:any
+    
+}
 
-export const Category: React.FC<CategoryProps> = ({ products, searchParams }) => {
-
+export const Category: React.FC<CategoryProps> = ({ products,setSelectedCategory }) => {
+    
     const [openCategory, setOpenCategory] = useState<string | null>(null);
-    const [selectedCategory, setSelectedCategory] = useState('')
-    const router = useRouter();
+   
+    
   
 
-    const categories = products.reduce((acc: Record<string, Set<string>>, product) => {
+    const categories = products?.reduce((acc: Record<string, Set<string>>, product) => {
         if (!acc[product.category]) {
             acc[product.category] = new Set<string>();
         }
@@ -30,11 +33,8 @@ export const Category: React.FC<CategoryProps> = ({ products, searchParams }) =>
     }, {});
 
     const handleSubCategoryClick = (sub: string) => {
-        setSelectedCategory(sub);
-
-        const params = new URLSearchParams();
-        params.set("category", sub);
-        router.push(`/shopping?${params.toString()}`);
+        
+            setSelectedCategory(sub)
     }
   
     return (

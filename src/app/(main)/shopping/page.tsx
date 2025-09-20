@@ -1,27 +1,67 @@
+"use client"
 import { Category } from '@/Components/Shopping/Category';
 import ShoppingCard from '@/Components/Shopping/ShoppingCard';
 
 import Link from 'next/link'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Sorting from '@/Components/Shopping/Sorting';
 import Pricerange from '@/Components/Shopping/Pricerange';
+import { getCategory } from '@/hook/Category/CategoryFetch';
+import axios from 'axios';
+import Pagination from '@/Components/Pagination/Pagination';
 
-interface SearchParams {
-    sort?:string;
-    minPrice?:string;
-    maxPrice?:string;
-    category?:string
 
-}
 
-const Shopping = async ({searchParams}:{searchParams : SearchParams}) => {
-     // wait for params
-    const params = await searchParams;
+const Shopping = () => {
 
-    const query = new URLSearchParams(params as any).toString();
-  
-    const res = await fetch(`http://localhost:5000/shopping?${query}`);
-    const products = await res.json();
+    const [products, setProducts] = useState([])
+    const [category, setCategory] = useState([])
+    const [sort, setSort] = useState('');
+    const [selectedCategory, setSelectedCategory] = useState('');
+    const [minPrice, setMinPrice] = useState('');
+    const [maxPrice, setMaxPrice] = useState('');
+    const [count, setCount] = useState(0);
+    const [currentPage, setCurrentPage] = useState<number>(1);
+    const [perPage, setPerPage] = useState(15);
+    const pageNumber = Math.ceil(count / perPage) || 1
+    const pageArray = [...Array(pageNumber).keys().map((i) => i + 1)];
+    const [total, setTotal] = useState(0)
+
+
+    const fetchData = async () => {
+        try {
+            const categoryData = await getCategory();
+            setCategory(categoryData);
+
+            const params = new URLSearchParams();
+            if (sort) params.set('sort', sort);
+            if (selectedCategory) params.set('category', selectedCategory);
+            if (minPrice) params.set('minPrice', minPrice);
+            if (maxPrice) params.set('maxPrice', maxPrice);
+            if (currentPage) params.set('page', currentPage.toString());
+            if (perPage) params.set('limit', perPage.toString());
+
+            const res = await axios.get(`http://localhost:5000/shopping?${params.toString()}`);
+            setProducts(res?.data?.product);
+            setCount(res?.data?.total)
+            setTotal(res?.data?.totalProducts)
+        } catch (error) {
+            console.error(error)
+        }
+    };
+
+
+    useEffect(() => {
+        fetchData()
+    }, [sort, selectedCategory, minPrice, maxPrice, currentPage, perPage])
+    const handleReset = () => {
+        setSort('');
+        setSelectedCategory('');
+        setMinPrice('');
+        setMaxPrice('');
+        setCurrentPage(1);
+
+    };
 
 
 
@@ -41,20 +81,28 @@ const Shopping = async ({searchParams}:{searchParams : SearchParams}) => {
                     </div>
 
                     {/* Right side filter + result */}
-                    <Sorting searchParams={searchParams} />
+                    <Sorting setSort={setSort} total={total} />
                 </div>
 
                 <div className='grid lg:grid-cols-5 gap-5 my-5'>
                     <div className='lg:col-span-1'>
-                        <Category products={products} searchParams={searchParams}   />
-                        <Pricerange searchParams={searchParams}/>
+                        <Category products={category} setSelectedCategory={setSelectedCategory} />
+                        <Pricerange setMinPrice={setMinPrice} setMaxPrice={setMaxPrice} />
+
+                        <button onClick={handleReset} className='btn btn-block mt-4'>Reset Filter</button>
+
                     </div>
                     <div className='lg:col-span-4 '>
                         <div >
                             {
-                                <ShoppingCard products={products}  />
+                                <ShoppingCard products={products} />
                             }
                         </div>
+
+                        {/* Pagination */}
+                        <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} pageArray={pageArray} />
+
+
                     </div>
                 </div>
             </div>

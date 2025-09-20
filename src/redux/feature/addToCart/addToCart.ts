@@ -44,7 +44,7 @@ export const addToCartSlice = createSlice({
       if (exist) {
         exist.quantity += 1
         savedLocalStorage(state.value)
-        state.value
+        
       }
     },
 
