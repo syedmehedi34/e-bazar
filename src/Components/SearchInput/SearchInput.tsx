@@ -2,7 +2,7 @@
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import { IoClose } from 'react-icons/io5';
-
+import { motion } from 'framer-motion';
 type PageProps = {
     setSearchBox: React.Dispatch<React.SetStateAction<boolean>>;
     searchBox: boolean
@@ -19,10 +19,15 @@ const SearchInput: React.FC<PageProps> = ({ setSearchBox, searchBox }) => {
     }
 
     return (
-        <div className="fixed top-0 w-full bg-black/70 flex justify-center items-center py-20 px-10 overflow-hidden ">
+        <motion.div
+        initial={{ scale: 0, }}
+        animate={{ scale: 1, }}
+        exit={{ scale: 0, }}
+        transition={{ duration: 0.3 }}
+        className="fixed top-0 w-full bg-gray-200/70 flex justify-center items-center py-20 px-10 overflow-hidden ">
             <button onClick={() => setSearchBox(!searchBox)} className='absolute top-4 right-4 cursor-pointer'>
-                <IoClose size={30} color='white' />
-            </button>
+                <IoClose size={30} color='black' />
+            </button> 
             <form onSubmit={handleFormSubmit} className='w-full max-w-full sm:max-w-xl'>
                 <label className="relative ">
                     <input
@@ -30,10 +35,10 @@ const SearchInput: React.FC<PageProps> = ({ setSearchBox, searchBox }) => {
                         required
                         placeholder="Search"
                         onChange={(e) => setSearch(e.target.value)}
-                        className="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-100 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500"
+                        className="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-600 text-black placeholder-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-500"
                     />
                     <svg
-                        className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-100"
+                        className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-800"
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 24 24"
                         fill="none"
@@ -47,7 +52,7 @@ const SearchInput: React.FC<PageProps> = ({ setSearchBox, searchBox }) => {
                     </svg>
                 </label>
             </form>
-        </div>
+        </motion.div>
     );
 };
 

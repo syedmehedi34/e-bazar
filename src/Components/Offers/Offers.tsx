@@ -3,7 +3,7 @@ import React from "react";
 
 const Offers = () => {
     return (
-        <div className="w-11/12 mx-auto my-12 relative">
+        <div className="container-custom my-12 relative">
             <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-8 rounded-2xl p-8 shadow-lg shadow-gray-800 relative rubik ">
 
                 {/* Left Content */}

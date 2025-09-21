@@ -16,6 +16,7 @@ import Image from 'next/image'
 import { FaSearch } from 'react-icons/fa'
 import SearchInput from '../SearchInput/SearchInput'
 import LoginPage from '../Login/login'
+import { AnimatePresence } from 'framer-motion'
 
 
 
@@ -62,8 +63,8 @@ const Navbar = () => {
 
 
   return (
-    <header className={`w-full z-100 relative ${path === "/" ? (scrollY > 50 ? "fixed-nav bg-gray-800 text-white  shadow" : "absolute bg-transparent") : (scrollY > 50 ? "fixed bg-white shadow" : "bg-gradient shadow")}`}>
-      <div className="w-11/12 mx-auto flex items-center justify-between py-4">
+    <header className={`w-full z-100  ${path === "/" ? (scrollY > 50 ? "fixed-nav bg-gray-800 text-white  shadow" : "absolute bg-transparent") : (scrollY > 50 ? "fixed-nav bg-gray-800 text-white  shadow" : "bg-gradient shadow")}`}>
+      <div className="container-custom flex items-center justify-between py-4">
         <div className='flex items-center gap-4'>
           {/* Mobile Menu Button */}
           <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="lg:hidden  cursor-pointer">
@@ -138,7 +139,9 @@ const Navbar = () => {
       {/* Modals */}
       {isOpen && <LoginPage onClose={() => setIsOpen(false)} />}
       {isOpenRegisterPage && <Register onClose={() => setIsOpenRegisterPage(false)} />}
+      <AnimatePresence>
         {searchBox && <SearchInput setSearchBox={setSearchBox} searchBox={searchBox} />}
+      </AnimatePresence>
     </header>
   )
 }

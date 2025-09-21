@@ -6,7 +6,7 @@ const Footer = () => {
   return (
     <div className="rubik bg-gray-800 text-white py-10" >
       {/* Top Footer */}
-      <div className="footer sm:footer-horizontal   w-11/12 mx-auto py-4 ">
+      <div className="footer sm:footer-horizontal   container-custom py-4 ">
         {/* Logo & Description */}
         <aside className="flex flex-col items-start space-y-2">
             <Logo logoColor={'white'} />

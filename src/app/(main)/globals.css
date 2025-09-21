@@ -66,6 +66,8 @@ body{
   clip-path: polygon(24.75% 0%, 100% 0%, 99.5% 100%, 24.75% 100%);
   }
 }
-
+.container-custom {
+  @apply w-full max-w-[1280px] mx-auto px-4;
+}
 
 

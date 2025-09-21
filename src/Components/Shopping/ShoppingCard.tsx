@@ -1,5 +1,6 @@
 'use client'
 import Image from 'next/image'
+import Link from 'next/link'
 import React from 'react'
 import { BsFillCartCheckFill } from 'react-icons/bs'
 
@@ -24,7 +25,7 @@ const ShoppingCard: React.FC<ProductsProps> = ({ products }) => {
                 products.map((product) => (
                     <div key={product._id} className="  rounded-lg shadow  hover:shadow-md text-sm   rubik cursor-pointer  transition-all duration-300  p-2">
                         {/* Fixed card width (same size) */}
-                        <div className=" sm:h-45 h-[300px] overflow-hidden flex items-center justify-center mx-auto">
+                        <Link href={`checkout/${product._id}`} className=" sm:h-45 h-[300px] overflow-hidden flex items-center justify-center mx-auto">
                             <Image
                                 src={product.images?.[0] || "https://www.shutterstock.com/image-vector/missing-picture-page-website-design-600nw-1552421075.jpg"}
                                 width={100}
@@ -33,7 +34,7 @@ const ShoppingCard: React.FC<ProductsProps> = ({ products }) => {
                                 priority
                                 className=" w-full h-full object-contain rounded-md mx-auto rounded-box "
                             />
-                        </div>
+                        </Link>
                         <div className="">
                             <h2 className="mt-2 font-medium line-clamp-1 ">{product.title}</h2>
 

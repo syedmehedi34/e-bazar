@@ -1,7 +1,7 @@
 "use client"
-interface PageProps{
-    setMinPrice: any
-    setMaxPrice:any
+interface PageProps {
+    setMinPrice: React.Dispatch<React.SetStateAction<number>>;
+    setMaxPrice: React.Dispatch<React.SetStateAction<number>>;
 }
 const Pricerange:React.FC<PageProps> = ({setMinPrice,setMaxPrice}) => {
     return (
@@ -12,11 +12,11 @@ const Pricerange:React.FC<PageProps> = ({setMinPrice,setMaxPrice}) => {
             <div className='flex lg:flex-col gap-4 w-full'>
                 <input
                     
-                    onChange={(e) => setMinPrice(Number(e.target.value))}
+                    onChange={(e:React.ChangeEvent<HTMLInputElement>) => setMinPrice(Number(e.target.value))}
                     type="number" placeholder='Min Price..' className='input w-full' />
                 <input
                     
-                    onChange={(e) => setMaxPrice(Number(e.target.value))}
+                    onChange={(e:React.ChangeEvent<HTMLInputElement>) => setMaxPrice(Number(e.target.value))}
                     type="number" className='input w-full ' placeholder='Max Price..' />
             </div>
 

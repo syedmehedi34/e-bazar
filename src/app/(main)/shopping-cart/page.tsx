@@ -72,7 +72,7 @@ const ShoppingCart = () => {
           <p className='md:text-4xl text-2xl font-bold tracking-wide'> Your Shopping Cart</p>
           <Link className='text-sm font-thin text-gray-500 underline' href={'/shop'}> → Shop</Link>
         </div>
-        <div className='w-11/12 mx-auto my-10'>
+        <div className='container-custom my-10'>
           {
             cartItems.length === 0 ? (<div className="text-center py-20 text-gray-500">
               Your cart is empty! <Link href="/shop" className="underline text-gray-800">Go Shopping</Link>
@@ -164,7 +164,7 @@ const ShoppingCart = () => {
                         </strong>
                       </div>
                       <div>
-                        <button className='flex items-center justify-center gap-4 text-center max-sm:text-sm  w-11/12 mx-auto bg-gray-800 text-white cursor-pointer sm:p-4 p-3 rounded-box hover:bg-gray-900'>
+                        <button className='flex items-center justify-center gap-4 text-center max-sm:text-sm  container-custom bg-gray-800 text-white cursor-pointer sm:p-4 p-3 rounded-box hover:bg-gray-900'>
                           Go to Checkout <MdArrowRightAlt />
                         </button>
                       </div>

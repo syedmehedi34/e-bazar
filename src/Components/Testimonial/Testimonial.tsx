@@ -84,7 +84,7 @@ const testimonials = [
 const Testimonial = () => {
   return (
     <div className="py-16">
-      <div className="w-11/12 mx-auto">
+      <div className="container-custom">
         <h2 className="text-4xl font-bold text-center mb-10 rubik">
           What Our Customers Say
         </h2>

@@ -31,7 +31,7 @@ const Faq = () => {
 
     return (
         <div className='py-16'>
-            <div className='w-11/12 mx-auto'>
+            <div className='container-custom'>
             <div className="text-center mb-16">
                 <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
                     Frequently Asked Questions

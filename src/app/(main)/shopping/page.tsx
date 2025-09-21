@@ -3,7 +3,7 @@ import { Category } from '@/Components/Shopping/Category';
 import ShoppingCard from '@/Components/Shopping/ShoppingCard';
 
 import Link from 'next/link'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import Sorting from '@/Components/Shopping/Sorting';
 import Pricerange from '@/Components/Shopping/Pricerange';
 import { getCategory } from '@/hook/Category/CategoryFetch';
@@ -17,48 +17,53 @@ const Shopping = () => {
     const [products, setProducts] = useState([])
     const [category, setCategory] = useState([])
     const [sort, setSort] = useState('');
-    const [selectedCategory, setSelectedCategory] = useState('');
-    const [minPrice, setMinPrice] = useState('');
-    const [maxPrice, setMaxPrice] = useState('');
+    const [selectedCategory, setSelectedCategory] = useState<string>('');
+    const [minPrice, setMinPrice] = useState<number>(0);
+    const [maxPrice, setMaxPrice] = useState<number>(0);
     const [count, setCount] = useState(0);
     const [currentPage, setCurrentPage] = useState<number>(1);
-    const [perPage, setPerPage] = useState(15);
-    const pageNumber = Math.ceil(count / perPage) || 1
+
+    const pageNumber = Math.ceil(count / 15) || 1
     const pageArray = [...Array(pageNumber).keys().map((i) => i + 1)];
     const [total, setTotal] = useState(0)
 
 
-    const fetchData = async () => {
-        try {
-            const categoryData = await getCategory();
-            setCategory(categoryData);
+  
+    
 
-            const params = new URLSearchParams();
-            if (sort) params.set('sort', sort);
-            if (selectedCategory) params.set('category', selectedCategory);
-            if (minPrice) params.set('minPrice', minPrice);
-            if (maxPrice) params.set('maxPrice', maxPrice);
-            if (currentPage) params.set('page', currentPage.toString());
-            if (perPage) params.set('limit', perPage.toString());
-            if (search) params.set('search', search);
-            const res = await axios.get(`http://localhost:5000/shopping?${params.toString()}`);
-            setProducts(res?.data?.product);
-            setCount(res?.data?.total)
-            setTotal(res?.data?.totalProducts)
-        } catch (error) {
-            console.error(error)
-        }
-    };
+ const fetchData = useCallback(async () => {
+  try {
+    const categoryData = await getCategory();
+    setCategory(categoryData);
+
+    const params = new URLSearchParams();
+    if (sort) params.set('sort', sort);
+    if (selectedCategory) params.set('category', selectedCategory);
+    if (minPrice) params.set('minPrice', minPrice.toString());
+    if (maxPrice) params.set('maxPrice', maxPrice.toString());
+    if (currentPage) params.set('page', currentPage.toString());
+    params.set('limit', '15');
+    if (search) params.set('search', search);
+
+    const res = await axios.get(`http://localhost:5000/shopping?${params.toString()}`);
+    setProducts(res?.data?.product);
+    setCount(res?.data?.total);
+    setTotal(res?.data?.totalProducts);
+  } catch (error) {
+    console.error(error);
+  }
+}, [sort, selectedCategory, minPrice, maxPrice, currentPage, search]); 
 
 
     useEffect(() => {
         fetchData()
-    }, [sort, selectedCategory, minPrice, maxPrice, currentPage, perPage, search])
+    }, [fetchData])
+
     const handleReset = () => {
         setSort('');
         setSelectedCategory('');
-        setMinPrice('');
-        setMaxPrice('');
+        setMinPrice(0);
+        setMaxPrice(0);
         setCurrentPage(1);
         const params = new URLSearchParams(searchParams.toString());
 
@@ -71,7 +76,7 @@ const Shopping = () => {
 
     return (
         <div className='min-h-screen'>
-            <div className='w-11/12 mx-auto'>
+            <div className='container-custom'>
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-5 py-6 px-4">
                     {/* Left side links */}
                     <div className="flex gap-1 text-sm">

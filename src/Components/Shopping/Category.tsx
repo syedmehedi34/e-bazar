@@ -6,13 +6,13 @@ import { MdOutlineArrowDropDown, MdOutlineArrowRight } from "react-icons/md";
 
 type Product = {
     category: string;
-    subCategory: string;
+    subCategory: string
 };
 
 
 interface CategoryProps {
     products: Product[];
-    setSelectedCategory:any
+    setSelectedCategory: (category: string) => void;
     
 }
 

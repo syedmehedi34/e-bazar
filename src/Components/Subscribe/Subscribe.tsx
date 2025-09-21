@@ -21,7 +21,7 @@ const Subscribe = () => {
     }
   return (
     <div className="py-16 ">
-      <div className="w-11/12 mx-auto">
+      <div className="container-custom">
         <div className="flex flex-col-reverse md:flex-row justify-between items-center gap-10 md:gap-16 shadow-md  p-5 rubik">
           {/* Left Content */}
           <div className="text-center md:text-left space-y-4 md:space-y-6 max-w-lg">
