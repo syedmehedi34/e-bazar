@@ -7,7 +7,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
 import { toast } from 'react-toastify';
 import { addToCart } from '@/redux/feature/addToCart/addToCart';
+
+import PaymentProcess from './PaymentProcess';
 import { set } from 'react-hook-form';
+import { useRouter } from 'next/navigation';
+import { setOrderDetails } from '@/redux/feature/orderSummarySlice/orderSummarySlice';
 
 interface Products {
     _id: string;
@@ -26,15 +30,40 @@ interface Products {
     description: string;
 
 }
+interface ProductDetails {
+  totalPrice: number
+  quantity: number
+  productId: string
+  productName: string
+  productPrice: number
+  productImage: string
+  productBrand: string
+  productCategory: string
+  productSizes: string | string[]  // depends on আপনার `selectedSize` কি ধরনের data
+  productColors: string | string[] // depends on আপনার `selectedColor`
+  productStock: number
+  productRating: number
+  productCurrency: string
+  productDescription: string
+}
+
 type CheckoutDetailsProps = {
     products: Products
     selectedImage: string
 }
 const CheckoutDetails: React.FC<CheckoutDetailsProps> = ({ products, selectedImage }) => {
     let [quantity, setQuantity] = useState(1)
-    const [productsDetails, setProductsDetails] = useState({})
+    const [productsDetails, setProductsDetails] = useState({});
+    const [selectedSize, setSelectedSize] = useState<string>('');
+    const [selectedColor, setSelectedColor] = useState<string>('');
+    const [isOpen, setIsOpen] = useState(false);
     const dispatch = useDispatch()
+    const [totalPrice, setTotalPrice] = useState(products.price);
+    const [totaldiscountPrice, setTotalDiscountPrice] = useState(products.discountPrice);
+    
+    const router = useRouter()
     const cartItems = useSelector((state: RootState) => state.cart.value);
+   
     const handledTwoCartItem = (product: Products) => {
         const exist = cartItems.find((item) => item._id === product._id);
         if (exist) {
@@ -50,16 +79,20 @@ const CheckoutDetails: React.FC<CheckoutDetailsProps> = ({ products, selectedIma
     const handleIncrement = () => {
         if (quantity < (products.stock || 0)) {
             setQuantity(quantity + 1)
+            setTotalPrice(products.price * (quantity + 1))
+            setTotalDiscountPrice(products.discountPrice * (quantity + 1))
         }
     }
     const handleDecrement = () => {
         if (quantity > 1) {
             setQuantity(quantity - 1)
+            setTotalPrice(products.price * (quantity - 1))
+            setTotalDiscountPrice(products.discountPrice * (quantity - 1))
         }
     }
 
     const handleBillingInfo = () => {
-        const totalPrice = products.discountPrice * quantity;
+       
         const productsDetails = {
             totalPrice,
             quantity,
@@ -69,8 +102,8 @@ const CheckoutDetails: React.FC<CheckoutDetailsProps> = ({ products, selectedIma
             productImage: selectedImage || '/placeholder.png',
             productBrand: products.brand,
             productCategory: products.category,
-            productSizes: products.sizes,
-            productColors: products.colors,
+            productSizes: selectedSize,
+            productColors: selectedColor,
             productStock: products.stock,
             productRating: products.rating,
             productCurrency: products.currency,
@@ -79,9 +112,15 @@ const CheckoutDetails: React.FC<CheckoutDetailsProps> = ({ products, selectedIma
         }
 
         setProductsDetails(productsDetails)
+        handleOpenModal()
+        dispatch(setOrderDetails(productsDetails as ProductDetails))
+        router.push('/orderSummary', )
 
     }
 
+    const handleOpenModal = () => {
+        setIsOpen(!isOpen);
+    }
 
 
     return (
@@ -97,8 +136,8 @@ const CheckoutDetails: React.FC<CheckoutDetailsProps> = ({ products, selectedIma
             {/* Price */}
             <div
                 className='text-xl font-bold mb-2 flex items-center gap-4'>
-                <p className=''> ৳ {products.discountPrice}</p>
-                <p className='text-sm line-through text-gray-600'> ৳ {products?.price}</p>
+                <p className=''> ৳ {totaldiscountPrice}</p>
+                <p className='text-sm line-through text-gray-600'> ৳ {totalPrice}</p>
             </div>
 
             <p className='mb-2'><strong>Brand:</strong> {products?.brand}</p>
@@ -111,8 +150,9 @@ const CheckoutDetails: React.FC<CheckoutDetailsProps> = ({ products, selectedIma
                     {products?.sizes && products.sizes.length > 0 ? (
                         products.sizes.map((s) => (
                             <span
+                                onClick={() => setSelectedSize(s)}
                                 key={s}
-                                className={`w-10 ${s === 'One Size' ? 'w-20' : ''} h-10 flex justify-center items-center shadow shadow-gray-400 rounded-box hover:cursor-pointer`}
+                                className={`py-2 px-3 ${selectedSize === s ? "bg-black text-white" : ""} h-10 flex justify-center items-center shadow shadow-gray-400 rounded-box hover:cursor-pointer`}
                             >
                                 {s}
                             </span>
@@ -132,7 +172,8 @@ const CheckoutDetails: React.FC<CheckoutDetailsProps> = ({ products, selectedIma
                         products.colors.map((c) => (
                             <span
                                 key={c}
-                                className='p-2 flex justify-center items-center shadow shadow-gray-400 rounded-box'
+                                onClick={() => setSelectedColor(c)}
+                                className={`p-2 flex justify-center items-center shadow shadow-gray-400 rounded-box *:hover:cursor-pointer ${selectedColor === c ? "bg-black text-white" : ""}`}
                             >
                                 {c}
                             </span>
@@ -167,7 +208,7 @@ const CheckoutDetails: React.FC<CheckoutDetailsProps> = ({ products, selectedIma
                 <Button action={() => handledTwoCartItem(products)} text={'Add to Cart'} />
                 <Button text={'Buy Now'} action={handleBillingInfo} />
             </div>
-
+           
         </div>
     )
 }

@@ -33,7 +33,7 @@ body{
   
   animation: slideDown 3s ease-out forwards; 
 
-  z-index: 999;
+  z-index: 90;
   color: #fff !important;
 }
 

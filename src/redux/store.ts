@@ -1,11 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit'
 import todoSlice from './feature/todoSlice/todoSlice'
 import { addToCartSlice } from './feature/addToCart/addToCart'
+import orderSlice from './feature/orderSummarySlice/orderSummarySlice'
  const store = () => {
   return configureStore({
     reducer: {
       todo:todoSlice,
-      cart: addToCartSlice.reducer
+      cart: addToCartSlice.reducer,
+      orderSummary: orderSlice
     }
   })
 }
