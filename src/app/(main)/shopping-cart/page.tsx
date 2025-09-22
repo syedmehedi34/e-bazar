@@ -9,6 +9,7 @@ import { MdArrowRightAlt } from "react-icons/md";
 import { RootState } from '@/redux/store';
 import Swal from 'sweetalert2';
 import { toast } from 'react-toastify';
+import BackButton from '../../../Components/Button/BackButton/BackButton';
 
 interface CartItem {
   _id: string;
@@ -70,9 +71,18 @@ const ShoppingCart = () => {
       <div className=''>
         <div className='min-h-[24vh] flex justify-center items-center flex-col gap-2 bg-gray-100 rubik'>
           <p className='md:text-4xl text-2xl font-bold tracking-wide'> Your Shopping Cart</p>
-          <Link className='text-sm font-thin text-gray-500 underline' href={'/shop'}> → Shop</Link>
+          <div className="flex items-center justify-center gap-4 my-4">
+            {/* Back Button */}
+            <BackButton />
+
+            {/* Shop Link */}
+            <Link href="/shopping" className="btn btn-sm text-sm">
+              → Shop
+            </Link>
+          </div>
         </div>
         <div className='container-custom my-10'>
+
           {
             cartItems.length === 0 ? (<div className="text-center py-20 text-gray-500">
               Your cart is empty! <Link href="/shop" className="underline text-gray-800">Go Shopping</Link>

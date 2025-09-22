@@ -67,7 +67,7 @@ const Shopping = () => {
         setCurrentPage(1);
         const params = new URLSearchParams(searchParams.toString());
 
-        params.delete('search'); // search param remove
+        params.delete('search'); 
         router.push(`/shopping?${params.toString()}`);
 
     };

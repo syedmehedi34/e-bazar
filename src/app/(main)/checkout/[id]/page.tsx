@@ -1,18 +1,27 @@
+
 import { getCheckoutDataById } from '@/hook/CheckoutDataFatch/checkoutDataFeatch'
 import React from 'react'
-import ImagesGallery from '@/Components/Checkout/ImagesGallery'
+
+import CheckoutDescription from '@/Components/Checkout/CheckoutDescription'
+
+import BackButton from '@/Components/Button/BackButton/BackButton'
+import ImagesGalleryClientWrapper from '@/Components/Checkout/ImagesGalleryClientWrapper'
+
 const CheckoutPage = async ({params}: { params: Promise<{ id: string }> }) => {
     const {id} = await params
     const products = await getCheckoutDataById(id)
-   
+  
     return (
-        <div className='min-h-screen '>
-            <div className="container-custom">
-                <div className='grid grid-cols-1 md:grid-cols-2 gap-4 mt-10'>
-                    <div>
-                        <ImagesGallery products={products}/>
-                    </div>
-                    <div>2</div>
+        <div className='min-h-screen py-10 '>
+            <div className="container-custom ">
+                <div className='mb-4'>
+                    <BackButton/>
+                </div>
+                    <ImagesGalleryClientWrapper products={products} />
+
+                <div>
+                    {/* <CheckoutDescription/> */}
+                    <CheckoutDescription products={products}/>
                 </div>
             </div>
         </div>

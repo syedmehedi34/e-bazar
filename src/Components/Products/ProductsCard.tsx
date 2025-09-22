@@ -3,6 +3,7 @@
 import { addToCart } from "@/redux/feature/addToCart/addToCart";
 import { RootState } from "@/redux/store";
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 import { BsFillCartCheckFill } from "react-icons/bs";
 import { useDispatch, useSelector } from "react-redux";
@@ -25,7 +26,7 @@ interface ProductsCardProps {
 }
 
 const ProductsCard: React.FC<ProductsCardProps> = ({ product }) => {
-    const { title, images, price,  rating, stock,} = product;
+    const { title, images, price,  rating, stock,_id} = product;
     const dispatch = useDispatch()
 
  const cartItems = useSelector((state: RootState) => state.cart.value); 
@@ -43,7 +44,7 @@ const ProductsCard: React.FC<ProductsCardProps> = ({ product }) => {
     return (
         <div className="  rounded-lg shadow-sm text-sm   rubik cursor-pointer hover:shadow-gray-800 transition-all duration-300  p-2">
             {/* Fixed card width (same size) */}
-            <div className=" sm:h-45 h-[300px] overflow-hidden flex items-center justify-center mx-auto">
+            <Link href={`checkout/${_id}`} className=" sm:h-45 h-[300px] overflow-hidden flex items-center justify-center mx-auto">
                 <Image
                     src={images[0] || "https://www.shutterstock.com/image-vector/missing-picture-page-website-design-600nw-1552421075.jpg"}
                     width={100}
@@ -52,7 +53,7 @@ const ProductsCard: React.FC<ProductsCardProps> = ({ product }) => {
                     priority
                     className=" w-full h-full object-contain rounded-md mx-auto "
                 />
-            </div>
+            </Link>
             <div className="">
                 <h2 className="mt-2 font-medium line-clamp-1 ">{title}</h2>
                 

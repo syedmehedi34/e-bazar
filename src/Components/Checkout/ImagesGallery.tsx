@@ -8,14 +8,15 @@ interface Product {
 
 type ProductsProps = {
     products: Product
+    onSelectImage: (img: string) => void
 }
 
-const ImagesGallery: React.FC<ProductsProps> = ({ products }) => {
+const ImagesGallery: React.FC<ProductsProps> = ({ products,onSelectImage }) => {
     const [selectedImage, setSelectedImage] = useState(products?.images[0] || '');
     const [isZoomed, setIsZoomed] = useState(false)
     const [position, setPosition] = useState({ x: 0, y: 0 })
     const containerRef = useRef<HTMLDivElement>(null)
- const zoomScale = 2
+    const zoomScale = 2
     const handleMouseMove = (e: React.MouseEvent) => {
         if (!containerRef.current) return
         const { left, top, width, height } = containerRef.current.getBoundingClientRect()
@@ -26,6 +27,12 @@ const ImagesGallery: React.FC<ProductsProps> = ({ products }) => {
 
         setPosition({ x, y })
     }
+
+    const handleImageSelect = (img: string) => {
+        setSelectedImage(img);
+        onSelectImage(img);
+    }
+
     return (
         <div>
             <div
@@ -60,15 +67,15 @@ const ImagesGallery: React.FC<ProductsProps> = ({ products }) => {
                     <div
                         key={index}
                         className={`shadow rounded-lg overflow-hidden cursor-pointer p-4  bg-white ${selectedImage === img ? 'bg-gray-300' : 'bg-gray-300'} transition-all duration-300`}
-                        onClick={() => setSelectedImage(img)}
-                        onMouseEnter={() => setSelectedImage(img)}
+                        onClick={() => handleImageSelect(img)}
+                        onMouseEnter={() => handleImageSelect(img)}
                     >
                         <Image
                             src={img || "https://www.shutterstock.com/image-vector/missing-picture-page-website-design-600nw-1552421075.jpg"}
                             alt={`Thumbnail ${index + 1}`}
                             width={100}
                             height={100}
-                            className="object-contain w-full h-20"
+                            className="object-contain w-full h-10"
                             priority
                         />
                     </div>
