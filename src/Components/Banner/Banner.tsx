@@ -63,6 +63,7 @@ const Banner = () => {
                   alt={item.title}
                   fill
                   priority
+                  sizes=''
                   className="object-contain"
                 />
               </motion.div>

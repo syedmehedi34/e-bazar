@@ -3,12 +3,15 @@
 import Image from 'next/image'
 import React, { useState } from 'react'
 import { useDeliveryDate } from '@/hook/useDeliveryDate/useDeliveryDate'
-
+import { FaRegCreditCard } from "react-icons/fa";
+import { MdOutlineLocalAtm } from "react-icons/md";
 import { RootState } from '@/redux/store'
 import { useSelector } from 'react-redux'
 import Button from '@/Components/Button/Button'
 import { toast } from 'react-toastify'
 import BackButton from '@/Components/Button/BackButton/BackButton'
+import Payment from '@/Components/Payment/CardPayment/Payment'
+
 const PaymentProcess = () => {
     const deliveryDate = useDeliveryDate(2)
     const products = useSelector((state: RootState) => state.orderSummary.orderDetails);
@@ -22,10 +25,9 @@ const PaymentProcess = () => {
         deliveryAddress: ''
     });
     const [paymentMethod, setPaymentMethod] = useState('');
+    const [isOpen, setIsOpen] = useState(false)
 
-    const handleNext = () => {
-        console.log("Form Data Submitted: ", formData)
-    }
+
 
 
 
@@ -40,18 +42,21 @@ const PaymentProcess = () => {
             return;
         }
 
-        toast.success("Payment process started", { position: "top-center" })
+        if (paymentMethod === 'card') {
+            setIsOpen(!isOpen)
+        }
 
 
     }
 
 
+
     return (
         <div className='min-h-screen bg-gray-200 py-8 rubik'>
             <div className='container-custom mx-auto'>
-               <div className='mb-6'>
-                 <BackButton/>
-               </div>
+                <div className='mb-6'>
+                    <BackButton />
+                </div>
 
                 <div className='grid grid-cols-1 lg:grid-cols-3 gap-6'>
                     {/* Billing Form */}
@@ -63,8 +68,9 @@ const PaymentProcess = () => {
                                 <input
                                     type="text"
                                     id="name"
-                                    placeholder="John Doe"
+                                    placeholder="Enter Your Name.."
                                     className='input input-bordered w-full'
+                                    
                                     value={formData.name}
                                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                                 />
@@ -132,20 +138,37 @@ const PaymentProcess = () => {
                         </form>
                         {/* payment metod */}
                         <div>
-                            <h3 className='text-lg font-semibold mt-6 mb-4'>Select Payment Method</h3>
-                            <div className='flex  items-center gap-4'>
-                                <label className='flex items-center gap-2'>
+                            <h3 className="text-lg font-semibold mt-6 mb-4">
+                                Select Payment Method
+                            </h3>
+
+                            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                                {/* Card Payment */}
+                                <label className="flex items-center gap-2 cursor-pointer  border border-gray-300 p-3 rounded-lg shadow-sm hover:shadow-md transition">
                                     <input
-                                        onChange={() => setPaymentMethod('card')}
-                                        type="radio" name="payment" className='radio ' />
-                                    <span>Credit / Debit Card</span>
+                                        onChange={() => setPaymentMethod("card")}
+                                        type="radio"
+                                        name="payment"
+                                        className="radio"
+                                    />
+                                    <FaRegCreditCard className="text-blue-600 text-xl" />
+                                    <span className="text-gray-700 font-medium">
+                                        Credit / Debit Card
+                                    </span>
                                 </label>
 
-                                <label className='flex items-center gap-2'>
+                                {/* Cash Payment */}
+                                <label className="flex items-center gap-2 cursor-pointer border border-gray-300 p-3 rounded-lg shadow-sm hover:shadow-md transition">
                                     <input
-                                        onChange={() => setPaymentMethod('cash')}
-                                        type="radio" name="payment" className='radio ' />
-                                    <span>Cash on Delivery</span>
+                                        onChange={() => setPaymentMethod("cash")}
+                                        type="radio"
+                                        name="payment"
+                                        className="radio"
+                                    />
+                                    <MdOutlineLocalAtm className="text-green-600 text-xl" />
+                                    <span className="text-gray-700 font-medium">
+                                        Cash on Delivery
+                                    </span>
                                 </label>
                             </div>
                         </div>
@@ -189,6 +212,7 @@ const PaymentProcess = () => {
 
                 </div>
 
+                {isOpen && <Payment onClose={() => setIsOpen(!isOpen)} />}
             </div>
         </div>
     )

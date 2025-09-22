@@ -14,6 +14,11 @@ interface Product {
 const Products = async () => {
   const res = await fetch("http://localhost:5000/get-random-products")
   const products: Product[] = await res.json();
+  if (products.length === 0) {
+    return <div className="py-16">
+      <p>Products Not Found </p>
+    </div>
+  }
   return (
     <div className="py-16">
       <div className="container-custom">

@@ -7,9 +7,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
 import { toast } from 'react-toastify';
 import { addToCart } from '@/redux/feature/addToCart/addToCart';
-
-import PaymentProcess from './PaymentProcess';
-import { set } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 import { setOrderDetails } from '@/redux/feature/orderSummarySlice/orderSummarySlice';
 
@@ -52,8 +49,8 @@ type CheckoutDetailsProps = {
     selectedImage: string
 }
 const CheckoutDetails: React.FC<CheckoutDetailsProps> = ({ products, selectedImage }) => {
-    let [quantity, setQuantity] = useState(1)
-    const [productsDetails, setProductsDetails] = useState({});
+    const [quantity, setQuantity] = useState(1)
+  
     const [selectedSize, setSelectedSize] = useState<string>('');
     const [selectedColor, setSelectedColor] = useState<string>('');
     const [isOpen, setIsOpen] = useState(false);
@@ -111,7 +108,7 @@ const CheckoutDetails: React.FC<CheckoutDetailsProps> = ({ products, selectedIma
 
         }
 
-        setProductsDetails(productsDetails)
+    
         handleOpenModal()
         dispatch(setOrderDetails(productsDetails as ProductDetails))
         router.push('/orderSummary', )
