@@ -16,16 +16,17 @@ import { loadStripe } from "@stripe/stripe-js";
 const PaymentProcess = () => {
     const deliveryDate = useDeliveryDate(2)
     const products = useSelector((state: RootState) => state.orderSummary.orderDetails);
-
+    const [paymentMethod, setPaymentMethod] = useState('');
     const [formData, setFormData] = useState({
         name: '',
         phone: '',
         email: '',
         note: '',
         address: '',
-        deliveryAddress: ''
+        deliveryAddress: '',
+        paymentMethod:paymentMethod || "Card"
     });
-    const [paymentMethod, setPaymentMethod] = useState('');
+
     const [isOpen, setIsOpen] = useState(false)
     const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || "");
 
@@ -213,7 +214,7 @@ const PaymentProcess = () => {
 
                 </div>
 
-                {isOpen &&  
+                {isOpen  &&  products &&
                     <Elements stripe={stripePromise}>
                         <Payment
                             onClose={() => setIsOpen(!isOpen)}

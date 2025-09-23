@@ -6,6 +6,7 @@ import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js'
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
+import { useDeliveryDate } from '@/hook/useDeliveryDate/useDeliveryDate';
 
 interface userData {
   name: string;
@@ -14,6 +15,7 @@ interface userData {
   note: string;
   address: string;
   deliveryAddress: string;
+  paymentMethod: string
 }
 interface ProductDetails {
   totalPrice: number;
@@ -47,7 +49,13 @@ const Payment: React.FC<PaymentProps> = ({ onClose, products, userData }) => {
   const [cardError, setCardError] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter()
-
+  const deliveryData = useDeliveryDate(3)
+  const generateTransactionId = () => {
+    const prefix = "pay-e-bazaar";
+    const randomNumber = Math.floor(1000 + Math.random() * 9000);
+    const randomChars = Math.random().toString(36).substring(2, 6).toUpperCase();
+    return `${prefix}-${randomNumber}-${randomChars}`;
+  }
   const handlePayment = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -63,7 +71,7 @@ const Payment: React.FC<PaymentProps> = ({ onClose, products, userData }) => {
 
       const res = await axios.post(`http://localhost:5000/create-payment-intent`,
         { amount: products?.totalPrice, id: products?.productId });
-        console.log(res)
+      console.log(res)
       const clientSecret = res?.data?.clientSecret;
 
       //confirm payment
@@ -77,6 +85,7 @@ const Payment: React.FC<PaymentProps> = ({ onClose, products, userData }) => {
               email: userData.email,
               phone: userData.phone,
 
+
             }
           }
         })
@@ -86,8 +95,59 @@ const Payment: React.FC<PaymentProps> = ({ onClose, products, userData }) => {
       }
 
       if (paymentIntent?.status === 'succeeded') {
-        toast.success('Your Payment Successfully!')
-        router.push('/shopping')
+
+        const orderDetails = {
+          customer: {
+            name: userData.name,
+            email: userData.email,
+            phone: userData.phone,
+            address: userData.address,
+            deliveryAddress: userData.deliveryAddress,
+            note: userData.note || "",
+          },
+          product: {
+            id: products.productId,
+            name: products.productName,
+            brand: products.productBrand,
+            category: products.productCategory,
+            sizes: Array.isArray(products.productSizes) ? products.productSizes : [products.productSizes],
+            colors: Array.isArray(products.productColors) ? products.productColors : [products.productColors],
+            quantity: products.quantity,
+            totalPrice: products.totalPrice,
+            currency: products.productCurrency,
+            image: products.productImage,
+            description: products.productDescription,
+          },
+          payment: {
+            method: userData.paymentMethod,
+            orderStatus: "pending",
+            paymentStatus: 'pending',
+            verifiedByAdmin: false,
+            transactionId: generateTransactionId(),
+            amount: products.totalPrice,
+            currency: products.productCurrency,
+          },
+          delivery: {
+            date: deliveryData,
+            status: "pending",
+            charge: 100,
+          },
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        };
+
+        const res = await axios.post('http://localhost:5000/order', { orderDetails })
+        console.log(res)
+        if (res.status === 200) {
+          toast.success('Your Payment Successfully!')
+          router.push('/shopping')
+        }else{
+          console.error(res.data.message)
+        }
+
+
+
+
 
       }
 
@@ -100,6 +160,8 @@ const Payment: React.FC<PaymentProps> = ({ onClose, products, userData }) => {
     }
 
   }
+
+
 
   return (
     <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50">
@@ -158,8 +220,8 @@ const Payment: React.FC<PaymentProps> = ({ onClose, products, userData }) => {
           type="submit"
           className="w-full py-3 bg-black text-white font-semibold rounded-lg hover:bg-gray-900 transition"
         >
-          
-          {loading ? <span className="loading loading-bars loading-xs"></span>:`Pay ৳ ${products.totalPrice}`}
+
+          {loading ? <span className="loading loading-bars loading-xs"></span> : `Pay ৳ ${products.totalPrice}`}
         </button>
       </form>
 
