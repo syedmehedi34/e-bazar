@@ -11,7 +11,8 @@ import Button from '@/Components/Button/Button'
 import { toast } from 'react-toastify'
 import BackButton from '@/Components/Button/BackButton/BackButton'
 import Payment from '@/Components/Payment/CardPayment/Payment'
-
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
 const PaymentProcess = () => {
     const deliveryDate = useDeliveryDate(2)
     const products = useSelector((state: RootState) => state.orderSummary.orderDetails);
@@ -26,7 +27,7 @@ const PaymentProcess = () => {
     });
     const [paymentMethod, setPaymentMethod] = useState('');
     const [isOpen, setIsOpen] = useState(false)
-
+    const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || "");
 
 
 
@@ -70,7 +71,7 @@ const PaymentProcess = () => {
                                     id="name"
                                     placeholder="Enter Your Name.."
                                     className='input input-bordered w-full'
-                                    
+
                                     value={formData.name}
                                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                                 />
@@ -212,7 +213,16 @@ const PaymentProcess = () => {
 
                 </div>
 
-                {isOpen && <Payment onClose={() => setIsOpen(!isOpen)} />}
+                {isOpen &&  
+                    <Elements stripe={stripePromise}>
+                        <Payment
+                            onClose={() => setIsOpen(!isOpen)}
+                            userData={formData}
+                            products={products}
+                        />
+                    </Elements>
+                }
+
             </div>
         </div>
     )
