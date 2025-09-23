@@ -13,6 +13,8 @@ import BackButton from '@/Components/Button/BackButton/BackButton'
 import Payment from '@/Components/Payment/CardPayment/Payment'
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
+import axios from 'axios';
+import { useRouter } from 'next/navigation';
 const PaymentProcess = () => {
     const deliveryDate = useDeliveryDate(2)
     const products = useSelector((state: RootState) => state.orderSummary.orderDetails);
@@ -24,16 +26,21 @@ const PaymentProcess = () => {
         note: '',
         address: '',
         deliveryAddress: '',
-        paymentMethod:paymentMethod || "Card"
+        paymentMethod: paymentMethod 
     });
 
     const [isOpen, setIsOpen] = useState(false)
     const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || "");
+    const deliveryData = useDeliveryDate()
+    const router = useRouter()
+    const generateTransactionId = () => {
+        const prefix = "pay-e-bazaar";
+        const randomNumber = Math.floor(1000 + Math.random() * 9000);
+        const randomChars = Math.random().toString(36).substring(2, 6).toUpperCase();
+        return `${prefix}-${randomNumber}-${randomChars}`;
+    }
 
-
-
-
-    const handlePayment = () => {
+    const handlePayment = async () => {
         if (!formData.name || !formData.phone || !formData.email || !formData.address || !formData.deliveryAddress) {
             toast.error("Please fill all the fields", { position: "top-center" })
             return;
@@ -48,9 +55,58 @@ const PaymentProcess = () => {
             setIsOpen(!isOpen)
         }
 
+        if (paymentMethod === 'cash') {
 
+            const orderDetails = {
+                customer: {
+                    name: formData.name,
+                    email: formData.email,
+                    phone: formData.phone,
+                    address: formData.address,
+                    deliveryAddress: formData.deliveryAddress,
+                    note: formData.note || "",
+                },
+                product: {
+                    id: products?.productId,
+                    name: products?.productName,
+                    brand: products?.productBrand,
+                    category: products?.productCategory,
+                    sizes: Array.isArray(products?.productSizes) ? products?.productSizes : [products?.productSizes],
+                    colors: Array.isArray(products?.productColors) ? products?.productColors : [products?.productColors],
+                    quantity: products?.quantity,
+                    totalPrice: products?.totalPrice,
+                    currency: products?.productCurrency,
+                    image: products?.productImage,
+                    description: products?.productDescription,
+                },
+                payment: {
+                    method: formData.paymentMethod || 'Cash On Delivery',
+                    orderStatus: "pending",
+                    paymentStatus: 'pending',
+                    verifiedByAdmin: false,
+                    transactionId: generateTransactionId(),
+                    amount: products?.totalPrice,
+                    currency: products?.productCurrency,
+                },
+                delivery: {
+                    date: deliveryData,
+                    status: "pending",
+                    charge: 100,
+                },
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString(),
+            };
+
+            const res = await axios.post('http://localhost:5000/order', { orderDetails })
+            console.log(res)
+            if (res.status === 200) {
+                toast.success('Your Order Place Successfully!')
+                router.push('/shopping')
+            }
+
+
+        }
     }
-
 
 
     return (
@@ -214,11 +270,11 @@ const PaymentProcess = () => {
 
                 </div>
 
-                {isOpen  &&  products &&
+                {isOpen && products && formData &&
                     <Elements stripe={stripePromise}>
                         <Payment
                             onClose={() => setIsOpen(!isOpen)}
-                            userData={formData}
+                            formData={formData}
                             products={products}
                         />
                     </Elements>

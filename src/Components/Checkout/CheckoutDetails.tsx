@@ -51,8 +51,8 @@ type CheckoutDetailsProps = {
 const CheckoutDetails: React.FC<CheckoutDetailsProps> = ({ products, selectedImage }) => {
     const [quantity, setQuantity] = useState(1)
   
-    const [selectedSize, setSelectedSize] = useState<string>('');
-    const [selectedColor, setSelectedColor] = useState<string>('');
+    const [selectedSize, setSelectedSize] = useState<string[]>([]);
+    const [selectedColor, setSelectedColor] = useState<string[]>([]);
     const [isOpen, setIsOpen] = useState(false);
     const dispatch = useDispatch()
     const [totalPrice, setTotalPrice] = useState(products.price);
@@ -147,9 +147,14 @@ const CheckoutDetails: React.FC<CheckoutDetailsProps> = ({ products, selectedIma
                     {products?.sizes && products.sizes.length > 0 ? (
                         products.sizes.map((s) => (
                             <span
-                                onClick={() => setSelectedSize(s)}
+                                onClick={() => setSelectedSize((prev)=>
+                                    prev.includes(s) ?
+                                     prev.filter(item => item !== s)
+                                    : 
+                                    [...prev, s]
+                                )}
                                 key={s}
-                                className={`py-2 px-3 ${selectedSize === s ? "bg-black text-white" : ""} h-10 flex justify-center items-center shadow shadow-gray-400 rounded-box hover:cursor-pointer`}
+                                className={`py-2 px-3 ${selectedSize.includes(s)? "bg-black text-white" : ""} h-10 flex justify-center items-center shadow shadow-gray-400 rounded-box hover:cursor-pointer`}
                             >
                                 {s}
                             </span>

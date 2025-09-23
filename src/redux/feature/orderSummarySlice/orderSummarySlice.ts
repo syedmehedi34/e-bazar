@@ -16,6 +16,7 @@ interface ProductDetails {
   productRating: number;
   productCurrency: string;
   productDescription: string;
+  paymentMethod: string;
 }
 
 interface OrderState {

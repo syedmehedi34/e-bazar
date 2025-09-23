@@ -56,6 +56,8 @@ const Payment: React.FC<PaymentProps> = ({ onClose, products, userData }) => {
     const randomChars = Math.random().toString(36).substring(2, 6).toUpperCase();
     return `${prefix}-${randomNumber}-${randomChars}`;
   }
+
+
   const handlePayment = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -119,7 +121,7 @@ const Payment: React.FC<PaymentProps> = ({ onClose, products, userData }) => {
             description: products.productDescription,
           },
           payment: {
-            method: userData.paymentMethod,
+            method: userData.paymentMethod || "Card",
             orderStatus: "pending",
             paymentStatus: 'pending',
             verifiedByAdmin: false,
@@ -141,7 +143,7 @@ const Payment: React.FC<PaymentProps> = ({ onClose, products, userData }) => {
         if (res.status === 200) {
           toast.success('Your Payment Successfully!')
           router.push('/shopping')
-        }else{
+        } else {
           console.error(res.data.message)
         }
 
