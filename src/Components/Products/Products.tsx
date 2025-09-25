@@ -1,5 +1,6 @@
 import Button from "../Button/Button";
 import ProductsCard from "./ProductsCard";
+import Link from 'next/link'
 interface Product {
   _id: string;
   id: string;
@@ -32,7 +33,9 @@ const Products = async () => {
             ))}
         </div>
         <div className="flex justify-center my-4">
+          <Link href={'/shopping'}>
           <Button text={"See More"} />
+          </Link>
         </div>
       </div>
     </div>

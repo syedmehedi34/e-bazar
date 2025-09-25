@@ -107,8 +107,6 @@ const CheckoutDetails: React.FC<CheckoutDetailsProps> = ({ products, selectedIma
             productDescription: products.description,
 
         }
-
-    
         handleOpenModal()
         dispatch(setOrderDetails(productsDetails as ProductDetails))
         router.push('/orderSummary', )

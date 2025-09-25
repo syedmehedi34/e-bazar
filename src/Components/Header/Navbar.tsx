@@ -17,19 +17,21 @@ import { FaSearch } from 'react-icons/fa'
 import SearchInput from '../SearchInput/SearchInput'
 import LoginPage from '../Login/login'
 import { AnimatePresence } from 'framer-motion'
+import Sidebar from './Sidebar'
+import { FaArrowRightFromBracket } from "react-icons/fa6";
 
 
 
 const Navbar = () => {
   const [scrollY, setScrollY] = useState(0);
-  const [isOpen, setIsOpen] = useState(false); 
-  const [isOpenRegisterPage, setIsOpenRegisterPage] = useState(false); 
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false); 
-  const shoppingCart = useSelector((state: RootState) => state.cart.value) ;
+  const [isOpen, setIsOpen] = useState(false);
+  const [isOpenRegisterPage, setIsOpenRegisterPage] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const shoppingCart = useSelector((state: RootState) => state.cart.value);
   const [searchBox, setSearchBox] = useState(false)
   const path = usePathname()
   const { data: session } = useSession()
-  
+
   useEffect(() => {
     const handleScrollY = () => setScrollY(window.scrollY);
     window.addEventListener('scroll', handleScrollY);
@@ -44,7 +46,7 @@ const Navbar = () => {
         title: "Logout successfully!"
       })
     } catch (error) {
-      const err = error as AxiosError<{message:string}>;
+      const err = error as AxiosError<{ message: string }>;
       Swal.fire({
         icon: 'error',
         title: err.response?.data?.message || "Logout Failed!"
@@ -63,7 +65,7 @@ const Navbar = () => {
 
 
   return (
-    <header className={`w-full z-100  ${path === "/" ? (scrollY > 50 ? "fixed-nav bg-gray-800 text-white  shadow " : "absolute bg-transparent") : (scrollY > 50 ? "fixed-nav bg-gray-800 text-white  shadow " : "bg-gradient shadow")}`}>
+    <header className={`w-full z-100  ${path === "/" ? (scrollY > 50 ? "fixed-nav bg-gray-800 text-white  shadow " : "shadow bg-white") : (scrollY > 50 ? "fixed-nav bg-gray-800 text-white  shadow " : "bg-gradient shadow")}`}>
       <div className="container-custom flex items-center justify-between py-4">
         <div className='flex items-center gap-4'>
           {/* Mobile Menu Button */}
@@ -74,7 +76,7 @@ const Navbar = () => {
           </button>
           {/* Logo */}
           <Link href={'/'}>
-            <Logo/>
+            <Logo />
           </Link>
         </div>
 
@@ -84,8 +86,8 @@ const Navbar = () => {
         {/* Icons + Auth Buttons */}
         <div className="flex items-center gap-4">
           <div className="">
-            <button className='cursor-pointer mt-2' onClick={()=>setSearchBox(!searchBox)} ><FaSearch size={20} /></button>
-            
+            <button className='cursor-pointer mt-2' onClick={() => setSearchBox(!searchBox)} ><FaSearch size={20} /></button>
+
           </div>
           <div className="relative">
             <Link href={'/shopping-cart'}><BsCartCheckFill size={24} /></Link>
@@ -99,20 +101,27 @@ const Navbar = () => {
           {/* Login / Register */}
           {!session?.user ? (
             <div className='hidden lg:block'>
-              <button onClick={() => setIsOpen(true)} className="btn btn-outline hover:bg-gray-800  rounded-md hover:text-white transition-all duration-300 mr-2">Login</button>
-              <button onClick={() => setIsOpenRegisterPage(true)} className="btn btn-outline  hover:bg-gray-800 rounded-md hover:text-white transition-all duration-300">Register</button>
+              <button onClick={() => setIsOpen(true)} className="btn btn-sm btn-outline border-gray-400 hover:bg-gray-800  rounded-md hover:text-white transition-all duration-300 mr-2">
+                Login
+                <FaArrowRightFromBracket />
+              </button>
+              <button onClick={() => setIsOpenRegisterPage(true)} className="btn btn-sm btn-outline  hover:bg-gray-800 rounded-md hover:text-white transition-all duration-300">
+                Register
+                <FaArrowRightFromBracket />
+
+              </button>
             </div>
           ) : (
             <div className="dropdown dropdown-end ">
               <div tabIndex={0} className="btn btn-ghost btn-circle avatar">
                 <div className="w-10 h-10 rounded-full">
-                  <Image src={session?.user?.image  || "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"} alt="Avatar" fill className='rounded-full' />
+                  <Image src={session?.user?.image || "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"} alt="Avatar" fill className='rounded-full' />
                 </div>
               </div>
-              <ul tabIndex={0} className="dropdown-content menu p-2 shadow bg-gradient shadow-amber-600 text-white rounded-box w-52 mt-4 space-y-4">
+              <ul tabIndex={0} className="dropdown-content menu p-2 shadow bg-white shadow-gray-600 text-gray-800 rounded-box w-52 mt-4 space-y-4">
                 <li><Link href="#">Profile</Link></li>
                 <li><Link href="/dashboard">Dashboard</Link></li>
-                <li><button onClick={() => handleLogout()} className="btn btn-outline border-none w-full bg-gray-800 hover:bg-red-800 text-white">Logout</button></li>
+                <li><button onClick={() => handleLogout()} className="btn btn-outline border-none w-full bg-gray-800 hover:bg-red-800 text-white rounded-box">Logout</button></li>
               </ul>
             </div>
           )}
@@ -122,23 +131,20 @@ const Navbar = () => {
       </div>
 
       {/* Mobile Menu */}
-      {mobileMenuOpen && (
-        <div className="lg:hidden bg-black/80 text-white w-[70%]  py-10 px-4 flex flex-col gap-4 items-center">
-          {navItems}
-          {
-            !session?.user && (
-              <div className=' lg:hidden flex flex-col w-full gap-2 '>
-                <button onClick={() => setIsOpen(true)} className="btn btn-outline hover:bg-gray-800 hover:border-none rounded-md hover:text-white transition-all duration-300">Login</button>
-                <button onClick={() => setIsOpenRegisterPage(true)} className="btn btn-outline  hover:bg-gray-800 hover:border-none rounded-md hover:text-white transition-all duration-300">Register</button>
-              </div>
-            )
-          }
-        </div>
-      )}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+
+
+
+          <Sidebar isOpen={mobileMenuOpen} setIsOpen={setMobileMenuOpen} setIsOpenRegisterPage={setIsOpenRegisterPage} isLogin={setIsOpen} session={session} navItems={navItems} />
+
+
+        )}
+      </AnimatePresence>
 
       {/* Modals */}
-      {isOpen && <LoginPage onClose={() => setIsOpen(false)} />}
-      {isOpenRegisterPage && <Register onClose={() => setIsOpenRegisterPage(false)} />}
+      {isOpen && <LoginPage onClose={() => setIsOpen(false)} isOpen={isOpen} />}
+      {isOpenRegisterPage && <Register onClose={() => setIsOpenRegisterPage(false)} isOpen ={isOpenRegisterPage} />}
       <AnimatePresence>
         {searchBox && <SearchInput setSearchBox={setSearchBox} searchBox={searchBox} />}
       </AnimatePresence>

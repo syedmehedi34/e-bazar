@@ -10,13 +10,13 @@ const Sorting: React.FC<PageProps> = ({ setSort,total }) => {
 
 
     return (
-        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 md:gap-5 w-full md:w-auto">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 md:gap-5 w-full md:w-auto relative z-[1] ">
             <p className="flex gap-1 text-sm">
                 Showing <span className="font-medium">{total}</span> Result
             </p>
 
             <select
-                className="w-full sm:w-[200px] md:w-[250px] lg:w-[300px] select z-[-1] "
+                className="w-full sm:w-[200px] md:w-[250px] lg:w-[300px] select  "
                 defaultValue="latest"
                 onChange={(e) => setSort(e.target.value)}
             >

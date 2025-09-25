@@ -1,18 +1,18 @@
 "use client";
 import { signIn } from 'next-auth/react';
 import Link from 'next/link';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { FcGoogle } from "react-icons/fc";
 import { IoClose } from 'react-icons/io5'
 import Swal from 'sweetalert2';
 import Logo from '../Logo/Logo';
 
 
-interface LoginPageProps { onClose: () => void; }
+interface LoginPageProps { onClose: () => void; isOpen:boolean }
 
 
 
-const LoginPage: React.FC<LoginPageProps> = ({ onClose }) => {
+const LoginPage: React.FC<LoginPageProps> = ({ onClose,isOpen }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -49,6 +49,18 @@ const LoginPage: React.FC<LoginPageProps> = ({ onClose }) => {
     }
   };
 
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+    }
+
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, [isOpen]);
+
   const handleLoginWithGoogle = async () => {
     try {
       await signIn("google", { callbackUrl: "/" });
@@ -58,12 +70,12 @@ const LoginPage: React.FC<LoginPageProps> = ({ onClose }) => {
     }
   };
   return (
-    <div className="fixed top-0 w-full h-full bg-black/80 flex items-center justify-center z-100">
+    <div className="fixed top-0 w-full h-full bg-black/70 flex items-center justify-center z-[200]">
       {/* Modal Box */}
-      <div className="bg-white py-10 border border-gray-600 rounded-2xl shadow-lg w-[400px] max-w-full p-6 relative">
+      <div className="bg-white/80 py-10  rounded-2xl shadow-lg w-[500px] max-w-full p-6 relative">
         {/* Close Button */}
         <button
-          className="absolute top-3 right-3 cursor-pointer hover:text-gray-800 transition bg-gray-800 p-1 rounded-2xl text-white font-bold"
+          className="absolute top-3 right-3 cursor-pointer  transition bg-gray-800 p-1 rounded-2xl text-white font-bold"
           onClick={onClose}
         >
           <IoClose />
