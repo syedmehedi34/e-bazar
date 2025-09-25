@@ -10,6 +10,7 @@ import { RootState } from '@/redux/store';
 import Swal from 'sweetalert2';
 import { toast } from 'react-toastify';
 import BackButton from '../../../Components/Button/BackButton/BackButton';
+import { useRouter } from 'next/navigation';
 
 interface CartItem {
   _id: string;
@@ -24,6 +25,7 @@ interface CartItem {
 const ShoppingCart = () => {
   const cartItems = useSelector((state: RootState) => state.cart.value as CartItem[]);
   const dispatch = useDispatch()
+  const router = useRouter()
   const subTotal = () => {
     const total = cartItems.reduce((acc, cart) => acc + cart.price * cart.quantity, 0);
 
@@ -66,6 +68,12 @@ const ShoppingCart = () => {
     });
   };
 
+  const handleCheckout = ()=>{
+    router.push(`/checkout/${cartItems[0]._id}`)
+  }
+  const handleCheckoutItem = (_id:string)=>{
+    router.push(`/checkout/${_id}`)
+  }
   return (
     <div className='min-h-screen bg-gray-200'>
       <div className=''>
@@ -101,8 +109,10 @@ const ShoppingCart = () => {
                     <ul className='space-y-4 rubik list bg-base-100 rounded-box '>
                       {
                         cartItems.map((cart) => (
-                          <li key={cart._id} className="sm:flex justify-between items-center">
-                            <div className='list-row'>
+                          <li key={cart._id} className="sm:flex justify-between items-center" 
+                        
+                          >
+                            <div className='list-row cursor-pointer'   onClick={()=>handleCheckoutItem(cart._id)}>
                               <div>
                                 <Image className='size-10 rounded-box shadow object-contain' src={cart.images?.[0] || cart.images?.[1]} width={30} height={30} alt={cart.title} />
 
@@ -174,7 +184,9 @@ const ShoppingCart = () => {
                         </strong>
                       </div>
                       <div>
-                        <button className='flex items-center justify-center gap-4 text-center max-sm:text-sm  container-custom bg-gray-800 text-white cursor-pointer sm:p-4 p-3 rounded-box hover:bg-gray-900'>
+                        <button
+                        onClick={handleCheckout}
+                        className='flex items-center justify-center gap-4 text-center max-sm:text-sm  container-custom bg-gray-800 text-white cursor-pointer sm:p-4 p-3 rounded-box hover:bg-gray-900'>
                           Go to Checkout <MdArrowRightAlt />
                         </button>
                       </div>

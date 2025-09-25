@@ -1550,7 +1550,8 @@
     "rating": 4.7,
     "stock": 22,
     "featured": false,
-    "sizes": ["One Size"],
+    "sizes": [""],
+    "colors":[""],
     "images": ["https://m.media-amazon.com/images/I/61IQ9lkOKxL._AC_SX466_.jpg", "https://m.media-amazon.com/images/I/71LJXcQxuXL._AC_SX466_.jpg", "https://m.media-amazon.com/images/I/71-aC-QshgL._AC_SX466_.jpg"],
     "reviews": [
       {"user": "Asif Rahman", "rating": 5, "comment": "Charges my MacBook and phone together. Very fast and reliable."},

@@ -2,7 +2,7 @@
 "use client";
 import { signIn } from 'next-auth/react';
 import React, { useEffect, useState } from 'react'
-import { FaGooglePlusG } from 'react-icons/fa6';
+
 import { IoClose } from 'react-icons/io5'
 import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
 import axios, { AxiosError } from 'axios';

@@ -6,13 +6,14 @@ import Link from 'next/link'
 import React, { useCallback, useEffect, useState } from 'react'
 import Sorting from '@/Components/Shopping/Sorting';
 import Pricerange from '@/Components/Shopping/Pricerange';
-import { getCategory } from '@/hook/Category/CategoryFetch';
 import axios from 'axios';
 import Pagination from '@/Components/Pagination/Pagination';
 import { useRouter, useSearchParams } from 'next/navigation';
+import Loader from '@/Components/Loader/Loader';
 const Shopping = () => {
     const searchParams = useSearchParams();
     const search = searchParams.get('search') || '';
+    const [loading, setLoading] = useState(false)
     const router = useRouter()
     const [products, setProducts] = useState([])
     const [category, setCategory] = useState([])
@@ -28,31 +29,34 @@ const Shopping = () => {
     const [total, setTotal] = useState(0)
 
 
-  
-    
 
- const fetchData = useCallback(async () => {
-  try {
-    const categoryData = await getCategory();
-    setCategory(categoryData);
+    const fetchData = useCallback(async () => {
+        try {
+            setLoading(true)
+           
+            
 
-    const params = new URLSearchParams();
-    if (sort) params.set('sort', sort);
-    if (selectedCategory) params.set('category', selectedCategory);
-    if (minPrice) params.set('minPrice', minPrice.toString());
-    if (maxPrice) params.set('maxPrice', maxPrice.toString());
-    if (currentPage) params.set('page', currentPage.toString());
-    params.set('limit', '15');
-    if (search) params.set('search', search);
+            const params = new URLSearchParams();
+            if (sort) params.set('sort', sort);
+            if (selectedCategory) params.set('category', selectedCategory);
+            if (minPrice) params.set('minPrice', minPrice.toString());
+            if (maxPrice) params.set('maxPrice', maxPrice.toString());
+            if (currentPage) params.set('page', currentPage.toString());
+            params.set('limit', '15');
+            if (search) params.set('search', search);
 
-    const res = await axios.get(`http://localhost:5000/shopping?${params.toString()}`);
-    setProducts(res?.data?.product);
-    setCount(res?.data?.total);
-    setTotal(res?.data?.totalProducts);
-  } catch (error) {
-    console.error(error);
-  }
-}, [sort, selectedCategory, minPrice, maxPrice, currentPage, search]); 
+            const res = await axios.get(`http://localhost:5000/shopping?${params.toString()}`);
+            
+            setProducts(res?.data?.product);
+            setCount(res?.data?.total);
+            setTotal(res?.data?.totalProducts);
+            setCategory(res?.data?.allProducts)
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setLoading(false)
+        }
+    }, [sort, selectedCategory, minPrice, maxPrice, currentPage, search]);
 
 
     useEffect(() => {
@@ -67,15 +71,23 @@ const Shopping = () => {
         setCurrentPage(1);
         const params = new URLSearchParams(searchParams.toString());
 
-        params.delete('search'); 
+        params.delete('search');
         router.push(`/shopping?${params.toString()}`);
 
     };
 
 
+    {
+        loading && products.length === 0 && (
+            <div className="absolute inset-0 flex items-center justify-center bg-white/70 z-50">
+                <Loader />
+            </div>
+        )
+    }
 
     return (
-        <div className='min-h-screen'>
+        <div className='min-h-screen relative'>
+
             <div className='container-custom'>
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-5 py-6 px-4">
                     {/* Left side links */}

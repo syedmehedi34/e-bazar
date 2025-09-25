@@ -8,15 +8,6 @@ import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
 import { useDeliveryDate } from '@/hook/useDeliveryDate/useDeliveryDate';
 
-interface userData {
-  name: string;
-  phone: string;
-  email: string;
-  note: string;
-  address: string;
-  deliveryAddress: string;
-  paymentMethod: string
-}
 interface ProductDetails {
   totalPrice: number;
   quantity: number;
@@ -36,13 +27,21 @@ interface ProductDetails {
 
 type PaymentProps = {
   onClose: () => void
-  userData: userData
-  products: ProductDetails
 
+  products: ProductDetails
+  formData: {
+    name: string;
+    phone: string;
+    email: string;
+    note: string;
+    address: string;
+    deliveryAddress: string;
+    paymentMethod: string;
+  };
 
 }
 
-const Payment: React.FC<PaymentProps> = ({ onClose, products, userData }) => {
+const Payment: React.FC<PaymentProps> = ({ onClose, products, formData }) => {
   const stripe = useStripe()
   const elements = useElements()
   const [error, setError] = useState("");
@@ -83,9 +82,9 @@ const Payment: React.FC<PaymentProps> = ({ onClose, products, userData }) => {
           payment_method: {
             card: card,
             billing_details: {
-              name: userData.name,
-              email: userData.email,
-              phone: userData.phone,
+              name: formData.name,
+              email: formData.email,
+              phone: formData.phone,
 
 
             }
@@ -100,12 +99,12 @@ const Payment: React.FC<PaymentProps> = ({ onClose, products, userData }) => {
 
         const orderDetails = {
           customer: {
-            name: userData.name,
-            email: userData.email,
-            phone: userData.phone,
-            address: userData.address,
-            deliveryAddress: userData.deliveryAddress,
-            note: userData.note || "",
+            name: formData.name,
+            email: formData.email,
+            phone: formData.phone,
+            address: formData.address,
+            deliveryAddress: formData.deliveryAddress,
+            note: formData.note || "",
           },
           product: {
             id: products.productId,
@@ -121,7 +120,7 @@ const Payment: React.FC<PaymentProps> = ({ onClose, products, userData }) => {
             description: products.productDescription,
           },
           payment: {
-            method: userData.paymentMethod || "Card",
+            method: formData.paymentMethod || "Card",
             orderStatus: "pending",
             paymentStatus: 'pending',
             verifiedByAdmin: false,

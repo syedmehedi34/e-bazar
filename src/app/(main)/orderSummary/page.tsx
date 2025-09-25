@@ -33,6 +33,7 @@ const PaymentProcess = () => {
     const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || "");
     const deliveryData = useDeliveryDate()
     const router = useRouter()
+
     const generateTransactionId = () => {
         const prefix = "pay-e-bazaar";
         const randomNumber = Math.floor(1000 + Math.random() * 9000);
@@ -108,6 +109,7 @@ const PaymentProcess = () => {
         }
     }
 
+    console.log("order summary",products)
 
     return (
         <div className='min-h-screen bg-gray-200 py-8 rubik'>

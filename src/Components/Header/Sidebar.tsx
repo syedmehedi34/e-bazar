@@ -1,5 +1,6 @@
 'use client'
-import { AnimatePresence, motion } from 'framer-motion';
+import {  motion } from 'framer-motion';
+import { useSession } from 'next-auth/react';
 import { useEffect } from 'react';
 import { IoClose } from 'react-icons/io5';
 
@@ -8,11 +9,13 @@ interface SidebarProps {
   setIsOpen: (value: boolean) => void;
   setIsOpenRegisterPage: (value: boolean) => void;
   isLogin: (value: boolean) => void;
-  session: any;
+
   navItems: React.ReactNode;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ isOpen, setIsOpen, setIsOpenRegisterPage, session, navItems,isLogin }) => {
+const Sidebar: React.FC<SidebarProps> = ({ isOpen, setIsOpen, setIsOpenRegisterPage,  navItems,isLogin }) => {
+
+const {data:session} = useSession()
 
   useEffect(() => {
     if (isOpen) {

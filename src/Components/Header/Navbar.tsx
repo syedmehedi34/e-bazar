@@ -136,7 +136,7 @@ const Navbar = () => {
 
 
 
-          <Sidebar isOpen={mobileMenuOpen} setIsOpen={setMobileMenuOpen} setIsOpenRegisterPage={setIsOpenRegisterPage} isLogin={setIsOpen} session={session} navItems={navItems} />
+          <Sidebar isOpen={mobileMenuOpen} setIsOpen={setMobileMenuOpen} setIsOpenRegisterPage={setIsOpenRegisterPage} isLogin={setIsOpen}  navItems={navItems} />
 
 
         )}

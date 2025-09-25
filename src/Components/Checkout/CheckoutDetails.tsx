@@ -36,12 +36,13 @@ interface ProductDetails {
   productImage: string
   productBrand: string
   productCategory: string
-  productSizes: string | string[]  // depends on আপনার `selectedSize` কি ধরনের data
-  productColors: string | string[] // depends on আপনার `selectedColor`
+  productSizes: string | string[] 
+  productColors: string | string[] 
   productStock: number
   productRating: number
   productCurrency: string
   productDescription: string
+paymentMethod: string;
 }
 
 type CheckoutDetailsProps = {
@@ -172,8 +173,8 @@ const CheckoutDetails: React.FC<CheckoutDetailsProps> = ({ products, selectedIma
                         products.colors.map((c) => (
                             <span
                                 key={c}
-                                onClick={() => setSelectedColor(c)}
-                                className={`p-2 flex justify-center items-center shadow shadow-gray-400 rounded-box *:hover:cursor-pointer ${selectedColor === c ? "bg-black text-white" : ""}`}
+                                onClick={() => setSelectedColor([c])}
+                                className={`p-2 flex justify-center items-center shadow shadow-gray-400 rounded-box *:hover:cursor-pointer ${selectedColor.includes(c) ? "bg-black text-white" : ""}`}
                             >
                                 {c}
                             </span>
