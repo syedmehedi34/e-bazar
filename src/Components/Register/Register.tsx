@@ -80,7 +80,7 @@ const Register: React.FC<RegisterProps> = ({ onClose ,isOpen}) => {
         };
     }, [isOpen]);
     return (
-        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50">
             {/* Modal Box */}
             <div className="bg-white/80 py-10 border border-gray-600 rounded-2xl shadow-lg w-[500px] max-w-full p-6 relative">
                 {/* Close Button */}

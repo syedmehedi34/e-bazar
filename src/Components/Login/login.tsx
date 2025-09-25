@@ -70,7 +70,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onClose,isOpen }) => {
     }
   };
   return (
-    <div className="fixed top-0 w-full h-full bg-black/70 flex items-center justify-center z-[200]">
+    <div className="fixed inset-0 w-full h-full bg-black/80 flex items-center justify-center z-[999]">
       {/* Modal Box */}
       <div className="bg-white/80 py-10  rounded-2xl shadow-lg w-[500px] max-w-full p-6 relative">
         {/* Close Button */}

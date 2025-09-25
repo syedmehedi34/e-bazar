@@ -27,7 +27,7 @@ const TrustCard = () => {
         }
     ]
   return (
-    <div className='mt-16'>
+    <div className='my-16'>
         <div className='container-custom'>
             <div className='grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4'>
                 {
