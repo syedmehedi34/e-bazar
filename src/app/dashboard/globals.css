@@ -1,0 +1,74 @@
+@import "tailwindcss";
+ @plugin "daisyui" {
+  themes: light --default, dark --prefersdark;
+  themes: light --default;
+ }
+
+/* globals.css */
+:root {
+  --font-poppins: 'Poppins', sans-serif;
+  --font-rubik: 'Rubik', sans-serif;
+}
+@theme{
+  --color-dark:'#eff3f6'
+}
+.poppins {
+  font-family: var(--font-poppins);
+}
+
+.rubik{
+  font-family: var(--font-rubik);
+}
+
+body{
+  font-family: var(--font-poppins);
+  position: relative;
+   
+}
+
+.fixed-nav {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  
+  animation: slideDown 3s ease-out forwards; 
+
+  z-index: 90;
+  color: #fff !important;
+}
+
+@keyframes slideDown {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+
+.swiper-pagination-bullet {
+  background: #09090a !important; 
+  opacity: 0.10;
+}
+
+.swiper-pagination-bullet-active {
+  background: #fff !important; 
+  opacity: 1;
+}
+
+.clip-path {
+ clip-path: polygon(40% 0%, 100% 0%, 100% 100%, 0% 100%);
+}
+
+@media (max-width:1024) {
+  .clip-path{
+  clip-path: polygon(24.75% 0%, 100% 0%, 99.5% 100%, 24.75% 100%);
+  }
+}
+.container-custom {
+  @apply w-full max-w-[1280px] mx-auto px-4;
+}
+
+

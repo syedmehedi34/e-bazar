@@ -78,10 +78,25 @@ const handler = NextAuth({
       }
       return session
     },
-    async signIn ({user}) {
-      if (user) return true
-      return false
+    async signIn ({user,account}) {
+     if (account?.provider === "google") {
+        try {
+         
+          await axios.post("http://localhost:5000/create/user", {
+            name: user.name,
+            email: user.email,
+            image: user.image,
+            role: ["user"],
+          });
+          return true;
+        } catch (error) {
+          console.error("Google sign-in failed", error);
+          return false;
+        }
+      }
+      return true;
     }
+ 
   }
 })
 
