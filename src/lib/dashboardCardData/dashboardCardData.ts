@@ -26,3 +26,14 @@ export const GetSalesAnalytics = async () => {
 
  
 }
+export const LatestOrderList = async () => {
+  const res = await fetch('http://localhost:5000/admin/latest/order', {
+    cache: 'no-store'
+  })
+
+  const data = await res.json()
+  return data
+  
+
+ 
+}

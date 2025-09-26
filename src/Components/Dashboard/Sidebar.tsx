@@ -48,7 +48,7 @@ const Sidebar = () => {
   }
 
   return (
-    <aside className="bg-white  shadow w-64 h-screen fixed lg:relative overflow-y-auto z-[100] ">
+    <aside className=" ">
       <div className="flex justify-center my-10">
         <Image
           src={session?.user?.image || "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"}

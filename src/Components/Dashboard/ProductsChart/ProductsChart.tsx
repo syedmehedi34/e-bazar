@@ -29,7 +29,7 @@ const ComposedResponsiveContainer: React.FC<ProductsChartProps> = ({
     productsChartData,
 }) => {
     return (
-        <div className="w-full h-[500px] p-4 bg-white shadow rounded-lg">
+        <div className="w-full h-[450px] px-4 py-10 bg-white shadow rounded-lg ">
             <h2 className="text-xl font-bold mb-4">Products Sales Chart</h2>
 
             <ResponsiveContainer width="100%" height="100%">
