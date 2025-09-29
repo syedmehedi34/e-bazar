@@ -16,14 +16,14 @@ export default function DashboardLayout({
   }
   return (
     <html lang="en">
-      <body className="bg-gray-100">
+      <body className="bg-gray-100 dark:bg-gray-900">
         <SessionWrapper>
           <div className="flex flex-col lg:flex-row min-h-screen">
             {/* Sidebar */}
 
             <div
 
-              className={`lg:block hidden  transition-all duration-700 fixed h-full bg-white z-[100] w-52 shadow`}>
+              className={`lg:block hidden  transition-all duration-700 fixed h-full bg-white dark:shadow-gray-700 dark:bg-gray-900 dark:text-white z-[100] w-52 shadow`}>
               <Sidebar />
             </div>
             <AnimatePresence>
@@ -33,7 +33,7 @@ export default function DashboardLayout({
                   animate={{ x: 0, opacity: 1 }}
                   exit={{ x: -300, opacity: 0 }}
                   transition={{ duration: 0.5 }}
-                  className="fixed top-0 left-0 z-[100] h-full bg-gray-900"
+                  className="fixed top-0 left-0 z-[100] h-full bg-white dark:shadow-gray-700 dark:bg-gray-900 dark:text-white shadow"
                 >
                   <Sidebar />
                 </motion.div>

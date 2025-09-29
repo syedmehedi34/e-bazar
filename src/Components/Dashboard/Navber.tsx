@@ -1,3 +1,4 @@
+import { DarkModetoggle } from "@/hook/DarkModeToggle/darkMode";
 import Link from "next/link";
 import React from "react";
 import { FaBell, FaHome, FaSearch, FaUserCircle } from "react-icons/fa";
@@ -11,7 +12,7 @@ type NavbarProps ={
 
 const Navber:React.FC<NavbarProps> = ({onhandleSidebarOpen,sidebarOpen}) => {
   return (
-    <header className="flex justify-between items-center p-4 bg-white  to-gray-900 shadow">
+    <header className="flex justify-between items-center p-4 bg-white dark:bg-gray-900 dark:text-white dark:shadow-gray-700 to-gray-900 shadow">
       {/* Left - Title */}
       
 
@@ -21,7 +22,7 @@ const Navber:React.FC<NavbarProps> = ({onhandleSidebarOpen,sidebarOpen}) => {
           <input
             type="text"
             placeholder="Search..."
-            className="input pl-10"
+            className="input pl-10 dark:bg-gray-700"
           />
           <FaSearch className="absolute left-3 top-2.5 text-gray-300 w-5 h-5" />
         </div>
@@ -29,6 +30,7 @@ const Navber:React.FC<NavbarProps> = ({onhandleSidebarOpen,sidebarOpen}) => {
 
       {/* Right - Icons & Profile */}
       <div className="flex items-center gap-6">
+        <button onClick={DarkModetoggle} className="btn">Dark</button>
         {/* Home */}
         <Link href={'/'} className="  ">
           <FaHome size={20} />

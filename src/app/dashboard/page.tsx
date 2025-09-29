@@ -72,14 +72,14 @@ const Page: React.FC = () => {
     <div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10 rubik">
         {/* Total Sales */}
-        <div className="bg-white p-4 shadow rounded-lg">
+        <div className="bg-white dark:bg-gray-800 dark:text-white p-4 shadow rounded-lg">
           <div className="flex flex-col justify-between h-full">
             <div className="flex items-center gap-4">
               <div className="p-2 bg-green-100 rounded">
                 <FaDollarSign className="text-3xl text-green-500" />
               </div>
               <div>
-                <h3 className="text-sm text-gray-600">Total Sales</h3>
+                <h3 className="text-sm text-gray-600 dark:text-gray-300">Total Sales</h3>
                 <p className="text-2xl font-bold">${totalSales}</p>
               </div>
             </div>
@@ -93,13 +93,13 @@ const Page: React.FC = () => {
         </div>
 
         {/* Total Orders */}
-        <div className="bg-white p-4 shadow rounded-lg">
+        <div className="bg-white dark:bg-gray-800 dark:text-white p-4 shadow rounded-lg">
           <div className="flex items-center gap-4">
             <div className="p-2 bg-blue-100 rounded">
               <FaShoppingCart className="text-3xl text-blue-500" />
             </div>
             <div>
-              <h3 className="text-sm text-gray-600">Total Orders</h3>
+              <h3 className="text-sm text-gray-600 dark:text-gray-300">Total Orders</h3>
               <p className="text-2xl font-bold">{totalOrders}</p>
             </div>
           </div>
@@ -112,13 +112,13 @@ const Page: React.FC = () => {
         </div>
 
         {/* Active Users */}
-        <div className="bg-white p-4 shadow rounded-lg">
+        <div className="bg-white dark:bg-gray-800 dark:text-white p-4 shadow rounded-lg">
           <div className="flex items-center gap-4">
             <div className="p-2 bg-purple-100 rounded">
               <FaUsers className="text-3xl text-purple-500" />
             </div>
             <div>
-              <h3 className="text-sm text-gray-600">Active Users</h3>
+              <h3 className="text-sm text-gray-600 dark:text-gray-300">Active Users</h3>
               <p className="text-2xl font-bold">{totalUsers}</p>
             </div>
           </div>
@@ -131,13 +131,13 @@ const Page: React.FC = () => {
         </div>
 
         {/* Total Products */}
-        <div className="bg-white p-4 shadow rounded-lg">
+        <div className="bg-white dark:bg-gray-800 dark:text-white p-4 shadow rounded-lg">
           <div className="flex items-center gap-4">
             <div className="p-2 bg-orange-100 rounded">
               <FaBox className="text-3xl text-orange-500" />
             </div>
             <div>
-              <h3 className="text-sm text-gray-600">Total Products</h3>
+              <h3 className="text-sm text-gray-600 dark:text-gray-300">Total Products</h3>
               <p className="text-2xl font-bold">{totalProducts}</p>
             </div>
           </div>

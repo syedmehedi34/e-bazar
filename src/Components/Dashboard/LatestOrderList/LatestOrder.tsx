@@ -38,7 +38,7 @@ type LatesOrder = {
 const LatestOrder: React.FC<LatesOrder> = ({ orderList }) => {
     return (
         <div className="my-10 ">
-            <div className="overflow-x-auto bg-white rounded-lg shadow">
+            <div className="overflow-x-auto bg-white dark:bg-gray-800 dark:text-white rounded-lg shadow">
                 <h1 className='p-4 font-bold rubik'>
                     Latest Order
                 </h1>
@@ -46,21 +46,21 @@ const LatestOrder: React.FC<LatesOrder> = ({ orderList }) => {
                     {/* head */}
                     <thead className=" text-sm">
                         <tr>
-                            <th>Image</th>
-                            <th>Title</th>
-                            <th>Customer Name</th>
-                            <th>Customer Email</th>
-                            <th>Quantity</th>
-                            <th>Payment Method</th>
-                            <th>Payment Status</th>
-                            <th>Total Amount</th>
-                            <th>Date</th>
+                            <th className='dark:text-white'>Image</th>
+                            <th className='dark:text-white'>Title</th>
+                            <th className='dark:text-white'>Customer Name</th>
+                            <th className='dark:text-white'>Customer Email</th>
+                            <th className='dark:text-white'>Quantity</th>
+                            <th className='dark:text-white'>Payment Method</th>
+                            <th className='dark:text-white'>Payment Status</th>
+                            <th className='dark:text-white'>Total Amount</th>
+                            <th className='dark:text-white'>Date</th>
                         </tr>
                     </thead>
                     <tbody>
                         {orderList.length > 0 ? (
                             orderList.map((order, idx) => (
-                                <tr key={idx} className="hover:bg-gray-50">
+                                <tr key={idx} className="hover:bg-gray-50 dark:hover:bg-gray-700">
                                     <td>
                                         {order.product.image ? (
                                             <Image

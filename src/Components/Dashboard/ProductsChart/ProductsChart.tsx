@@ -29,12 +29,12 @@ const ComposedResponsiveContainer: React.FC<ProductsChartProps> = ({
     productsChartData,
 }) => {
     return (
-        <div className="w-full h-[450px] px-4 py-10 bg-white shadow rounded-lg ">
+        <div className="w-full h-[450px] px-4 py-10 bg-white dark:bg-gray-800 dark:text-white shadow rounded-lg ">
             <h2 className="text-xl font-bold mb-4">Products Sales Chart</h2>
 
             <ResponsiveContainer width="100%" height="100%">
                 <ComposedChart data={productsChartData} margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
-                    <CartesianGrid stroke="#f5f5f5" />
+                    <CartesianGrid stroke="#f5f5f5"  />
 
                     {/* X Axis */}
                     <XAxis

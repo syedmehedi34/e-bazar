@@ -4,29 +4,36 @@ import Link from 'next/link';
 import React, { useEffect, useState } from 'react'
 import { FcGoogle } from "react-icons/fc";
 import { IoClose } from 'react-icons/io5'
-import Swal from 'sweetalert2';
+import { FaEye, FaEyeSlash } from "react-icons/fa";  // 👈 Add icons
 import Logo from '../Logo/Logo';
+import { toast } from 'react-toastify';
 
+interface LoginPageProps { onClose: () => void; isOpen: boolean }
 
-interface LoginPageProps { onClose: () => void; isOpen:boolean }
-
-
-
-const LoginPage: React.FC<LoginPageProps> = ({ onClose,isOpen }) => {
+const LoginPage: React.FC<LoginPageProps> = ({ onClose, isOpen }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false); 
+
+  const handleUserLogin = () => {
+    setEmail("mduserkhan@gmail.com");
+    setPassword("12345678")
+  }
+  const handleAdminLogin = () => {
+    setEmail("admin123@gmail.com");
+    setPassword("12345678")
+  }
 
   const handleCredentialsLogin = async (e: React.FormEvent<HTMLElement>) => {
     e.preventDefault();
     setLoading(true);
 
     if (!email || !password) {
-      alert("Email and password are required");
+      toast.error("Email and password are required");
       setLoading(false);
       return;
     }
-    // Call the login API
     const result = await signIn("credentials", {
       email,
       password,
@@ -34,18 +41,12 @@ const LoginPage: React.FC<LoginPageProps> = ({ onClose,isOpen }) => {
     });
 
     if (result?.ok && !result.error) {
-      Swal.fire({
-        icon: "success",
-        title: "Login Successfully !"
-      })
+      toast.success("Login Successfully !")
       setLoading(false);
       onClose();
-
     } else {
-      Swal.fire({
-        icon: "error",
-        title: "Invalid credentials!"
-      })
+      toast.error("Invalid credentials!");
+      setLoading(false)
     }
   };
 
@@ -55,7 +56,6 @@ const LoginPage: React.FC<LoginPageProps> = ({ onClose,isOpen }) => {
     } else {
       document.body.style.overflow = 'auto';
     }
-
     return () => {
       document.body.style.overflow = 'auto';
     };
@@ -64,26 +64,39 @@ const LoginPage: React.FC<LoginPageProps> = ({ onClose,isOpen }) => {
   const handleLoginWithGoogle = async () => {
     try {
       await signIn("google", { callbackUrl: "/" });
-
     } catch (error) {
       console.error("Google login failed:", error);
     }
   };
+
   return (
     <div className="fixed inset-0 w-full h-full bg-black/80 flex items-center justify-center z-[999]">
-      {/* Modal Box */}
-      <div className="bg-white/80 py-10  rounded-2xl shadow-lg w-[500px] max-w-full p-6 relative">
+      <div className="bg-white py-10 rounded-2xl shadow-lg w-[500px] max-w-full p-6 relative">
+        
         {/* Close Button */}
         <button
-          className="absolute top-3 right-3 cursor-pointer  transition bg-gray-800 p-1 rounded-2xl text-white font-bold"
+          className="absolute top-3 right-3 cursor-pointer transition bg-gray-800 p-1 rounded-2xl text-white font-bold"
           onClick={onClose}
         >
           <IoClose />
         </button>
 
-        <h2 className="text-xl font-semibold text-gray-800 mb-4 rubik r">
-          <Logo/>
-        </h2>
+        {/* Header */}
+        <div className='flex justify-between items-center mb-4'>
+          <h2 className="text-xl font-semibold text-gray-800 mb-4">
+            <Logo />
+          </h2>
+          <div className='flex items-center gap-4'>
+            <button type='button'
+              onClick={handleUserLogin}
+              className='py-1 px-2 rounded-md text-sm cursor-pointer bg-gray-200'>User Credential</button>
+            <button type='button'
+              onClick={handleAdminLogin}
+              className='py-1 px-2 rounded-md text-sm cursor-pointer bg-gray-200'>Admin Credential</button>
+          </div>
+        </div>
+
+        {/* Form */}
         <form onSubmit={handleCredentialsLogin} className="space-y-4">
           {/* Email */}
           <div>
@@ -93,22 +106,30 @@ const LoginPage: React.FC<LoginPageProps> = ({ onClose,isOpen }) => {
               placeholder="Enter your email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full border border-gray-500 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-gray-800 input bg-transparent"
+              className="w-full border border-gray-500 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-gray-800 bg-transparent"
               required
             />
           </div>
 
           {/* Password */}
-          <div>
+          <div className="relative">
             <label className="block text-gray-600 mb-1">Password</label>
             <input
-              type="password"
+              type={showPassword ? "text" : "password"}  // 👈 toggle type
               placeholder="Enter your password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full border border-gray-500 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-gray-800 input bg-transparent"
+              className="w-full border border-gray-500 rounded-lg px-4 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-gray-800 bg-transparent"
               required
             />
+            {/* Eye Icon */}
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-12 transform -translate-y-1/2 text-gray-600 cursor-pointer"
+            >
+              {showPassword ? <FaEyeSlash /> : <FaEye />}
+            </button>
           </div>
 
           {/* Login Button */}
@@ -119,6 +140,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onClose,isOpen }) => {
             {loading ? "Sign in..." : "Sign in"}
           </button>
         </form>
+
         {/* Divider */}
         <div className="flex items-center my-6">
           <div className="flex-grow border-t border-gray-300"></div>
@@ -129,21 +151,19 @@ const LoginPage: React.FC<LoginPageProps> = ({ onClose,isOpen }) => {
         {/* Google */}
         <button
           onClick={handleLoginWithGoogle}
-          className="btn btn-block  rounded-md bg-gray-800 border-none text-white hover:bg-gray-800  ">
-          <FcGoogle size={30} />
+          className="btn btn-block rounded-md bg-gray-800 border-none text-white hover:bg-gray-800 flex items-center gap-2 justify-center"
+        >
+          <FcGoogle size={24} />
           Login with Google
         </button>
 
+        {/* Footer */}
         <p className='text-sm text-center mt-4'>
-          <span>Dot&apos;t have an account please? <Link href={'#'} className='text-red-400 underline'>create account</Link></span>
+          <span>Don&apos;t have an account? <Link href={'#'} className='text-red-400 underline'>Create account</Link></span>
         </p>
-
-
-
-
       </div>
     </div>
   )
 }
 
-export default LoginPage
+export default LoginPage;

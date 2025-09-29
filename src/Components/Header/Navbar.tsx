@@ -19,6 +19,7 @@ import LoginPage from '../Login/login'
 import { AnimatePresence } from 'framer-motion'
 import Sidebar from './Sidebar'
 import { FaArrowRightFromBracket } from "react-icons/fa6";
+import { toast } from 'react-toastify'
 
 
 
@@ -41,16 +42,10 @@ const Navbar = () => {
   const handleLogout = async () => {
     try {
       await signOut();
-      Swal.fire({
-        icon: 'success',
-        title: "Logout successfully!"
-      })
+     toast.success("Logout successfully!")
     } catch (error) {
       const err = error as AxiosError<{ message: string }>;
-      Swal.fire({
-        icon: 'error',
-        title: err.response?.data?.message || "Logout Failed!"
-      })
+     toast.error("Logout Failed!")
     }
   }
   const navItems = (
