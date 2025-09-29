@@ -23,6 +23,7 @@ const ProductsList = () => {
         getProductsData()
     }, [getProductsData])
 
+    
     return (
         <div>
             <div>
@@ -55,7 +56,7 @@ const ProductsList = () => {
                 </div>
 
                 <div className='bg-white dark:bg-gray-800 dark:text-white p-4'>
-                    <ProductsTable products={products} />
+                    <ProductsTable products={products} onUpdate={getProductsData} />
                     <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} pageArray={pageArray} />
                 </div>
             </div>

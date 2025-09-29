@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import ProductsUpdate from "./ProductsUpdate";
 
 interface Products {
   _id: string;
@@ -10,9 +11,18 @@ interface Products {
   createdAt: string;
 }
 
+// শুধু update এর জন্য দরকারি product interface
+interface Product {
+  _id: string;
+  title: string;
+  category: string;
+  stock: number;
+  price: number;
+}
+
 type ProductsTableProps = {
   products: Products[];
-  onUpdate?: (id: string) => void;
+  onUpdate?: () => void
   onDelete?: (id: string) => void;
 };
 
@@ -21,66 +31,79 @@ const ProductsTable: React.FC<ProductsTableProps> = ({
   onUpdate,
   onDelete,
 }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [updateProducts, setUpdateProducts] = useState<Product | null>(null);
 
-    const [isOpen , setIsOpen] = useState(false)
+  const handleUpdate = (product: Products) => {
+    const singleProduct: Product = {
+      _id: product._id,
+      title: product.title,
+      category: product.category,
+      stock: product.stock,
+      price: product.price,
+    };
+    setUpdateProducts(singleProduct);
+    setIsOpen(true);
+  };
 
   return (
-    <div>
-    <div className="overflow-x-auto">
-      <table className="table  w-full">
-        {/* head */}
-        <thead>
-          <tr>
-            <th className="dark:text-white" >#</th>
-            <th className="dark:text-white" >Image</th>
-            <th className="dark:text-white" >Title</th>
-            <th className="dark:text-white" >Category</th>
-            <th className="dark:text-white" >Stock</th>
-            <th className="dark:text-white" >Price</th>
-            <th className="dark:text-white" >Created At</th>
-            <th className="dark:text-white" >Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {products?.map((product, index) => (
-            <tr key={product._id} className="dark:hover:bg-gray-700">
-              <th>{index + 1}</th>
-              <td>
-                <div className="avatar">
-                  <div className="mask mask-squircle w-12 h-12">
-                    <img
-                      src={product.images[0]}
-                      alt={product.title}
-                      className="object-cover"
-                    />
-                  </div>
-                </div>
-              </td>
-              <td>{product.title}</td>
-              <td>{product.category}</td>
-              <td>{product.stock}</td>
-              <td>${product.price}</td>
-              <td>{new Date(product.createdAt).toLocaleDateString()}</td>
-              <td className="flex gap-2">
-                <button
-                  onClick={() => onUpdate?.(product._id)}
-                  className="btn btn-sm bg-gray-800 text-white rounded-box"
-                >
-                  Update
-                </button>
-                <button
-                  onClick={() => onDelete?.(product._id)}
-                  className="btn btn-sm bg-red-800 text-white rounded-box"
-                >
-                  Delete
-                </button>
-              </td>
+    <div className="relative">
+      <div className="overflow-x-auto">
+        <table className="table w-full">
+          <thead>
+            <tr>
+              <th className="dark:text-white">#</th>
+              <th className="dark:text-white">Image</th>
+              <th className="dark:text-white">Title</th>
+              <th className="dark:text-white">Category</th>
+              <th className="dark:text-white">Stock</th>
+              <th className="dark:text-white">Price</th>
+              <th className="dark:text-white">Created At</th>
+              <th className="dark:text-white">Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-         
+          </thead>
+          <tbody>
+            {products?.map((product, index) => (
+              <tr key={product._id} className="dark:hover:bg-gray-700">
+                <th>{index + 1}</th>
+                <td>
+                  <div className="avatar">
+                    <div className="mask mask-squircle w-12 h-12">
+                      <img
+                        src={product.images[0]}
+                        alt={product.title}
+                        className="object-cover"
+                      />
+                    </div>
+                  </div>
+                </td>
+                <td>{product.title}</td>
+                <td>{product.category}</td>
+                <td>{product.stock}</td>
+                <td>${product.price}</td>
+                <td>{new Date(product.createdAt).toLocaleDateString()}</td>
+                <td className="flex gap-2">
+                  <button
+                    onClick={() => handleUpdate(product)}
+                    className="btn btn-sm bg-gray-800 text-white rounded-box"
+                  >
+                    Update
+                  </button>
+                  <button className="btn btn-sm bg-red-800 text-white rounded-box">
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {isOpen && updateProducts && (
+        <div className="fixed inset-0 z-100 bg-black/50 flex justify-center items-center">
+          <ProductsUpdate setIsOpen={setIsOpen} updateProducts={updateProducts}  onUpdate={onUpdate || (() => { })}/>
+        </div>
+      )}
     </div>
   );
 };
