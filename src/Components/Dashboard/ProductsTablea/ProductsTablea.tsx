@@ -89,7 +89,9 @@ const ProductsTable: React.FC<ProductsTableProps> = ({
                   >
                     Update
                   </button>
-                  <button className="btn btn-sm bg-red-800 text-white rounded-box">
+                  <button 
+                  onClick={()=>onDelete?.(product._id)}
+                  className="btn btn-sm bg-red-800 text-white rounded-box">
                     Delete
                   </button>
                 </td>
