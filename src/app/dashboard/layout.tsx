@@ -5,6 +5,7 @@ import Navber from '@/Components/Dashboard/Navber';
 import SessionWrapper from '@/Components/SessionWrapper/SessionWrapper';
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import ToastProvider from '@/Components/ToastProvider/ToastProvider';
 export default function DashboardLayout({
   children,
 }: {
@@ -51,6 +52,7 @@ export default function DashboardLayout({
               {/* Page Content */}
               <div className="flex-1 p-4 overflow-auto lg:ml-52">
                 {children}
+                <ToastProvider/>
               </div>
             </main>
           </div>

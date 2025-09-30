@@ -3,6 +3,7 @@ import React, { useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import axios from "axios";
 import Swal from "sweetalert2";
+import { toast } from "react-toastify";
 
 interface Products {
     _id: string
@@ -56,21 +57,15 @@ const ProductsUpdate: React.FC<ProductsUpdateProps> = ({
             const res = await axios.patch(`http://localhost:5000/products?_id=${updateProducts?._id}`, data);
 
             if (res?.data) {
-                Swal.fire({
-                    title:"Product updated successfully!",
-                    icon:"success"
-                })
-               
+                toast.success("Product updated successfully!")
+
                 onUpdate()
 
 
             }
         } catch (error) {
             console.error("Error updating product:", error);
-               Swal.fire({
-                    title:"Product updated Unsuccessfully!",
-                    icon:"error"
-                })
+            toast.error("Product updated Unsuccessfully!")
         } finally {
 
             setIsOpen(false)

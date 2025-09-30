@@ -122,7 +122,7 @@ const Payment: React.FC<PaymentProps> = ({ onClose, products, formData }) => {
           payment: {
             method: formData.paymentMethod || "Card",
             orderStatus: "pending",
-            paymentStatus: 'pending',
+            paymentStatus: 'paid',
             verifiedByAdmin: false,
             transactionId: generateTransactionId(),
             amount: products.totalPrice,
