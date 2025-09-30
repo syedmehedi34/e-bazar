@@ -9,22 +9,32 @@ const AdminOrdersPage = () => {
     const [orders, setOrders] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [PageArray, setPageArray] = useState([]);
+    const [search, setSearch] = useState('');
+    const [sort, setSort] = useState('')
 
     const getOrders = useCallback(async()=>{
-        const res = await axios.get(`http://localhost:5000/admin/order`);
+        const res = await axios.get(`http://localhost:5000/admin/order?search=${search}&sort=${sort}&page=${currentPage}`);
         if(res.status === 200){
             setOrders(res?.data.order);
             setPageArray(res?.data?.pageArray)
         }
-    },[])
+    },[search,sort,currentPage])
 
     useEffect(()=>{
         getOrders()
-    },[])
+    },[getOrders])
+
+    console.log(search, sort)
   return (
     <div className='dark:text-white'>
         <div>
-            <OrderContainer orders={orders} getOrders={getOrders}/>
+            <OrderContainer
+             orders={orders} 
+             getOrders={getOrders}
+             setSearch={setSearch}
+             setSort={setSort}
+            
+            />
 
            <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} pageArray={PageArray}/>
          

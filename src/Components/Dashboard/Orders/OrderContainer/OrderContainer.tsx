@@ -1,9 +1,10 @@
 "use client"
-import React from 'react'
+import React, { Dispatch } from 'react'
 import OrderTable from '../OrderTable/OrderTable';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import Swal from 'sweetalert2';
+import OrderFilter from '../OrderFilter/OrderFilter';
 
 interface IOrder {
     customer: {
@@ -39,10 +40,12 @@ interface IOrder {
 type OrderContainerProps = {
     orders: IOrder[]
     getOrders: () => void;
+    setSearch: React.Dispatch<React.SetStateAction<string>>;
+    setSort: React.Dispatch<React.SetStateAction<string>>;
 }
 
 
-const OrderContainer: React.FC<OrderContainerProps> = ({ orders, getOrders }) => {
+const OrderContainer: React.FC<OrderContainerProps> = ({ orders, getOrders ,setSearch,setSort}) => {
 
     const handleStatusChange = async (orderId: string, status: string) => {
         try {
@@ -64,8 +67,11 @@ const OrderContainer: React.FC<OrderContainerProps> = ({ orders, getOrders }) =>
         }
     };
 
+
+
     return (
         <div>
+            <OrderFilter setSearch={setSearch} setSort={setSort}/>
             <OrderTable orders={orders} handleStatusChange={handleStatusChange} />
         </div>
     )
