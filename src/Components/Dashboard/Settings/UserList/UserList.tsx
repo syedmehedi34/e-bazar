@@ -4,6 +4,7 @@ import { FolderSync, Trash } from "lucide-react";
 import React, { useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
+import Swal from "sweetalert2";
 
 interface IUserList {
     _id: string;
@@ -15,10 +16,10 @@ interface IUserList {
 
 type UserListProps = {
     users: IUserList[];
-    onGetUserFn : ()=>void
+    onGetUserFn: () => void
 };
 
-const UserList: React.FC<UserListProps> = ({ users ,onGetUserFn}) => {
+const UserList: React.FC<UserListProps> = ({ users, onGetUserFn }) => {
     const [selectedUser, setSelectedUser] = useState<IUserList | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -39,9 +40,6 @@ const UserList: React.FC<UserListProps> = ({ users ,onGetUserFn}) => {
             email: formData.get("email"),
             role: formData.getAll("role"),
         };
-
-        console.log(updatedUser)
-
         try {
             const res = await axios.patch(`http://localhost:5000/admin/user-update/${selectedUser._id}`, updatedUser);
             if (res.status === 200) {
@@ -59,6 +57,35 @@ const UserList: React.FC<UserListProps> = ({ users ,onGetUserFn}) => {
             toast.error("Error updating user:");
         }
     };
+
+    
+
+    const handleDeleteUser = async (id: string) => {
+        const result = await Swal.fire({
+            title: "Are you sure?",
+            text: "You won’t be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!",
+            cancelButtonText: "Cancel",
+        });
+
+        if (result.isConfirmed) {
+            try {
+                const res = await axios.delete(`http://localhost:5000/admin/user-delete/${id}`);
+                if (res.status === 200) {
+                    toast.success(res?.data?.message || "User deleted successfully");
+                    onGetUserFn();
+                }
+            } catch (error) {
+                console.error(error);
+                toast.error("Something went wrong");
+            }
+        }
+    };
+
 
     return (
         <div className="overflow-x-auto w-full p-4 relative">
@@ -83,7 +110,7 @@ const UserList: React.FC<UserListProps> = ({ users ,onGetUserFn}) => {
                 </thead>
                 <tbody>
                     {users?.map((user, index) => (
-                        <tr key={index} className="dark:hover:bg-gray-900">
+                        <tr key={index} className="dark:hover:bg-gray-700">
                             <td>{user.name}</td>
                             <td>{user.email}</td>
                             <td>{user.role.join(", ")}</td>
@@ -97,6 +124,7 @@ const UserList: React.FC<UserListProps> = ({ users ,onGetUserFn}) => {
                                     <FolderSync />
                                 </button>
                                 <button
+                                    onClick={() => handleDeleteUser(user._id)}
                                     title="Delete"
                                     className=" p-2 bg-gray-100 dark:bg-gray-600 cursor-pointer rounded-full"
                                 >
