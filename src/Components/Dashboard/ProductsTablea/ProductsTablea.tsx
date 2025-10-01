@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import ProductsUpdate from "./ProductsUpdate";
+import { FolderSync, Trash } from "lucide-react";
 
 interface Products {
   _id: string;
@@ -84,15 +85,17 @@ const ProductsTable: React.FC<ProductsTableProps> = ({
                 <td>{new Date(product.createdAt).toLocaleDateString()}</td>
                 <td className="flex gap-2">
                   <button
+                   title="Update"
                     onClick={() => handleUpdate(product)}
-                    className="btn btn-sm bg-gray-800 text-white rounded-box"
+                    className="p-2 bg-gray-100 dark:bg-gray-600 cursor-pointer rounded-full"
                   >
-                    Update
+                    <FolderSync/>
                   </button>
                   <button 
+                  title="Delete"
                   onClick={()=>onDelete?.(product._id)}
-                  className="btn btn-sm bg-red-800 text-white rounded-box">
-                    Delete
+                  className="p-2 bg-gray-100 dark:bg-gray-600 cursor-pointer rounded-full">
+                    <Trash/>
                   </button>
                 </td>
               </tr>

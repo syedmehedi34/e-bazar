@@ -12,10 +12,10 @@ interface ITopSellingProducts {
 }
 
 type TopSellingProps = {
-    topSellingProducts: ITopSellingProducts[];
+    topSellingProduct: ITopSellingProducts[];
 };
 
-const TopSellingProducts: React.FC<TopSellingProps> = ({ topSellingProducts }) => {
+const TopSellingProducts: React.FC<TopSellingProps> = ({ topSellingProduct }) => {
     return (
         <div className="p-5 bg-white dark:bg-gray-800 dark:text-white rounded-lg shadow-lg">
             <h2 className="text-xl font-bold mb-4">Top Selling Products</h2>
@@ -23,19 +23,19 @@ const TopSellingProducts: React.FC<TopSellingProps> = ({ topSellingProducts }) =
             <div className="overflow-x-auto">
                 <table className="table  w-full text-sm">
                     <thead>
-                        <tr>
+                        <tr className="dark:bg-gray-700">
                             
-                            <th>Image</th>
-                            <th>Title</th>
-                            <th>Category</th>
-                            <th>Total Quantity</th>
-                            <th>Total Sales</th>
+                            <th className="dark:text-white  py-4 ">Image</th>
+                            <th className="dark:text-white py-4   ">Title</th>
+                            <th className="dark:text-white py-4 ">Category</th>
+                            <th className="dark:text-white py-4 ">Total Quantity</th>
+                            <th className="dark:text-white py-4 ">Total Sales</th>
                         </tr>
                     </thead>
 
                     <tbody>
-                        {topSellingProducts && topSellingProducts.length > 0 ? (
-                            topSellingProducts.map((product, index) => (
+                        {topSellingProduct && topSellingProduct.length > 0 ? (
+                            topSellingProduct.map((product, index) => (
                                 <tr key={product._id}>
                                  
                                     <td>

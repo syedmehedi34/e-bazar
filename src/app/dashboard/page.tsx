@@ -8,6 +8,7 @@ import {
   GetSalesAnalytics,
   LatestOrderList,
 } from "@/lib/dashboardCardData/dashboardCardData";
+import { TrendingUp } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { FaShoppingCart, FaDollarSign, FaUsers, FaBox } from "react-icons/fa";
 import { MdArrowDropUp } from "react-icons/md";
@@ -76,7 +77,7 @@ const Page: React.FC = () => {
   const cards = [
     {
       title: "Total Sales",
-      value: `$${totalSales}`,
+      value: `৳ ${totalSales}`,
       icon: <FaDollarSign className="text-3xl text-green-500" />,
       bg: "bg-green-100",
       text: "text-green-400",
@@ -130,8 +131,8 @@ const Page: React.FC = () => {
               </div>
               <div className="flex mt-4 justify-between items-center text-sm">
                 <p></p>
-                <p className={`flex items-center font-bold ${card.text}`}>
-                  {card.growth} <MdArrowDropUp />
+                <p className={`flex items-center font-bold gap-4 ${card.text}`}>
+                  {card.growth} <TrendingUp />
                 </p>
               </div>
             </div>

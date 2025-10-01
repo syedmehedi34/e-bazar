@@ -11,13 +11,13 @@ interface RevenueData {
   dailyRevenue: number;
 }
 
-interface ITopSellingProducts{
-  _id:string,
-  tittle:string,
-  images:string,
-  category:string,
-  totalQuantity:number,
-  totalSales:number
+interface ITopSellingProduct{
+  _id: string;
+    title: string;
+    image: string;
+    category: string;
+    totalQuantity: number;
+    totalSales: number;
 }
 
 interface Report {
@@ -27,7 +27,7 @@ interface Report {
   TotalPendingOrder: number;
   totalOrders: number;
   revenueData: RevenueData[];
-  topSellingProducts: ITopSellingProducts[]
+  topSellingProducts: ITopSellingProduct[]
 }
 
 const ReportPage: React.FC = () => {
@@ -130,7 +130,7 @@ const ReportPage: React.FC = () => {
       </div>
         <div>
           <RevenuneChart revenueData={report?.revenueData} />
-          <TopSellingProducts topSellingProducts={report?.topSellingProducts}/>
+          <TopSellingProducts topSellingProduct={report?.topSellingProducts}/>
         </div>
     </div>
   );

@@ -1,4 +1,5 @@
 import { DarkModetoggle } from "@/hook/DarkModeToggle/darkMode";
+import { Moon } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 import { FaBell, FaHome, FaSearch, FaUserCircle } from "react-icons/fa";
@@ -30,15 +31,15 @@ const Navber:React.FC<NavbarProps> = ({onhandleSidebarOpen,sidebarOpen}) => {
 
       {/* Right - Icons & Profile */}
       <div className="flex items-center gap-6">
-        <button onClick={DarkModetoggle} className="btn">Dark</button>
+        <button onClick={DarkModetoggle} className="p-2 bg-gray-100 dark:bg-gray-600 cursor-pointer rounded-full"><Moon /></button>
         {/* Home */}
-        <Link href={'/'} className="  ">
+        <Link href={'/'} className=" p-2 bg-gray-100 dark:bg-gray-600 cursor-pointer rounded-full ">
           <FaHome size={20} />
          
         </Link>
 
         {/* Notifications */}
-        <button className="relative  transition flex items-center">
+        <button className="relative  transition flex items-center p-2 bg-gray-100 dark:bg-gray-600 cursor-pointer rounded-full">
           <FaBell size={20} />
           <span className="absolute -top-1 -right-2 bg-red-500 text-xs text-white w-4 h-4 flex items-center justify-center rounded-full">
             3
@@ -46,7 +47,7 @@ const Navber:React.FC<NavbarProps> = ({onhandleSidebarOpen,sidebarOpen}) => {
         </button>
 
         {/* Profile */}
-        <button className=" transition flex items-center">
+        <button className=" transition flex items-center p-2 bg-gray-100 dark:bg-gray-600 cursor-pointer rounded-full">
           <FaUserCircle size={20} />
         </button>
         <button 

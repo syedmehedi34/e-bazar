@@ -47,7 +47,7 @@ const RevenueChart: React.FC<RevenueDataProps> = ({ revenueData }) => {
                         tick={{ fontSize: 12 }}
                     />
                     <Tooltip />
-                    <Line type="monotone" dataKey="revenue" stroke="#000000" strokeWidth={3} />
+                    <Line type="monotone" dataKey="revenue" stroke="#ad46ff" strokeWidth={3} />
                     
                  
                 </LineChart>
