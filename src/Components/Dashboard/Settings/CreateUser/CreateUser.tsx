@@ -70,7 +70,7 @@ const CreateUser: React.FC<CreateUserProps> = ({ onGetUserFn }) => {
                             type="text"
                             placeholder="Enter your Name"
                             name='name'
-                            className="w-full border border-gray-500 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-gray-800 input bg-transparent"
+                            className="input w-full dark:bg-gray-600 dark:text-white"
                             required
                         />
                     </div>
@@ -81,7 +81,7 @@ const CreateUser: React.FC<CreateUserProps> = ({ onGetUserFn }) => {
                             type="email"
                             placeholder="Enter your email"
                             name='email'
-                            className="w-full border border-gray-500 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-gray-800 input bg-transparent"
+                            className="input w-full dark:bg-gray-600 dark:text-white"
                             required
                         />
                     </div>
@@ -92,7 +92,7 @@ const CreateUser: React.FC<CreateUserProps> = ({ onGetUserFn }) => {
                             type={showPassword ? "text" : "password"}
                             placeholder="Enter your password"
                             name='password'
-                            className="w-full border border-gray-500 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-gray-800 input bg-transparent"
+                            className="input w-full dark:bg-gray-600 dark:text-white"
                             required
                         />
                         {/* Eye icon */}
@@ -107,7 +107,7 @@ const CreateUser: React.FC<CreateUserProps> = ({ onGetUserFn }) => {
                     {/* Login Button */}
                     <button
                         type="submit"
-                        className="w-full bg-gray-800 text-white font-semibold py-2 rounded-lg hover:bg-gray-900 transition cursor-pointer"
+                        className="w-full bg-black text-white font-semibold py-2 rounded-lg hover:bg-gray-900 transition cursor-pointer"
                     >
                         {loading ? <span className="loading loading-bars loading-xl"></span> : "Create User"}
                     </button>

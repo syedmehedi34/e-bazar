@@ -29,7 +29,7 @@ const SettingPage = () => {
   return (
     <div>
       <div className='grid lg:grid-cols-3 grid-cols-1 gap-5 '>
-        <div className='lg:col-span-2 bg-white dark:bg-gray-800 py-4 rounded-box '>
+        <div className='lg:col-span-2 bg-white dark:bg-gray-800 dark:text-white py-4 rounded-box '>
           <UserList users={users} onGetUserFn = {getUser}/>
 
           <Pagination currentPage={currenPage} setCurrentPage={setCurrentPage} pageArray={pageArray} />
