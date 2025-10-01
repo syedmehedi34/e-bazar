@@ -10,7 +10,7 @@ const AdminOrdersPage = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [PageArray, setPageArray] = useState([]);
     const [search, setSearch] = useState('');
-    const [sort, setSort] = useState('')
+    const [sort, setSort] = useState('latest')
 
     const getOrders = useCallback(async()=>{
         const res = await axios.get(`http://localhost:5000/admin/order?search=${search}&sort=${sort}&page=${currentPage}`);
@@ -24,7 +24,7 @@ const AdminOrdersPage = () => {
         getOrders()
     },[getOrders])
 
-    console.log(search, sort)
+   
   return (
     <div className='dark:text-white'>
         <div>
