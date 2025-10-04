@@ -32,8 +32,7 @@ const Sidebar = () => {
       { name: "Orders", path: "/dashboard/orders", icon: <MdShoppingCart size={20} /> },
       { name: "Reports", path: "/dashboard/reports", icon: <MdAssessment size={20} /> },
       { name: "Settings", path: "/dashboard/settings", icon: <MdSettings size={20} /> },
-      { name: "Notifications", path: "/dashboard/notifications", icon: <MdNotifications size={20} /> },
-      { name: "Support", path: "/dashboard/support", icon: <MdSupportAgent size={20} /> }
+     
     );
   }
 

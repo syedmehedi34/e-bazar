@@ -3,6 +3,7 @@
 import LatestOrder from "@/Components/Dashboard/LatestOrderList/LatestOrder";
 import ProductsChart from "@/Components/Dashboard/ProductsChart/ProductsChart";
 import ProductsUpdate from "@/Components/Dashboard/ProductsTablea/ProductsUpdate";
+import Loader from "@/Components/Loader/Loader";
 import {
   DashboardCardData,
   GetSalesAnalytics,
@@ -56,11 +57,7 @@ const Page: React.FC = () => {
   }, []);
 
   if (loading) {
-    return (
-      <div className="p-6">
-        <p className="text-center text-gray-500">Loading dashboard...</p>
-      </div>
-    );
+    return <Loader/>
   }
 
   if (!data) {

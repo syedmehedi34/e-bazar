@@ -2,13 +2,11 @@
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 import Logo from '../Logo/Logo'
-import { usePathname } from 'next/navigation'
-import { BsCartCheckFill } from "react-icons/bs";
-import { FaHeartCircleCheck } from "react-icons/fa6";
 
+import { CiShoppingCart,CiHeart  } from "react-icons/ci";
+import { User, ShoppingCart, Box, LifeBuoy, LayoutDashboard } from "lucide-react";
 import Register from '../Register/Register'
 import { signOut, useSession } from 'next-auth/react'
-import Swal from 'sweetalert2'
 import { useSelector } from 'react-redux'
 import { RootState } from '@/redux/store'
 import { AxiosError } from 'axios'
@@ -20,6 +18,11 @@ import { AnimatePresence } from 'framer-motion'
 import Sidebar from './Sidebar'
 import { FaArrowRightFromBracket } from "react-icons/fa6";
 import { toast } from 'react-toastify'
+import {  FaUser,  FaBoxOpen, FaLifeRing } from "react-icons/fa6";
+import { IoCartOutline } from 'react-icons/io5'
+import { AiOutlineDashboard } from 'react-icons/ai'
+import DarkMode from '../DarkMode/DarkMode';
+
 
 
 
@@ -30,7 +33,6 @@ const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const shoppingCart = useSelector((state: RootState) => state.cart.value);
   const [searchBox, setSearchBox] = useState(false)
-  const path = usePathname()
   const { data: session } = useSession()
 
   useEffect(() => {
@@ -42,10 +44,10 @@ const Navbar = () => {
   const handleLogout = async () => {
     try {
       await signOut();
-     toast.success("Logout successfully!")
+      toast.success("Logout successfully!")
     } catch (error) {
       const err = error as AxiosError<{ message: string }>;
-     toast.error("Logout Failed!")
+      toast.error(`${err.message}`)
     }
   }
   const navItems = (
@@ -54,14 +56,13 @@ const Navbar = () => {
       <Link href={'/shopping'} className='text-[15px] font-medium leading-6'>Shop</Link>
       <Link href={'/about'} className='text-[15px] font-medium leading-6'>About Us</Link>
       <Link href={'/'} className='text-[15px] font-medium leading-6'>Blog</Link>
+     
     </>
   )
 
-
-
   return (
     <>
-      <header className={`w-full  ${scrollY > 50 ? "fixed-nav bg-gray-800 relative" : "relative "} `}>
+      <header className={`w-full shadow dark:bg-gray-800 dark:text-white  ${scrollY > 50 ? "fixed-nav bg-white text-black dark:bg-gray-800 relative" : "relative "} `}>
         <div className="container-custom flex items-center justify-between py-4">
           <div className='flex items-center gap-4'>
             {/* Mobile Menu Button */}
@@ -82,17 +83,18 @@ const Navbar = () => {
           {/* Icons + Auth Buttons */}
           <div className="flex items-center gap-4">
             <div className="">
-              <button className='cursor-pointer mt-2' onClick={() => setSearchBox(!searchBox)} ><FaSearch size={20} /></button>
+              <button className=' bg-gray-200 p-2 rounded-full cursor-pointer dark:bg-gray-700 dark:text-white transition-all duration-300 ' onClick={() => setSearchBox(!searchBox)} ><FaSearch size={24} /></button>
 
             </div>
-            <div className="relative">
-              <Link href={'/shopping-cart'}><BsCartCheckFill size={24} /></Link>
-              <span className='absolute -top-2 -right-2 font-bold'>{shoppingCart?.length || 0}</span>
+            <div className="relative bg-gray-200 p-2 rounded-full cursor-pointer dark:bg-gray-700 dark:text-white transition-all duration-300">
+              <Link href={'/shopping-cart'}><CiShoppingCart  size={24} /></Link>
+              <span className='absolute -top-2 -right-0 font-bold'>{shoppingCart?.length || 0}</span>
             </div>
-            <div className="relative">
-              <Link href={'/cart'}><FaHeartCircleCheck size={24} /></Link>
-              <span className='absolute -top-2 -right-2 font-bold'>0</span>
+            <div className="relative bg-gray-200 p-2 rounded-full cursor-pointer dark:bg-gray-700 dark:text-white transition-all duration-300">
+              <Link href={'/cart'}><CiHeart  size={24} /></Link>
+              <span className='absolute -top-2 -right-0 font-bold'>0</span>
             </div>
+             <DarkMode/>
 
             {/* Login / Register */}
             {!session?.user ? (
@@ -114,10 +116,40 @@ const Navbar = () => {
                     <Image src={session?.user?.image || "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"} alt="Avatar" fill className='rounded-full' />
                   </div>
                 </div>
-                <ul tabIndex={0} className="dropdown-content menu p-2 shadow bg-white shadow-gray-600 text-gray-800 rounded-box w-52 mt-4 space-y-4">
-                  <li><Link href="#">Profile</Link></li>
-                  <li><Link href="/dashboard">Dashboard</Link></li>
-                  <li><button onClick={() => handleLogout()} className="btn btn-outline border-none w-full bg-gray-800 hover:bg-red-800 text-white rounded-box">Logout</button></li>
+                <ul tabIndex={0} className="dropdown-content  p-2 shadow bg-white dark:text-white dark:bg-gray-800  text-gray-800 rounded-box w-52 mt-4 ">
+                  {
+                    session?.user.role?.includes("admin") ? (
+                      <>
+                        <li className="flex items-center gap-2 mb-4 p-2 hover:bg-gray-600 hover:text-white dark:hover:text-white rounded-box transition-all duration-300">
+                          <LayoutDashboard  className="text-sm" />
+                          <Link href="/dashboard">Dashboard</Link>
+                        </li>
+                      </>
+                    ) : (
+                      <div className='flex flex-col gap-4 mb-4 *:hover:bg-gray-300 dark:*:hover:bg-gray-600 *:p-2'>
+                        <li className="flex items-center gap-2">
+                          <User className="text-sm " />
+                          <Link href="#">My Profile</Link>
+                        </li>
+                      
+                        <li className=" flex items-center gap-2">
+                          <ShoppingCart className="text-lg text-gray-800 dark:text-white" />
+                          <Link href="#">My Cart</Link>
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <Box className="text-sm" />
+                          <Link href="#">My Orders</Link>
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <LifeBuoy className="text-sm" />
+                          <Link href="#">Support</Link>
+                        </li>
+                      </div>
+                    )
+}
+
+
+                  <li><button onClick={() => handleLogout()} className="btn btn-outline border-none w-full bg-gray-700 hover:bg-gray-600 text-white rounded-box">Logout</button></li>
                 </ul>
               </div>
             )}
@@ -142,9 +174,9 @@ const Navbar = () => {
       </header>
       {/* Modals */}
       {isOpen &&
-       
-          <LoginPage onClose={() => setIsOpen(false)} isOpen={isOpen} />
-       
+
+        <LoginPage onClose={() => setIsOpen(false)} isOpen={isOpen} />
+
       }
 
       {isOpenRegisterPage && <Register onClose={() => setIsOpenRegisterPage(false)} isOpen={isOpenRegisterPage} />}

@@ -47,9 +47,9 @@ const Navber:React.FC<NavbarProps> = ({onhandleSidebarOpen,sidebarOpen}) => {
         </button>
 
         {/* Profile */}
-        <button className=" transition flex items-center p-2 bg-gray-100 dark:bg-gray-600 cursor-pointer rounded-full">
+        <Link href={'/dashboard/admin-profile'} className=" transition flex items-center p-2 bg-gray-100 dark:bg-gray-600 cursor-pointer rounded-full">
           <FaUserCircle size={20} />
-        </button>
+        </Link>
         <button 
         onClick={onhandleSidebarOpen}
         className=" transition flex items-center cursor-pointer lg:hidden">

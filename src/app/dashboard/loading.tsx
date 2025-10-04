@@ -1,12 +1,14 @@
 import React from 'react'
 
-const loading = () => {
+const Loader = () => {
   return (
-    <div className='w-full min-h-screen flex justify-center items-center'>
+    <div className='w-full min-h-screen flex  flex-col gap-2 justify-center items-center dark:text-white'>
+
       <span className="loading loading-bars loading-xl"></span>
+      <p className="text-gray-600 dark:text-white text-sm font-medium">Thinking...</p>
     </div>
 
   )
 }
 
-export default loading
+export default Loader

@@ -58,7 +58,7 @@ const UserList: React.FC<UserListProps> = ({ users, onGetUserFn }) => {
         }
     };
 
-    
+
 
     const handleDeleteUser = async (id: string) => {
         const result = await Swal.fire({
@@ -119,14 +119,14 @@ const UserList: React.FC<UserListProps> = ({ users, onGetUserFn }) => {
                                 <button
                                     title="Update"
                                     onClick={() => handleUpdateClick(user)}
-                                    className="p-2 bg-gray-100 dark:bg-gray-600 cursor-pointer rounded-full"
+                                    className="p-2 bg-gray-100 hover:text-accent transition-all duration-300 dark:bg-gray-600 cursor-pointer rounded-full"
                                 >
                                     <FolderSync />
                                 </button>
                                 <button
                                     onClick={() => handleDeleteUser(user._id)}
                                     title="Delete"
-                                    className=" p-2 bg-gray-100 dark:bg-gray-600 cursor-pointer rounded-full"
+                                    className=" p-2 hover:text-secondary transition-all duration-300 bg-gray-100 dark:bg-gray-600 cursor-pointer rounded-full"
                                 >
                                     <Trash />
                                 </button>

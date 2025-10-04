@@ -36,7 +36,7 @@ body{
   animation: slideDown 3s ease-out forwards; 
 
   z-index: 90;
-  color: #fff !important;
+
 }
 
 @keyframes slideDown {
