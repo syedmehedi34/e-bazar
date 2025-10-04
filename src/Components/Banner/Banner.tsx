@@ -3,7 +3,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay } from 'swiper/modules';
 import Button from '../Button/Button';
 
-// Slide data array
+
 const slides = [
   {
     desktopImg: 'https://i.postimg.cc/qBxrBpzt/hero-1-2.png',
@@ -42,7 +42,7 @@ const slides = [
 
 const Banner = () => {
   return (
-    <div className="relative h-[80vh] md:h-[100vh] lg:h-[80vh] xl:h-[100vh] border-b-2 border-gray-200">
+    <div className="relative h-[80vh] md:h-[100vh] lg:h-[80vh] xl:h-[100vh] border-b-2 dark:border-gray-600 border-gray-200 bg-white dark:bg-gray-900">
       <Swiper
         modules={[Autoplay]}
         effect="fade"
@@ -80,11 +80,11 @@ const Banner = () => {
                     slide.content.align === 'right' ? 'text-right px-6' : ''
                   }`}
                 >
-                  <p className="font-bold text-sm sm:text-base">{slide.content.subtitle}</p>
-                  <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold tracking-wide">
+                  <p className="font-bold text-sm sm:text-base dark:text-white">{slide.content.subtitle}</p>
+                  <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold tracking-wide dark:text-white">
                     {slide.content.title}
                   </h2>
-                  <p className="text-sm sm:text-base md:text-lg leading-6 tracking-wide">
+                  <p className="text-sm sm:text-base md:text-lg leading-6 tracking-wide dark:text-white">
                     {slide.content.desc}
                   </p>
                   <div className={slide.content.align === 'right' ? 'flex justify-end' : ''}>

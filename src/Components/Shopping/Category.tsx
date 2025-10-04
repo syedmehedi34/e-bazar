@@ -45,7 +45,7 @@ export const Category: React.FC<CategoryProps> = ({ products,setSelectedCategory
                     Object.keys(categories).map((category) => (
                         <li key={category}>
                             <button
-                                className='flex items-center justify-between w-full mb-4 btn'
+                                className='flex items-center justify-between w-full mb-4 btn dark:bg-gray-700 dark:border-none dark:text-white'
                                 onClick={() => setOpenCategory(openCategory === category ? null : category)}>
                                 {category}
                                 <MdOutlineArrowDropDown />
@@ -56,7 +56,7 @@ export const Category: React.FC<CategoryProps> = ({ products,setSelectedCategory
                                         {Array.from(categories[category]).map((sub) => (
                                             <li
                                                 onClick={() => handleSubCategoryClick(sub)}
-                                                className='flex w-full justify-between items-center btn btn-sm btn-outline mb-2 border-gray-300' key={sub}>{sub} <MdOutlineArrowRight />
+                                                className='flex w-full justify-between items-center btn btn-sm btn-outline mb-2 border-gray-300 dark:hover:bg-gray-700 dark:text-white dark:border-gray-600' key={sub}>{sub} <MdOutlineArrowRight />
                                             </li>
                                         ))}
                                     </ul>

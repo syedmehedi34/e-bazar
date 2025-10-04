@@ -42,7 +42,7 @@ const ProductsCard: React.FC<ProductsCardProps> = ({ product }) => {
   
 
     return (
-        <div className="  rounded-lg shadow-sm text-sm   rubik cursor-pointer hover:shadow-lg transition-all duration-300  p-2">
+        <div className="  rounded-lg shadow-sm text-sm   rubik cursor-pointer hover:shadow-lg transition-all duration-300  p-2 dark:bg-gray-800">
             {/* Fixed card width (same size) */}
             <Link href={`checkout/${_id}`} className=" sm:h-45 h-[300px] overflow-hidden flex items-center justify-center mx-auto">
                 <Image

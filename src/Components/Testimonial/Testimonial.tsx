@@ -85,7 +85,7 @@ const Testimonial = () => {
   return (
     <div className="py-16">
       <div className="container-custom">
-        <h2 className="text-4xl font-bold text-center mb-10 rubik">
+        <h2 className="text-4xl font-bold text-center mb-10 rubik dark:text-white">
           What Our Customers Say
         </h2>
 
@@ -104,8 +104,8 @@ const Testimonial = () => {
         >
           {testimonials.map((t, index) => (
             <SwiperSlide key={index}>
-              <div className="card  shadow-md hover:shadow-lg  py-5 px-2 rubik h-full my-10 hover:shadow-gray-800 hover:scale-105 transition-all duration-300 cursor-pointer">
-                <div className="flex items-center gap-3 mb-3">
+              <div className="card  shadow-md hover:shadow-md  py-5 px-2 rubik h-full my-10 hover:shadow-gray-800 hover:scale-105 transition-all duration-300 cursor-pointer dark:text-white dark:bg-gray-800">
+                <div className="flex items-center gap-3 mb-3 ">
                   <Image src={t.image}
                     alt={t.name}
                     width={100}
@@ -114,14 +114,14 @@ const Testimonial = () => {
                   />
                   <div>
                     <h3 className="font-semibold">{t.name}</h3>
-                    <p className="text-xs text-gray-600">{t.location}</p>
-                    <p className="text-xs text-gray-600">{t.date}</p>
+                    <p className="text-xs text-gray-600 dark:text-white">{t.location}</p>
+                    <p className="text-xs text-gray-600 dark:text-white">{t.date}</p>
                   </div>
                 </div>
-                <p className="text-sm text-gray-800 mb-2 line-clamp-2">{t.description}</p>
+                <p className="text-sm text-gray-800 mb-2 line-clamp-2 dark:text-white">{t.description}</p>
                 <div className="flex">
                   {Array.from({ length: t.rating }).map((_, i) => (
-                    <span key={i} className="text-gray-800">
+                    <span key={i} className="text-gray-800 dark:text-white">
                       ★
                     </span>
                   ))}

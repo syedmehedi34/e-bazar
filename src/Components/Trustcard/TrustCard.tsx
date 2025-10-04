@@ -33,7 +33,7 @@ const TrustCard = () => {
                 {
                     cards.map((card)=>{
                         return(
-                            <div key={card.title} className='flex items-center gap-4 bg-gray-200 py-8 6 px-4 rounded-md cursor-pointer'>
+                            <div key={card.title} className='flex items-center gap-4 bg-gray-100 dark:bg-gray-800 dark:text-white py-8 6 px-4 rounded-md cursor-pointer'>
                                 <div className='text-3xl bg-gray-800 text-white p-2 rounded-md'>
                                     {card.icons}
                                 </div>

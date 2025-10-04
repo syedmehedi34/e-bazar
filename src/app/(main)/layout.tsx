@@ -40,7 +40,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${poppins.variable} ${rubik.variable} relative`}
+        className={`${poppins.variable} ${rubik.variable} relative dark:bg-gray-900`}
        
       >
 

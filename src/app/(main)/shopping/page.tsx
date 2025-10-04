@@ -42,7 +42,7 @@ const Shopping = () => {
             if (minPrice) params.set('minPrice', minPrice.toString());
             if (maxPrice) params.set('maxPrice', maxPrice.toString());
             if (currentPage) params.set('page', currentPage.toString());
-            params.set('limit', '16');
+            params.set('limit', '12');
             if (search) params.set('search', search);
 
             const res = await axios.get(`http://localhost:5000/shopping?${params.toString()}`);
@@ -80,13 +80,13 @@ const Shopping = () => {
 
 
     return (
-        <div className='min-h-screen relative'>
+        <div className='min-h-screen relative dark:text-white'>
 
             <div className='container-custom'>
-                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-5 py-6 px-4">
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-5 py-6 ">
                     {/* Left side links */}
                     <div className="flex gap-1 text-sm">
-                        <Link href="/" className="text-gray-700 transition-colors underline-offset-2 underline">
+                        <Link href="/" className="text-gray-700 dark:text-gray-200 transition-colors underline-offset-2 underline">
                             Home
                         </Link>
                         <p className='text-gray-400'>/</p>
@@ -114,7 +114,7 @@ const Shopping = () => {
                             ) : (
                                 products.length === 0 ? (
                                     <div className="flex flex-col items-center justify-center h-72 text-center">
-                                        
+
                                         <h2 className="text-xl font-semibold text-gray-700">
                                             No Products Found
                                         </h2>
