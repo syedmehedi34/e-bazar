@@ -33,8 +33,8 @@ const Shopping = () => {
     const fetchData = useCallback(async () => {
         try {
             setLoading(true)
-           
-            
+
+
 
             const params = new URLSearchParams();
             if (sort) params.set('sort', sort);
@@ -42,11 +42,11 @@ const Shopping = () => {
             if (minPrice) params.set('minPrice', minPrice.toString());
             if (maxPrice) params.set('maxPrice', maxPrice.toString());
             if (currentPage) params.set('page', currentPage.toString());
-            params.set('limit', '15');
+            params.set('limit', '16');
             if (search) params.set('search', search);
 
             const res = await axios.get(`http://localhost:5000/shopping?${params.toString()}`);
-            
+
             setProducts(res?.data?.product);
             setCount(res?.data?.total);
             setTotal(res?.data?.totalProducts);
@@ -77,13 +77,7 @@ const Shopping = () => {
     };
 
 
-    {
-        loading && products.length === 0 && (
-            <div className="absolute inset-0 flex items-center justify-center bg-white/70 z-50">
-                <Loader />
-            </div>
-        )
-    }
+
 
     return (
         <div className='min-h-screen relative'>
@@ -113,21 +107,41 @@ const Shopping = () => {
                         <button onClick={handleReset} className='btn btn-block mt-4'>Reset Filter</button>
 
                     </div>
-                    <div className='lg:col-span-4 '>
-                        <div >
-                            {
-                                <ShoppingCard products={products} />
-                            }
-                        </div>
+                    <div className='lg:col-span-4 min-h-screen '>
+                        {
+                            loading ? (
+                                <Loader />
+                            ) : (
+                                products.length === 0 ? (
+                                    <div className="flex flex-col items-center justify-center h-72 text-center">
+                                        
+                                        <h2 className="text-xl font-semibold text-gray-700">
+                                            No Products Found
+                                        </h2>
+                                        <p className="text-gray-500 mt-1">
+                                            Try changing filters or search again.
+                                        </p>
+                                    </div>
+                                ) : (
+                                    <div >
+                                        {
+                                            <ShoppingCard products={products} />
+                                        }
+                                        {/* Pagination */}
+                                        <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} pageArray={pageArray} />
+                                    </div>
+                                )
+                            )
+                        }
 
-                        {/* Pagination */}
-                        <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} pageArray={pageArray} />
+
+
 
 
                     </div>
                 </div>
             </div>
-        </div>
+        </div >
     )
 }
 

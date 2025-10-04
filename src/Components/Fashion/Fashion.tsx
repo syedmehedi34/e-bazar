@@ -12,7 +12,7 @@ const Fashion = () => {
     ];
 
     return (
-        <div className="my-10">
+        <div className="py-16">
             <div className="container-custom">
 
 

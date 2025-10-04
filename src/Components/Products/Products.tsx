@@ -23,7 +23,7 @@ const Products = async () => {
   return (
     <div className="py-16">
       <div className="container-custom">
-        <div className=" mb-4">
+        <div className=" mb-10">
           <h2 className="rubik text-4xl font-bold">Just For You</h2>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">

@@ -87,14 +87,14 @@ const ProductsTable: React.FC<ProductsTableProps> = ({
                   <button
                    title="Update"
                     onClick={() => handleUpdate(product)}
-                    className="p-2 bg-gray-100 dark:bg-gray-600 cursor-pointer rounded-full"
+                    className="p-2 bg-gray-100 dark:bg-gray-600 cursor-pointer rounded-full hover:text-accent transition-all duration-300 "
                   >
                     <FolderSync/>
                   </button>
                   <button 
                   title="Delete"
                   onClick={()=>onDelete?.(product._id)}
-                  className="p-2 bg-gray-100 dark:bg-gray-600 cursor-pointer rounded-full">
+                  className="p-2 bg-gray-100 dark:bg-gray-600 cursor-pointer rounded-full hover:text-secondary transition-all duration-300">
                     <Trash/>
                   </button>
                 </td>

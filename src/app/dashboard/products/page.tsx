@@ -16,7 +16,6 @@ const ProductsList = () => {
     const getProductsData = useCallback(async () => {
         const res = await axios.get(`http://localhost:5000/admin/products/list?page=${currentPage}&sort=${sort}&search=${search}`);
         const data = res?.data;
-        console.log(data)
         setProducts(data?.products);
         setPageArray(data?.pageArray)
     }, [currentPage, sort, search])

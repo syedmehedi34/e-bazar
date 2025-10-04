@@ -63,7 +63,7 @@ const ProductForm = () => {
   };
 
   return (
-    <div className="min-h-screen flex justify-center items-center py-10">
+    <div className="min-h-screen flex justify-center items-center py-10 bg-white dark:bg-gray-800 rounded-box">
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="w-full max-w-3xl bg-white dark:bg-gray-800 dark:text-white p-8 rounded-2xl shadow-xl space-y-6"
