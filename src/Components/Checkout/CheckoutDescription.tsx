@@ -19,7 +19,7 @@ const CheckoutDescription: React.FC<CheckoutDetailsProps> = ({ products }) => {
         <div className="rubik my-10">
             {/* Product Description */}
             <h2 className="text-2xl font-semibold mb-4">Product Description</h2>
-            <p className="text-gray-700 leading-7">{products?.description}</p>
+            <p className="text-gray-700 dark:text-gray-100 leading-7">{products?.description}</p>
 
             <div className='my-10 '>
                 <Image
@@ -44,7 +44,7 @@ const CheckoutDescription: React.FC<CheckoutDetailsProps> = ({ products }) => {
                         {products.reviews.map((review, index) => (
                             <div
                                 key={index}
-                                className="p-5 border border-gray-200 rounded-2xl shadow-sm hover:shadow-md transition-shadow duration-200 bg-white"
+                                className="p-5 border border-gray-200 dark:border-gray-600 rounded-2xl shadow-sm hover:shadow-md transition-shadow duration-200 bg-white dark:bg-gray-800 dark:text-white"
                             >
                                 {/* User */}
                                 <p className="font-semibold text-lg mb-2">{review.user}</p>
@@ -56,14 +56,14 @@ const CheckoutDescription: React.FC<CheckoutDetailsProps> = ({ products }) => {
                                             <MdOutlineStar size={20} />
                                         </span>
                                     ))}
-                                    {/* যদি fractional rating দরকার হয় future এ, এখানে half star add করা যাবে */}
-                                    <span className="ml-2 text-sm text-gray-500">
+                                   
+                                    <span className="ml-2 text-sm text-gray-500 dark:text-gray-300">
                                         {review.rating}/5
                                     </span>
                                 </div>
 
                                 {/* Comment */}
-                                <p className="text-gray-600 leading-6">{review.comment}</p>
+                                <p className="text-gray-600 dark:text-white leading-6">{review.comment}</p>
                             </div>
                         ))}
                     </div>

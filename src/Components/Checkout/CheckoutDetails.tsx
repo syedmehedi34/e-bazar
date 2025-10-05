@@ -120,7 +120,7 @@ const CheckoutDetails: React.FC<CheckoutDetailsProps> = ({ products, selectedIma
 
 
     return (
-        <div className='rubik '>
+        <div className='rubik dark:text-white '>
 
             <h2 className='text-3xl font-semibold mb-4 max-md:text-center'>{products?.title}</h2>
             <p className='mb-2 flex items-center'>{[...Array(Math.floor(Number(products?.rating) || 0)).keys()].map((i) => (
@@ -133,7 +133,7 @@ const CheckoutDetails: React.FC<CheckoutDetailsProps> = ({ products, selectedIma
             <div
                 className='text-xl font-bold mb-2 flex items-center gap-4'>
                 <p className=''> ৳ {totaldiscountPrice}</p>
-                <p className='text-sm line-through text-gray-600'> ৳ {totalPrice}</p>
+                <p className='text-sm line-through text-gray-600 dark:text-gray-400'> ৳ {totalPrice}</p>
             </div>
 
             <p className='mb-2'><strong>Brand:</strong> {products?.brand}</p>
@@ -192,14 +192,14 @@ const CheckoutDetails: React.FC<CheckoutDetailsProps> = ({ products, selectedIma
                 <p className='font-medium my-2'>Quantity</p>
                 <div className='flex  my-2 gap-4  '>
 
-                    <div className='flex items-center border gap-2  border-gray-300 shadow'>
+                    <div className='flex items-center border gap-2  border-gray-300 dark:border-gray-600 '>
                         <button
                             onClick={handleDecrement}
-                            className='btn  btn-square'>-</button>
+                            className='btn dark:bg-gray-700 dark:border-gray-600 dark:text-white  btn-square'>-</button>
                         <p className='px-4 font-bold'>{quantity}</p>
                         <button
                             onClick={handleIncrement}
-                            className='btn btn-square'>+</button>
+                            className='btn btn-square dark:bg-gray-700 dark:border-gray-600 dark:text-white'>+</button>
                     </div>
 
                 </div>

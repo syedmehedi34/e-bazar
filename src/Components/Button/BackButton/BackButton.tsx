@@ -8,7 +8,7 @@ const BackButton = () => {
   return (
     <button
       onClick={() => router.back()}
-      className="btn  btn-sm flex items-center gap-1"
+      className="btn  btn-sm flex items-center gap-1 dark:bg-gray-800 dark:border-gray-600 dark:text-white"
     >
       <IoIosArrowRoundBack size={24} />
       Back

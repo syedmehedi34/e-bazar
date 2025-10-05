@@ -44,7 +44,7 @@ const ImagesGallery: React.FC<ProductsProps> = ({ products,onSelectImage }) => {
                     onMouseLeave={() => setIsZoomed(false)}
                     onMouseMove={handleMouseMove}
 
-                    className='cursor-zoom-in h-[500px] flex items-center justify-center bg-white'
+                    className='cursor-zoom-in h-[500px] flex items-center justify-center bg-white '
                 >
                     <Image
                         src={selectedImage || "https://www.shutterstock.com/image-vector/missing-picture-page-website-design-600nw-1552421075.jpg"}
