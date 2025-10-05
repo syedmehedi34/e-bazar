@@ -1,6 +1,6 @@
 import Banner from "@/Components/Banner/Banner";
 import Faq from "@/Components/Faq/Faq";
-import Fashion from "@/Components/Fashion/Fashion";
+import Fashion from "@/Components/Footer/Fashion/Fashion";
 // import Offers from "@/Components/Offers/Offers";
 import Products from "@/Components/Products/Products";
 import Subscribe from "@/Components/Subscribe/Subscribe";

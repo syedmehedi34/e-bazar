@@ -42,7 +42,7 @@ const OrderTable: React.FC<OrderProps> = ({ orders, handleStatusChange }) => {
                 <h1 className='p-4 font-bold rubik text-sm'>
                     Latest Order
                 </h1>
-                <table className="table w-full">
+                <table className="table  w-full">
                     {/* head */}
                     <thead className=" text-sm">
                         <tr>

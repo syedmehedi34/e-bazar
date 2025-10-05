@@ -129,16 +129,16 @@ const Navbar = () => {
                       <div className='flex flex-col gap-4 mb-4 *:hover:bg-gray-300 dark:*:hover:bg-gray-600 *:p-2'>
                         <li className="flex items-center gap-2">
                           <User className="text-sm " />
-                          <Link href="#">My Profile</Link>
+                          <Link href="/user_profile">My Profile</Link>
                         </li>
                       
                         <li className=" flex items-center gap-2">
                           <ShoppingCart className="text-lg text-gray-800 dark:text-white" />
-                          <Link href="#">My Cart</Link>
+                          <Link href="/shopping-cart">My Cart</Link>
                         </li>
                         <li className="flex items-center gap-2">
                           <Box className="text-sm" />
-                          <Link href="#">My Orders</Link>
+                          <Link href="/my_orders">My Orders</Link>
                         </li>
                         <li className="flex items-center gap-2">
                           <LifeBuoy className="text-sm" />

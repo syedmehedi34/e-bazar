@@ -15,14 +15,16 @@ import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 const PaymentProcess = () => {
     const deliveryDate = useDeliveryDate(2)
+    const {data:session} = useSession()
     const products = useSelector((state: RootState) => state.orderSummary.orderDetails);
     const [paymentMethod, setPaymentMethod] = useState('');
     const [formData, setFormData] = useState({
-        name: '',
+        name: session?.user?.name || "",
         phone: '',
-        email: '',
+        email: session?.user?.email || "",
         note: '',
         address: '',
         deliveryAddress: '',
@@ -58,6 +60,7 @@ const PaymentProcess = () => {
 
         if (paymentMethod === 'cash') {
 
+            if(!products) return toast.error("products not found")
             const orderDetails = {
                 customer: {
                     name: formData.name,
@@ -99,7 +102,7 @@ const PaymentProcess = () => {
             };
 
             const res = await axios.post('http://localhost:5000/order', { orderDetails })
-            console.log(res)
+       
             if (res.status === 200) {
                 toast.success('Your Order Place Successfully!')
                 router.push('/shopping')
@@ -109,7 +112,6 @@ const PaymentProcess = () => {
         }
     }
 
-    console.log("order summary",products)
 
     return (
         <div className='min-h-screen bg-gray-200 py-8 rubik'>
@@ -131,7 +133,7 @@ const PaymentProcess = () => {
                                     placeholder="Enter Your Name.."
                                     className='input input-bordered w-full'
 
-                                    value={formData.name}
+                                    value={session?.user?.email}
                                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                                 />
                             </div>
@@ -155,7 +157,7 @@ const PaymentProcess = () => {
                                     id="email"
                                     placeholder="example@mail.com"
                                     className='input input-bordered w-full'
-                                    value={formData.email}
+                                    value={session?.user?.email}
                                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                                 />
                             </div>

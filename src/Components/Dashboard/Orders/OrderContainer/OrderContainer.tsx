@@ -49,13 +49,13 @@ const OrderContainer: React.FC<OrderContainerProps> = ({ orders, getOrders ,setS
 
     const handleStatusChange = async (orderId: string, status: string) => {
         try {
-            console.log(orderId,status )
+          
             const res = await axios.patch(
                 `http://localhost:5000/admin/orders/payment-status`,
                 {  status, orderId }
             );
 
-            console.log("responsive",res)
+          
 
             if (res?.data) {
                 toast.success("Payment status updated successfully!");

@@ -75,9 +75,9 @@ const ShoppingCart = () => {
     router.push(`/checkout/${_id}`)
   }
   return (
-    <div className='min-h-screen bg-gray-200'>
+    <div className='min-h-screen bg-gray-200 dark:bg-gray-900 dark:text-white'>
       <div className=''>
-        <div className='min-h-[24vh] flex justify-center items-center flex-col gap-2 bg-gray-100 rubik'>
+        <div className='min-h-[24vh] flex justify-center items-center flex-col gap-2 bg-gray-100 dark:bg-gray-900 rubik'>
           <p className='md:text-4xl text-2xl font-bold tracking-wide'> Your Shopping Cart</p>
           <div className="flex items-center justify-center gap-4 my-4">
             {/* Back Button */}
@@ -96,9 +96,9 @@ const ShoppingCart = () => {
               Your cart is empty! <Link href="/shop" className="underline text-gray-800">Go Shopping</Link>
             </div>) : (
               <div className='grid lg:grid-cols-3 gap-4'>
-                <div className='lg:col-span-2 bg-gray-100 p-4 rounded-box '>
+                <div className='lg:col-span-2 bg-gray-100 dark:bg-gray-700 p-4 rounded-box '>
                   <div>
-                    <nav className='flex justify-between bg-base-100 p-4 mb-4 rounded-box'>
+                    <nav className='flex justify-between bg-base-100 dark:bg-gray-800 p-4 mb-4 rounded-box'>
                       <h4 className='text-md rubik max-sm:text-sm font-bold'>Your Cart</h4>
                       <button
                         onClick={() => handleDeleteAllCartItem()}
@@ -106,7 +106,7 @@ const ShoppingCart = () => {
                     </nav>
                   </div>
                   <div>
-                    <ul className='space-y-4 rubik list bg-base-100 rounded-box '>
+                    <ul className='space-y-4 rubik list bg-base-100 dark:bg-gray-800 rounded-box '>
                       {
                         cartItems.map((cart) => (
                           <li key={cart._id} className="sm:flex justify-between items-center" 
@@ -128,15 +128,15 @@ const ShoppingCart = () => {
                               <div className='flex items-center'>
                                 <button
                                   onClick={() => dispatch(decrementQuantity(cart._id))}
-                                  className='btn max-sm:btn-sm btn-square'>-</button>
+                                  className='btn max-sm:btn-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white btn-square'>-</button>
                                 <p className='px-4 font-bold'>{cart?.quantity}</p>
                                 <button
                                   onClick={() => dispatch(incrementQuantity(cart._id))}
-                                  className='btn max-sm:btn-sm btn-square'>+</button>
+                                  className='btn max-sm:btn-sm btn-square dark:bg-gray-700 dark:border-gray-600 dark:text-white'>+</button>
                               </div>
                               <button
                                 onClick={() => handleDeleteCartItem(cart._id)}
-                                className="btn btn-square max-sm:btn-sm">
+                                className="btn btn-square max-sm:btn-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                                 <MdDeleteForever size={24} />
 
                               </button>
@@ -150,8 +150,8 @@ const ShoppingCart = () => {
 
                   </div>
                 </div>
-                <div className='bg-gray-100 p-4 rounded-box'>
-                  <div className='bg-base-100 p-4 lg:col-span-1 rounded-box '>
+                <div className='bg-gray-100 dark:bg-gray-700 p-4 rounded-box'>
+                  <div className='bg-base-100 dark:bg-gray-800 p-4 lg:col-span-1 rounded-box '>
                     <div>
                       <h4 className='font-bold mb-4 max-sm:text-sm '>Order Summary</h4>
                       <form className='flex gap-5 mb-8' >
@@ -186,7 +186,7 @@ const ShoppingCart = () => {
                       <div>
                         <button
                         onClick={handleCheckout}
-                        className='flex items-center justify-center gap-4 text-center max-sm:text-sm  container-custom bg-gray-800 text-white cursor-pointer sm:p-4 p-3 rounded-box hover:bg-gray-900'>
+                        className='flex items-center justify-center gap-4 text-center max-sm:text-sm  container-custom bg-gray-900  text-white cursor-pointer sm:p-4 p-3 rounded-box hover:bg-gray-900'>
                           Go to Checkout <MdArrowRightAlt />
                         </button>
                       </div>
