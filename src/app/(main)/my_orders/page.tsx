@@ -12,18 +12,25 @@ import UserOrdersTable from "@/Components/UserOrders/UserOrdersTable/UserOrdersT
 import Pagination from "@/Components/Pagination/Pagination";
 import Swal from "sweetalert2";
 import { toast } from "react-toastify";
+
+import { Order } from "@/lib/orders";
+import { useRouter } from "next/navigation";
 interface Summary {
     totalOrders: number;
     totalPaid: number;
     totalPending: number;
     totalCanceled: number;
 }
+
 const MyOrdersPage = () => {
     const { data: session, status } = useSession();
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [pageArry, setPageArray] = useState([])
+    const [isOpen, setIsOpen] = useState(false);
+    const [invoice, setinvoice] = useState<Order>()
+    const router = useRouter();
     const [summary, setSummary] = useState<Summary>({
         totalOrders: 0,
         totalPaid: 0,
@@ -103,9 +110,15 @@ const MyOrdersPage = () => {
         });
     }
 
+    const handleInvoice = (order: Order) => {
+        setIsOpen(!isOpen);
+        const orderData = encodeURIComponent(JSON.stringify(order));
+        router.push(`/invoice?order=${orderData}`);
+    }
+
 
     return (
-        <div className="min-h-screen p-6 dark:text-white">
+        <div className="min-h-screen p-6 dark:text-white relative">
 
             <div className="container-custom">
                 <nav className="flex items-center justify-between">
@@ -127,9 +140,10 @@ const MyOrdersPage = () => {
                 ) : (
                     <div className="flex flex-col gap-10" >
                         <OrderCard orderSummary={summary} />
-                        <UserOrdersTable orders={orders} onDelete={handleCencelOrderById} />
+                        <UserOrdersTable orders={orders} onDelete={handleCencelOrderById} onInvoice={handleInvoice} />
 
                         <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} pageArray={pageArry} />
+
                     </div>
                 )}
             </div>

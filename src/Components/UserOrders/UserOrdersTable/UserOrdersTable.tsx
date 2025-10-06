@@ -31,13 +31,13 @@ interface Order {
 interface UserOrdersTableProps {
     orders: Order[];
     onDelete: (id: string) => void;
-    // onInvoice: (id: string) => void;
+    onInvoice: (order:Order) => void;
 }
 
 const UserOrdersTable: React.FC<UserOrdersTableProps> = ({
     orders,
     onDelete,
-    // onInvoice,
+    onInvoice,
 }) => {
     return (
         <div className="overflow-x-auto   p-4 transition-colors duration-300">
@@ -165,7 +165,7 @@ const UserOrdersTable: React.FC<UserOrdersTableProps> = ({
                                 {/* ✅ Actions */}
                                 <td className="flex items-center gap-2">
                                     <button
-                                        // onClick={() => onInvoice(order._id)}
+                                        onClick={() => onInvoice(order)}
                                         className="btn btn-sm bg-gray-800 text-white flex items-center gap-1"
                                     >
                                         <FaFileInvoice />
