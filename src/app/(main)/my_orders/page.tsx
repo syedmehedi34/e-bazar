@@ -10,6 +10,8 @@ import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import OrderCard from "@/Components/UserOrders/OrderCard/OrderCard";
 import UserOrdersTable from "@/Components/UserOrders/UserOrdersTable/UserOrdersTable";
 import Pagination from "@/Components/Pagination/Pagination";
+import Swal from "sweetalert2";
+import { toast } from "react-toastify";
 interface Summary {
     totalOrders: number;
     totalPaid: number;
@@ -76,6 +78,32 @@ const MyOrdersPage = () => {
         );
     }
 
+    const handleCencelOrderById = (id: string) => {
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this action!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!",
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                try {
+
+                    const res = await axios.delete(`http://localhost:5000/user/order/${id}`);
+                    if (res.status === 200) {
+                        toast.success("Your order has been cancel.");
+                        getOrder();
+                    }
+                } catch (error) {
+                    Swal.fire("Error!", "Something went wrong while cancel.", "error");
+                }
+            }
+        });
+    }
+
+
     return (
         <div className="min-h-screen p-6 dark:text-white">
 
@@ -99,9 +127,9 @@ const MyOrdersPage = () => {
                 ) : (
                     <div className="flex flex-col gap-10" >
                         <OrderCard orderSummary={summary} />
-                        <UserOrdersTable orders={orders} />
+                        <UserOrdersTable orders={orders} onDelete={handleCencelOrderById} />
 
-                        <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} pageArray={pageArry}/>
+                        <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} pageArray={pageArry} />
                     </div>
                 )}
             </div>

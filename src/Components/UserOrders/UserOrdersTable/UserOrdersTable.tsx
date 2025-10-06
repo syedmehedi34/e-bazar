@@ -30,13 +30,13 @@ interface Order {
 
 interface UserOrdersTableProps {
     orders: Order[];
-    // onDelete: (id: string) => void;
+    onDelete: (id: string) => void;
     // onInvoice: (id: string) => void;
 }
 
 const UserOrdersTable: React.FC<UserOrdersTableProps> = ({
     orders,
-    // onDelete,
+    onDelete,
     // onInvoice,
 }) => {
     return (
@@ -133,12 +133,12 @@ const UserOrdersTable: React.FC<UserOrdersTableProps> = ({
                                 <td>
                                     <span
                                         className={`badge ${order.payment.orderStatus === "canceled"
-                                                ? "badge-error text-white"
-                                                : order.payment.paymentStatus === "paid"
-                                                    ? new Date(order.delivery.date) <= new Date()
-                                                        ? "badge-success text-white"
-                                                        : "badge-warning "
-                                                    : "badge-info text-white"
+                                            ? "badge-error text-white"
+                                            : order.payment.paymentStatus === "paid"
+                                                ? new Date(order.delivery.date) <= new Date()
+                                                    ? "badge-success text-white"
+                                                    : "badge-warning "
+                                                : "badge-info text-white"
                                             }`}
                                     >
                                         {order.payment.orderStatus === "canceled"
@@ -166,17 +166,17 @@ const UserOrdersTable: React.FC<UserOrdersTableProps> = ({
                                 <td className="flex items-center gap-2">
                                     <button
                                         // onClick={() => onInvoice(order._id)}
-                                        className="btn btn-sm btn-info text-white flex items-center gap-1"
+                                        className="btn btn-sm bg-gray-800 text-white flex items-center gap-1"
                                     >
                                         <FaFileInvoice />
                                         Invoice
                                     </button>
                                     <button
-                                        // onClick={() => onDelete(order._id)}
+                                        onClick={() => onDelete(order._id)}
                                         className="btn btn-sm btn-error text-white flex items-center gap-1"
                                     >
                                         <FaTrashAlt />
-                                        Delete
+                                        Cancel
                                     </button>
                                 </td>
                             </tr>
