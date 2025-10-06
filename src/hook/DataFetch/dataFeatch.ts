@@ -5,6 +5,6 @@ export const fetchData = async (endpoint :  string)=>{
         const res = await axios.get(`http://localhost:5000/${endpoint}`);
         return res?.data;
     } catch (error) {
-        console.log(error)
+        (error)
     }
 }

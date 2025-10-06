@@ -2,7 +2,7 @@
 
 import axios from "axios";
 import { useSession } from "next-auth/react";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Loader from "../loading";
 import { PiExport } from "react-icons/pi";
 import { CiCalendarDate } from "react-icons/ci";
@@ -15,11 +15,13 @@ import { toast } from "react-toastify";
 
 import { Order } from "@/lib/orders";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { useReactToPrint } from "react-to-print";
 interface Summary {
     totalOrders: number;
     totalPaid: number;
     totalPending: number;
-    totalCanceled: number;
+    totalAmount: number;
 }
 
 const MyOrdersPage = () => {
@@ -29,14 +31,15 @@ const MyOrdersPage = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [pageArry, setPageArray] = useState([])
     const [isOpen, setIsOpen] = useState(false);
-    const [invoice, setinvoice] = useState<Order>()
     const router = useRouter();
     const [summary, setSummary] = useState<Summary>({
         totalOrders: 0,
         totalPaid: 0,
         totalPending: 0,
-        totalCanceled: 0,
+        totalAmount: 0,
     });
+    const contentRef = useRef<HTMLDivElement>(null);
+    const reactToPrintFn = useReactToPrint({ contentRef });
 
     const getOrder = useCallback(async () => {
         if (!session?.user?.email) return;
@@ -51,7 +54,7 @@ const MyOrdersPage = () => {
                 },
             }
             );
-            console.log(res)
+            (res)
             setOrders(res?.data?.orders || []);
             setSummary(res?.data?.summary);
             setPageArray(res?.data?.pageArray)
@@ -116,22 +119,22 @@ const MyOrdersPage = () => {
         router.push(`/invoice?order=${orderData}`);
     }
 
-
+    
     return (
         <div className="min-h-screen p-6 dark:text-white relative">
 
             <div className="container-custom">
-                <nav className="flex items-center justify-between">
-                    <div>
+                <nav className="md:flex items-center justify-between gap-4">
+                    <div className="mb-4 md:mb-0">
                         <h1 className="text-xl font-bold mb-2 dark:text-white">Your Orders</h1>
                         <p className="flex items-center gap-2 font-medium p-2 bg-gray-100 rounded-box text-sm 
                         dark:text-white dark:bg-gray-700
                         "> <CiCalendarDate /> {new Date().toLocaleDateString()}</p>
                     </div>
                     <div className="flex items-center gap-4">
-                        <button className="flex items-center gap-2 font-medium p-2 bg-gray-100  rounded-box text-sm dark:text-white dark:bg-gray-700"> <PiExport /> Export</button>
+                        <button onClick={reactToPrintFn} className="flex items-center gap-2 font-medium p-2 bg-gray-100  rounded-box text-sm dark:text-white dark:bg-gray-700"> <PiExport /> Export</button>
                         <button className="flex items-center gap-2 font-medium p-2 bg-gray-100 rounded-box text-sm dark:text-white dark:bg-gray-700">More Action <MdOutlineKeyboardArrowDown /> </button>
-                        <button className="flex items-center gap-2 font-medium p-2  rounded-box text-sm bg-gray-900  text-white dark:text-white dark:bg-gray-700">Create Order</button>
+                        <Link href={'/shopping'} className="flex items-center gap-2 font-medium p-2  rounded-box text-sm bg-gray-900  text-white dark:text-white dark:bg-gray-700">Create Order</Link>
                     </div>
                 </nav>
 
@@ -140,8 +143,10 @@ const MyOrdersPage = () => {
                 ) : (
                     <div className="flex flex-col gap-10" >
                         <OrderCard orderSummary={summary} />
-                        <UserOrdersTable orders={orders} onDelete={handleCencelOrderById} onInvoice={handleInvoice} />
+                        <div ref={contentRef}>
+                            <UserOrdersTable orders={orders} onDelete={handleCencelOrderById} onInvoice={handleInvoice} />
 
+                        </div>
                         <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} pageArray={pageArry} />
 
                     </div>

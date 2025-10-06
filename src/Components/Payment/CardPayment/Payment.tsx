@@ -72,7 +72,7 @@ const Payment: React.FC<PaymentProps> = ({ onClose, products, formData }) => {
 
       const res = await axios.post(`http://localhost:5000/create-payment-intent`,
         { amount: products?.totalPrice, id: products?.productId });
-      console.log(res)
+      (res)
       const clientSecret = res?.data?.clientSecret;
 
       //confirm payment
@@ -138,10 +138,10 @@ const Payment: React.FC<PaymentProps> = ({ onClose, products, formData }) => {
         };
 
         const res = await axios.post('http://localhost:5000/order', { orderDetails })
-        console.log(res)
+
         if (res.status === 200) {
           toast.success('Your Payment Successfully!')
-          router.push('/shopping')
+          router.push('/my_orders')
         } else {
           console.error(res.data.message)
         }

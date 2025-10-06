@@ -35,7 +35,7 @@ type OrderProps = {
     handleStatusChange: (orderId: string, status: string) => void
 }
 const OrderTable: React.FC<OrderProps> = ({ orders, handleStatusChange }) => {
-    console.log(orders)
+    (orders)
     return (
         <div>
             <div className="overflow-x-auto bg-white dark:bg-gray-800 dark:text-white rounded-lg shadow">

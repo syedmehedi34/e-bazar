@@ -1,11 +1,12 @@
 import React from "react";
 import { FaShoppingCart, FaCheckCircle, FaHourglassHalf, FaTimesCircle } from "react-icons/fa";
+import { IoCash } from "react-icons/io5";
 
 interface Summary {
   totalOrders: number;
   totalPaid: number;
   totalPending: number;
-  totalCanceled: number;
+  totalAmount: number;
 }
 
 type orderSummaryProps = {
@@ -33,9 +34,9 @@ const OrderCard: React.FC<orderSummaryProps> = ({ orderSummary }) => {
       bg: "bg-yellow-100 dark:bg-yellow-900/30",
     },
     {
-      title: "Canceled Orders",
-      value: orderSummary.totalCanceled,
-      icon: <FaTimesCircle className="text-3xl text-red-500" />,
+      title: "Total Amount",
+      value: `৳ ${orderSummary.totalAmount}`,
+      icon: <IoCash className="text-3xl text-red-500" />,
       bg: "bg-red-100 dark:bg-red-900/30",
     },
   ];

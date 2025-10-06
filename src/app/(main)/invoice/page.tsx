@@ -14,11 +14,11 @@ const OrderInvoice = () => {
     const reactToPrintFn = useReactToPrint({ contentRef });
 
     return (
-        <div className='container-custom my-10'>
+        <div className='container-custom my-10 min-h-screen'>
             <BackButton />
-            <div ref={contentRef} className='flex justify-center items-center '>
+            <div ref={contentRef} className='flex justify-center items-center mt-2 '>
 
-                <div className='bg-white dark:bg-gray-800 dark:text-white md:w-[595px] w-full  md:h-[642px] h-full p-5 relative overflow-hidden border-2 border-dotted mb-10'>
+                <div className='bg-white dark:bg-gray-800 dark:text-white md:w-[595px] w-full  h-[642px]  p-5 relative overflow-hidden border-2 border-dotted mb-10'>
                     <div>
                         <p className='absolute inset-0 flex justify-center dark:text-white items-center text-[8vw] font-bold italic  '>E-Bazaar</p>
                         <div className='absolute inset-0 bg-white/90 dark:bg-gray-800/90 p-5'>
