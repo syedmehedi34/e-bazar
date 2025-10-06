@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import React from "react";
 import { FaTrashAlt, FaFileInvoice } from "react-icons/fa";
 
@@ -73,7 +74,9 @@ const UserOrdersTable: React.FC<UserOrdersTableProps> = ({
                                     <div className="flex items-center gap-3">
                                         <div className="avatar">
                                             <div className="mask mask-squircle w-12 h-12">
-                                                <img
+                                                <Image
+                                                    width={100}
+                                                    height={100}
                                                     src={order.product.image}
                                                     alt={order.product.name}
                                                     className="object-cover"

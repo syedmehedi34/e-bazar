@@ -3,7 +3,8 @@ import axios, { AxiosError } from "axios";
 import React from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import Swal from "sweetalert2";
-import { Tag, Image, PackagePlus, } from "lucide-react";
+import { Tag, PackagePlus, } from "lucide-react";
+import { CiImageOn } from "react-icons/ci";
 
 interface ProductFormInputs {
   title: string;
@@ -92,7 +93,7 @@ const ProductForm = () => {
           </label>
           <textarea
             rows={3}
-              placeholder="Enter Your Description..."
+            placeholder="Enter Your Description..."
             className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
             {...register("description", { required: true })}
           />
@@ -103,7 +104,7 @@ const ProductForm = () => {
           <input
             type="number"
             placeholder="Price"
-          
+
             className="p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
             {...register("price", { required: true })}
           />
@@ -191,7 +192,8 @@ const ProductForm = () => {
         {/* Images */}
         <div>
           <label className=" text-sm font-semibold text-gray-600 mb-1 dark:text-white flex items-center gap-1">
-            <Image size={16} /> Images (comma separated URLs)
+            <CiImageOn size={24} />
+            Images (comma separated URLs)
           </label>
           <input
             type="text"

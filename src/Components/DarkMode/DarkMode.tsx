@@ -1,7 +1,6 @@
 "use client"
 import { DarkModetoggle } from '@/hook/DarkModeToggle/darkMode';
 import React, { useState } from 'react'
-import { FaMoon, FaSun } from 'react-icons/fa'
 import { FiMoon } from "react-icons/fi";
 import { MdOutlineWbSunny } from 'react-icons/md';
 const DarkMode = () => {

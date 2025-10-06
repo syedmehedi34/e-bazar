@@ -1,22 +1,31 @@
 import { configureStore } from '@reduxjs/toolkit'
 import todoSlice from './feature/todoSlice/todoSlice'
-import { addToCartSlice } from './feature/addToCart/addToCart'
+import addToCartReducer from './feature/addToCart/addToCart'
 import orderSlice from './feature/orderSummarySlice/orderSummarySlice'
- const store = () => {
-  return configureStore({
-    reducer: {
-      todo:todoSlice,
-      cart: addToCartSlice.reducer,
-      orderSummary: orderSlice
-    }
-  })
+import { persistStore, persistReducer } from 'redux-persist'
+import storage from 'redux-persist/lib/storage'
+
+// persist config
+const persistConfig = {
+  key: 'cart',
+  storage,
 }
 
+// persisted reducer
+const persistedCartReducer = persistReducer(persistConfig, addToCartReducer)
 
-// Infer the type of makeStore
-export type AppStore = ReturnType<typeof store>
-// Infer the `RootState` and `AppDispatch` types from the store itself
-export type RootState = ReturnType<AppStore['getState']>
-export type AppDispatch = AppStore['dispatch']
+// ✅ store object (function না)
+const store = configureStore({
+  reducer: {
+    todo: todoSlice,
+    cart: persistedCartReducer,
+    orderSummary: orderSlice,
+  },
+})
+
+export const persistor = persistStore(store)
+
+export type RootState = ReturnType<typeof store.getState>
+export type AppDispatch = typeof store.dispatch
 
 export default store

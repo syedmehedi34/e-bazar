@@ -1,5 +1,4 @@
 "use client";
-
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -12,7 +11,6 @@ import UserOrdersTable from "@/Components/UserOrders/UserOrdersTable/UserOrdersT
 import Pagination from "@/Components/Pagination/Pagination";
 import Swal from "sweetalert2";
 import { toast } from "react-toastify";
-
 import { Order } from "@/lib/orders";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -59,7 +57,8 @@ const MyOrdersPage = () => {
             setSummary(res?.data?.summary);
             setPageArray(res?.data?.pageArray)
         } catch (error) {
-            console.error("Order fetch failed:", error);
+
+            console.error("Order fetch failed:", (error as Error).message);
         } finally {
             setLoading(false);
         }
@@ -119,7 +118,7 @@ const MyOrdersPage = () => {
         router.push(`/invoice?order=${orderData}`);
     }
 
-    
+
     return (
         <div className="min-h-screen p-6 dark:text-white relative">
 

@@ -2,12 +2,11 @@
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 import Logo from '../Logo/Logo'
-
-import { CiShoppingCart,CiHeart  } from "react-icons/ci";
+import { CiShoppingCart, CiHeart } from "react-icons/ci";
 import { User, ShoppingCart, Box, LifeBuoy, LayoutDashboard } from "lucide-react";
 import Register from '../Register/Register'
 import { signOut, useSession } from 'next-auth/react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '@/redux/store'
 import { AxiosError } from 'axios'
 import Image from 'next/image'
@@ -18,10 +17,8 @@ import { AnimatePresence } from 'framer-motion'
 import Sidebar from './Sidebar'
 import { FaArrowRightFromBracket } from "react-icons/fa6";
 import { toast } from 'react-toastify'
-import {  FaUser,  FaBoxOpen, FaLifeRing } from "react-icons/fa6";
-import { IoCartOutline } from 'react-icons/io5'
-import { AiOutlineDashboard } from 'react-icons/ai'
 import DarkMode from '../DarkMode/DarkMode';
+
 
 
 
@@ -34,8 +31,9 @@ const Navbar = () => {
   const shoppingCart = useSelector((state: RootState) => state.cart.value);
   const [searchBox, setSearchBox] = useState(false)
   const { data: session } = useSession()
-
+  const dispatch = useDispatch()
   useEffect(() => {
+  
     const handleScrollY = () => setScrollY(window.scrollY);
     window.addEventListener('scroll', handleScrollY);
     return () => window.removeEventListener('scroll', handleScrollY);
@@ -56,7 +54,7 @@ const Navbar = () => {
       <Link href={'/shopping'} className='text-[15px] font-medium leading-6'>Shop</Link>
       <Link href={'/about'} className='text-[15px] font-medium leading-6'>About Us</Link>
       <Link href={'/'} className='text-[15px] font-medium leading-6'>Blog</Link>
-     
+
     </>
   )
 
@@ -87,14 +85,14 @@ const Navbar = () => {
 
             </div>
             <div className="relative bg-gray-200 p-2 rounded-full cursor-pointer dark:bg-gray-700 dark:text-white transition-all duration-300">
-              <Link href={'/shopping-cart'}><CiShoppingCart  size={24} /></Link>
+              <Link href={'/shopping-cart'}><CiShoppingCart size={24} /></Link>
               <span className='absolute -top-2 -right-0 font-bold'>{shoppingCart?.length || 0}</span>
             </div>
             <div className="relative bg-gray-200 p-2 rounded-full cursor-pointer dark:bg-gray-700 dark:text-white transition-all duration-300">
-              <Link href={'/cart'}><CiHeart  size={24} /></Link>
+              <Link href={'/cart'}><CiHeart size={24} /></Link>
               <span className='absolute -top-2 -right-0 font-bold'>0</span>
             </div>
-             <DarkMode/>
+            <DarkMode />
 
             {/* Login / Register */}
             {!session?.user ? (
@@ -121,7 +119,7 @@ const Navbar = () => {
                     session?.user.role?.includes("admin") ? (
                       <>
                         <li className="flex items-center gap-2 mb-4 p-2 hover:bg-gray-600 hover:text-white dark:hover:text-white rounded-box transition-all duration-300">
-                          <LayoutDashboard  className="text-sm" />
+                          <LayoutDashboard className="text-sm" />
                           <Link href="/dashboard">Dashboard</Link>
                         </li>
                       </>
@@ -131,7 +129,7 @@ const Navbar = () => {
                           <User className="text-sm " />
                           <Link href="/user_profile">My Profile</Link>
                         </li>
-                      
+
                         <li className=" flex items-center gap-2">
                           <ShoppingCart className="text-lg text-gray-800 dark:text-white" />
                           <Link href="/shopping-cart">My Cart</Link>
@@ -146,7 +144,7 @@ const Navbar = () => {
                         </li>
                       </div>
                     )
-}
+                  }
 
 
                   <li><button onClick={() => handleLogout()} className="btn btn-outline border-none w-full bg-gray-700 hover:bg-gray-600 text-white rounded-box">Logout</button></li>

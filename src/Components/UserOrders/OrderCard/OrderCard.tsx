@@ -1,5 +1,5 @@
 import React from "react";
-import { FaShoppingCart, FaCheckCircle, FaHourglassHalf, FaTimesCircle } from "react-icons/fa";
+import { FaShoppingCart, FaCheckCircle, FaHourglassHalf } from "react-icons/fa";
 import { IoCash } from "react-icons/io5";
 
 interface Summary {

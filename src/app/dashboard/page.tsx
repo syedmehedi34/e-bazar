@@ -1,8 +1,6 @@
 "use client";
-
 import LatestOrder from "@/Components/Dashboard/LatestOrderList/LatestOrder";
 import ProductsChart from "@/Components/Dashboard/ProductsChart/ProductsChart";
-import ProductsUpdate from "@/Components/Dashboard/ProductsTablea/ProductsUpdate";
 import Loader from "@/Components/Loader/Loader";
 import {
   DashboardCardData,
@@ -12,8 +10,6 @@ import {
 import { TrendingUp } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { FaShoppingCart, FaDollarSign, FaUsers, FaBox } from "react-icons/fa";
-import { MdArrowDropUp } from "react-icons/md";
-
 interface DashboardData {
   totalSales: number;
   totalOrders: number;

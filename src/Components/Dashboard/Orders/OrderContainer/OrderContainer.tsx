@@ -1,9 +1,8 @@
 "use client"
-import React, { Dispatch } from 'react'
+
 import OrderTable from '../OrderTable/OrderTable';
 import { toast } from 'react-toastify';
 import axios from 'axios';
-import Swal from 'sweetalert2';
 import OrderFilter from '../OrderFilter/OrderFilter';
 
 interface IOrder {

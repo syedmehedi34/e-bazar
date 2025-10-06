@@ -8,7 +8,6 @@ import {
     Tooltip,
     CartesianGrid,
     ResponsiveContainer,
-    Bar,
 } from "recharts";
 
 interface RevenueData {

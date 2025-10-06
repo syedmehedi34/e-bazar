@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 import { Poppins, Rubik } from "next/font/google";
 import "./globals.css"
 
-import ReduxProvider from "@/Provider/ReduxProvider/ReduxProvider"
+import ReduxProvider from "@/Provider/ReduxPresistProbider/ReduxPresistProbider"
 import Navbar from "@/Components/Header/Navbar";
 import Footer from "@/Components/Footer/Footer";
 import SessionWrapper from "@/Components/SessionWrapper/SessionWrapper";

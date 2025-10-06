@@ -27,7 +27,6 @@ interface ProductDetails {
 
 type PaymentProps = {
   onClose: () => void
-
   products: ProductDetails
   formData: {
     name: string;
@@ -74,9 +73,7 @@ const Payment: React.FC<PaymentProps> = ({ onClose, products, formData }) => {
         { amount: products?.totalPrice, id: products?.productId });
       (res)
       const clientSecret = res?.data?.clientSecret;
-
       //confirm payment
-
       const { paymentIntent, error: confirmError } =
         await stripe.confirmCardPayment(clientSecret, {
           payment_method: {
@@ -92,7 +89,7 @@ const Payment: React.FC<PaymentProps> = ({ onClose, products, formData }) => {
         })
 
       if (confirmError) {
-        alert(confirmError.message)
+        toast.error(confirmError.message)
       }
 
       if (paymentIntent?.status === 'succeeded') {
@@ -145,17 +142,10 @@ const Payment: React.FC<PaymentProps> = ({ onClose, products, formData }) => {
         } else {
           console.error(res.data.message)
         }
-
-
-
-
-
       }
-
-
     } catch (error) {
       setError("Payment failed. Please try again.");
-      console.error("Payment error:", error);
+      console.error("Payment error:", (error as Error).message);
     } finally {
       setLoading(false)
     }
@@ -191,11 +181,11 @@ const Payment: React.FC<PaymentProps> = ({ onClose, products, formData }) => {
               style: {
                 base: {
                   fontSize: "16px",
-                  color: "#000", // black text
+                  color: "#000", 
                   fontFamily: "Rubik, sans-serif",
-                  "::placeholder": { color: "#555" }, // dark gray placeholder
+                  "::placeholder": { color: "#555" }, 
                 },
-                invalid: { color: "#e53935" }, // red for invalid
+                invalid: { color: "#e53935" }, 
               },
             }}
             onChange={(event) => {

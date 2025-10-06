@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import ProductsUpdate from "./ProductsUpdate";
 import { FolderSync, Trash } from "lucide-react";
+import Image from "next/image";
 
 interface Products {
   _id: string;
@@ -70,7 +71,9 @@ const ProductsTable: React.FC<ProductsTableProps> = ({
                 <td>
                   <div className="avatar">
                     <div className="mask mask-squircle w-12 h-12">
-                      <img
+                      <Image
+                        width={100}
+                        height={100}
                         src={product.images[0]}
                         alt={product.title}
                         className="object-cover"
@@ -85,17 +88,17 @@ const ProductsTable: React.FC<ProductsTableProps> = ({
                 <td>{new Date(product.createdAt).toLocaleDateString()}</td>
                 <td className="flex gap-2">
                   <button
-                   title="Update"
+                    title="Update"
                     onClick={() => handleUpdate(product)}
                     className="p-2 bg-gray-100 dark:bg-gray-600 cursor-pointer rounded-full hover:text-accent transition-all duration-300 "
                   >
-                    <FolderSync/>
+                    <FolderSync />
                   </button>
-                  <button 
-                  title="Delete"
-                  onClick={()=>onDelete?.(product._id)}
-                  className="p-2 bg-gray-100 dark:bg-gray-600 cursor-pointer rounded-full hover:text-secondary transition-all duration-300">
-                    <Trash/>
+                  <button
+                    title="Delete"
+                    onClick={() => onDelete?.(product._id)}
+                    className="p-2 bg-gray-100 dark:bg-gray-600 cursor-pointer rounded-full hover:text-secondary transition-all duration-300">
+                    <Trash />
                   </button>
                 </td>
               </tr>
@@ -106,7 +109,7 @@ const ProductsTable: React.FC<ProductsTableProps> = ({
 
       {isOpen && updateProducts && (
         <div className="fixed inset-0 z-100 bg-black/50 flex justify-center items-center">
-          <ProductsUpdate setIsOpen={setIsOpen} updateProducts={updateProducts}  onUpdate={onUpdate || (() => { })}/>
+          <ProductsUpdate setIsOpen={setIsOpen} updateProducts={updateProducts} onUpdate={onUpdate || (() => { })} />
         </div>
       )}
     </div>

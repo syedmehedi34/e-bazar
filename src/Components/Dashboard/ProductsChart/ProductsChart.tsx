@@ -10,7 +10,6 @@ import {
     Legend,
     Area,
     Bar,
-    Line,
     CartesianGrid,
 } from "recharts";
 

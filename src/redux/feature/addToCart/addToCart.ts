@@ -1,5 +1,5 @@
 'use client'
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 export interface CartItem {
   _id: string;
@@ -12,58 +12,52 @@ export interface CartItem {
 }
 
 export interface addToCartState {
-  value: CartItem[]
-}
-
-const loadFromLocalStorage = () : CartItem[] =>
-  JSON.parse(globalThis?.localStorage?.getItem('shopping-cart') || '[]')
-
-const savedLocalStorage = (payload: CartItem[]) => {
-  if (typeof window === 'undefined') return;
-  localStorage.setItem('shopping-cart', JSON.stringify(payload));
+  value: CartItem[];
 }
 
 const initialState: addToCartState = {
-  value: loadFromLocalStorage()
+  value: []
 }
+
 export const addToCartSlice = createSlice({
   name: 'addToCart',
   initialState,
   reducers: {
-    addToCart: (state, action) => {
-      const exist = state.value.find(cart => cart._id === action.payload._id)
+    addToCart: (state, action: PayloadAction<CartItem>) => {
+      const exist = state.value.find(cart => cart._id === action.payload._id);
       if (exist) {
-        exist.quantity += 1
+        exist.quantity += 1;
       } else {
-        state.value.push({ ...action.payload, quantity: 1 })
+        state.value.push({ ...action.payload, quantity: 1 });
       }
-      savedLocalStorage(state.value)
     },
-    incrementQuantity: (state, action) => {
-      const exist = state.value.find(cart => cart._id === action.payload)
+    incrementQuantity: (state, action: PayloadAction<string>) => {
+      const exist = state.value.find(cart => cart._id === action.payload);
       if (exist) {
-        exist.quantity += 1
-        savedLocalStorage(state.value)
-        
+        exist.quantity += 1;
       }
     },
-
-    decrementQuantity: (state, action) => {
-      const exist = state.value.find(cart => cart._id === action.payload)
+    decrementQuantity: (state, action: PayloadAction<string>) => {
+      const exist = state.value.find(cart => cart._id === action.payload);
       if (exist && exist.quantity > 1) {
-        exist.quantity -= 1
-        savedLocalStorage(state.value)
+        exist.quantity -= 1;
       }
     },
-    removeFromCart: (state, action) => {
+    removeFromCart: (state, action: PayloadAction<string>) => {
       state.value = state.value.filter(cart => cart._id !== action.payload);
-      savedLocalStorage(state.value);
     },
-    removeAllFromCart :(state)=>{
-      state.value= [];
-      localStorage.removeItem('shopping-cart'); 
+    removeAllFromCart: (state) => {
+      state.value = [];
     }
   }
 })
-export const { addToCart,incrementQuantity, decrementQuantity, removeFromCart,removeAllFromCart } = addToCartSlice.actions
-export default addToCartSlice.reducer
+
+export const {
+  addToCart,
+  incrementQuantity,
+  decrementQuantity,
+  removeFromCart,
+  removeAllFromCart
+} = addToCartSlice.actions;
+
+export default addToCartSlice.reducer;

@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import React from "react";
 
 interface ITopSellingProducts {
@@ -24,7 +25,7 @@ const TopSellingProducts: React.FC<TopSellingProps> = ({ topSellingProduct }) =>
                 <table className="table  w-full text-sm">
                     <thead>
                         <tr className="dark:bg-gray-700">
-                            
+
                             <th className="dark:text-white  py-4 ">Image</th>
                             <th className="dark:text-white py-4   ">Title</th>
                             <th className="dark:text-white py-4 ">Category</th>
@@ -35,12 +36,14 @@ const TopSellingProducts: React.FC<TopSellingProps> = ({ topSellingProduct }) =>
 
                     <tbody>
                         {topSellingProduct && topSellingProduct.length > 0 ? (
-                            topSellingProduct.map((product, index) => (
+                            topSellingProduct.map((product) => (
                                 <tr key={product._id}>
-                                 
+
                                     <td>
                                         {product.image ? (
-                                            <img
+                                            <Image
+                                                width={100}
+                                                height={100}
                                                 src={product.image}
                                                 alt={product.title}
                                                 className="w-8 h-8 object-cover rounded"

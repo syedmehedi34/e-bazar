@@ -3,7 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useDispatch, useSelector } from 'react-redux';
 import { MdDeleteForever } from "react-icons/md";
-import { decrementQuantity, incrementQuantity, removeAllFromCart, removeFromCart } from '@/redux/feature/addToCart/addToCart';
+import { decrementQuantity, incrementQuantity,  removeAllFromCart, removeFromCart } from '@/redux/feature/addToCart/addToCart';
 import Button from '@/Components/Button/Button';
 import { MdArrowRightAlt } from "react-icons/md";
 import { RootState } from '@/redux/store';
@@ -11,6 +11,7 @@ import Swal from 'sweetalert2';
 import { toast } from 'react-toastify';
 import BackButton from '../../../Components/Button/BackButton/BackButton';
 import { useRouter } from 'next/navigation';
+
 
 interface CartItem {
   _id: string;
@@ -68,12 +69,16 @@ const ShoppingCart = () => {
     });
   };
 
-  const handleCheckout = ()=>{
+  const handleCheckout = () => {
     router.push(`/checkout/${cartItems[0]._id}`)
   }
-  const handleCheckoutItem = (_id:string)=>{
+  const handleCheckoutItem = (_id: string) => {
     router.push(`/checkout/${_id}`)
   }
+
+
+
+
   return (
     <div className='min-h-screen bg-gray-200 dark:bg-gray-900 dark:text-white'>
       <div className=''>
@@ -109,10 +114,10 @@ const ShoppingCart = () => {
                     <ul className='space-y-4 rubik list bg-base-100 dark:bg-gray-800 rounded-box '>
                       {
                         cartItems.map((cart) => (
-                          <li key={cart._id} className="sm:flex justify-between items-center" 
-                        
+                          <li key={cart._id} className="sm:flex justify-between items-center"
+
                           >
-                            <div className='list-row cursor-pointer'   onClick={()=>handleCheckoutItem(cart._id)}>
+                            <div className='list-row cursor-pointer' onClick={() => handleCheckoutItem(cart._id)}>
                               <div>
                                 <Image className='size-10 rounded-box shadow object-contain' src={cart.images?.[0] || cart.images?.[1]} width={30} height={30} alt={cart.title} />
 
@@ -185,8 +190,8 @@ const ShoppingCart = () => {
                       </div>
                       <div>
                         <button
-                        onClick={handleCheckout}
-                        className='flex items-center justify-center gap-4 text-center max-sm:text-sm  container-custom bg-gray-900  text-white cursor-pointer sm:p-4 p-3 rounded-box hover:bg-gray-900'>
+                          onClick={handleCheckout}
+                          className='flex items-center justify-center gap-4 text-center max-sm:text-sm  container-custom bg-gray-900  text-white cursor-pointer sm:p-4 p-3 rounded-box hover:bg-gray-900'>
                           Go to Checkout <MdArrowRightAlt />
                         </button>
                       </div>

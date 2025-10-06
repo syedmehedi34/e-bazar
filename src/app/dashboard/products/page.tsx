@@ -43,7 +43,8 @@ const ProductsList = () => {
                     getProductsData();
                     }
                 } catch (error) {
-                    Swal.fire("Error!", "Something went wrong while deleting.", "error");
+                    console.error((error as Error).message)
+                    Swal.fire("Error!", "Something went wrong while deleting.",);
                 }
             }
         });
