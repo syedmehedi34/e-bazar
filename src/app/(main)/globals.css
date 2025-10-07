@@ -60,12 +60,14 @@ body{
 }
 
 .clip-path {
- clip-path: polygon(40% 0%, 100% 0%, 100% 100%, 0% 100%);
+ clip-path: polygon(0% 100%, 100.59% 50.44%, 52% 0%, 100% 0%, 100% 100%);
+
+
 }
 
 @media (max-width:1024) {
   .clip-path{
-  clip-path: polygon(24.75% 0%, 100% 0%, 99.5% 100%, 24.75% 100%);
+  clip-path: polygon(0% 100%, 100.59% 40.44%, 48% 0%, 100% 0%, 100% 100%);
   }
 }
 .container-custom {

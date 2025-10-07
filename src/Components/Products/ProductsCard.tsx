@@ -36,7 +36,7 @@ const ProductsCard: React.FC<ProductsCardProps> = ({ product }) => {
             toast.info("This item is already in your cart! quantity update");
         } else {
             dispatch(addToCart({ ...product,  quantity: 1 }));
-            toast.success("✅ Item added to cart!");
+            toast.success("Item added to cart!");
         }
     };
   
@@ -59,14 +59,14 @@ const ProductsCard: React.FC<ProductsCardProps> = ({ product }) => {
                 
                 <div className="flex justify-between items-center">
                     <p className="text-xl my-2 font-bold">৳ {price}</p>
-                    <p className="text-red-500">{rating} </p>
+                    <p className="font-bold">{rating} </p>
                 </div>
                 <div className="flex items-center justify-between gap-4">
                     {stock && <p>{stock} stock</p>}
                     
                     <button 
                     onClick={()=>handledTwoCartItem(product)}
-                    className="text-[12px] p-2 bg-gray-800 rounded-full cursor-pointer hover:bg-red-800 ">
+                    className="text-[12px] p-2 bg-gray-800 rounded-full cursor-pointer hover:bg-gray-600 ">
                         <BsFillCartCheckFill size={14} color="white"/>
                     </button>
                 </div>

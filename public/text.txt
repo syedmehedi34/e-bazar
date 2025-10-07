@@ -52,3 +52,27 @@ Payment methods (Bkash, Nagad, Visa, Mastercard)।
  👗 (Dress, Saree, Bags, ) Men Fashion 👕 (Shirt, Pant, Shoes, T-shirt , ) Electronics 🔌 (Mobile, Gadgets) 
 
 give me 5 json data category: , subcategory: 
+
+{
+  "title": "",
+  "category": "",
+  "tags": [],
+  "author": "",
+  "date": "",
+  "image": "",
+  "shortDescription": "",
+  "content": [
+    {
+      "paragraph": ""
+    }
+    
+  ],
+  "comments": [
+    {
+      "user": "",
+      "comment": "",
+      "date": ""
+    }
+   
+  ]
+}

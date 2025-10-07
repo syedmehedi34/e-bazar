@@ -104,8 +104,8 @@ const Shopping = () => {
                         <Category products={category} setSelectedCategory={setSelectedCategory} />
                         <Pricerange setMinPrice={setMinPrice} setMaxPrice={setMaxPrice} />
 
-                        <button onClick={handleReset} className='btn btn-block mt-4'>Reset Filter</button>
-
+                        <button onClick={handleReset} className='btn btn-block dark:bg-gray-800 dark:text-white dark:border-gray-600 mt-4'>Reset Filter</button>
+ 
                     </div>
                     <div className='lg:col-span-4 min-h-screen '>
                         {

@@ -181,7 +181,7 @@ const CheckoutDetails: React.FC<CheckoutDetailsProps> = ({ products, selectedIma
                         ))
                     ) : (
                         <span className='px-4 h-10 font-bold flex justify-center items-center shadow shadow-gray-400 rounded-box text-gray-500'>
-                            No Colors Available
+                            Select Color
                         </span>
                     )}
                 </p>

@@ -28,14 +28,14 @@ const slides = [
     },
   },
   {
-    desktopImg: 'https://i.postimg.cc/7Y6WSNsM/hero3-1.png',
+    desktopImg: 'https://i.postimg.cc/GmmMjCjs/hero3.png',
     mobileImg: 'https://i.postimg.cc/ZnYD7PTm/hero3-m.png',
     content: {
       subtitle: 'Top Deals',
       title: 'Smart Electronics & Gadgets',
       desc: 'Grab the best deals on the latest electronics and gadgets. Limited time offers!',
       btnText: 'Browse Now',
-      align: 'right',
+      align: 'left',
     },
   },
 ];
@@ -43,6 +43,7 @@ const slides = [
 const Banner = () => {
   return (
     <div className="relative h-[80vh] md:h-[100vh] lg:h-[80vh] xl:h-[100vh] border-b-2 dark:border-gray-600 border-gray-200 bg-white dark:bg-gray-900">
+      <div className='absolute inset-0 w-full h-full clip-path  bg-gray-600 dark:bg-gray-700'></div>
       <Swiper
         modules={[Autoplay]}
         effect="fade"
@@ -69,11 +70,7 @@ const Banner = () => {
 
               {/* Content */}
               <div
-                className={`container-custom ${
-                  slide.content.align === 'right'
-                    ? 'flex justify-end items-center'
-                    : ''
-                }`}
+                className={`container-custom `}
               >
                 <div
                   className={`relative z-10 space-y-4 lg:text-black text-white text-center lg:text-start max-w-2xl ${

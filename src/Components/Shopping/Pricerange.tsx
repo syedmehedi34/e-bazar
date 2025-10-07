@@ -13,11 +13,11 @@ const Pricerange:React.FC<PageProps> = ({setMinPrice,setMaxPrice}) => {
                 <input
                     
                     onChange={(e:React.ChangeEvent<HTMLInputElement>) => setMinPrice(Number(e.target.value))}
-                    type="number" placeholder='Min Price..' className='input w-full' />
+                    type="number" placeholder='Min Price..' className='input w-full dark:bg-gray-800' />
                 <input
                     
                     onChange={(e:React.ChangeEvent<HTMLInputElement>) => setMaxPrice(Number(e.target.value))}
-                    type="number" className='input w-full ' placeholder='Max Price..' />
+                    type="number" className='input w-full dark:bg-gray-800 ' placeholder='Max Price..' />
             </div>
 
         </div>

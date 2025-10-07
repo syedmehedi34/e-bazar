@@ -18,10 +18,7 @@ import Sidebar from './Sidebar'
 import { FaArrowRightFromBracket } from "react-icons/fa6";
 import { toast } from 'react-toastify'
 import DarkMode from '../DarkMode/DarkMode';
-
-
-
-
+import { usePathname } from 'next/navigation';
 
 const Navbar = () => {
   const [scrollY, setScrollY] = useState(0);
@@ -31,9 +28,9 @@ const Navbar = () => {
   const shoppingCart = useSelector((state: RootState) => state.cart.value);
   const [searchBox, setSearchBox] = useState(false)
   const { data: session } = useSession()
-  const dispatch = useDispatch()
+  const pathname = usePathname();
   useEffect(() => {
-  
+
     const handleScrollY = () => setScrollY(window.scrollY);
     window.addEventListener('scroll', handleScrollY);
     return () => window.removeEventListener('scroll', handleScrollY);
@@ -50,17 +47,24 @@ const Navbar = () => {
   }
   const navItems = (
     <>
-      <Link href={'/'} className='text-[15px] font-medium leading-6'>Home</Link>
-      <Link href={'/shopping'} className='text-[15px] font-medium leading-6'>Shop</Link>
-      <Link href={'/about'} className='text-[15px] font-medium leading-6'>About Us</Link>
-      <Link href={'/'} className='text-[15px] font-medium leading-6'>Blog</Link>
+      <Link href={'/'} className='text-[15px] font-medium leading-6 hover:border-b  transition-all duration-300'>Home</Link>
+      <Link href={'/shopping'} className='text-[15px] font-medium leading-6 hover:border-b  transition-all duration-300'>Shop</Link>
+      <Link href={'/about'} className='text-[15px] font-medium leading-6 hover:border-b  transition-all duration-300'>About Us</Link>
+      <Link href={'/'} className='text-[15px] font-medium leading-6 hover:border-b  transition-all duration-300 '>Blog</Link>
 
     </>
   )
 
   return (
     <>
-      <header className={`w-full shadow dark:bg-gray-800 dark:text-white  ${scrollY > 50 ? "fixed-nav bg-white text-black dark:bg-gray-800 relative" : "relative "} `}>
+      <header className={`z-100  ${pathname === "/"
+        ? scrollY > 50
+          ? "fixed-nav bg-white/95 dark:bg-gray-900 dark:text-white  shadow"
+          : "absolute top-0 left-0 bg-transparent text-black dark:text-white w-full"
+        : scrollY > 50
+          ? "fixed-nav bg-white/95 dark:bg-gray-800 dark:text-white shadow"
+          : "bg-white  dark:bg-gray-800 dark:text-white dark:shadow-gray-700  shadow"
+        }`}>
         <div className="container-custom flex items-center justify-between py-4">
           <div className='flex items-center gap-4'>
             {/* Mobile Menu Button */}
@@ -86,12 +90,12 @@ const Navbar = () => {
             </div>
             <div className="relative bg-gray-200 p-2 rounded-full cursor-pointer dark:bg-gray-700 dark:text-white transition-all duration-300">
               <Link href={'/shopping-cart'}><CiShoppingCart size={24} /></Link>
-              <span className='absolute -top-2 -right-0 font-bold'>{shoppingCart?.length || 0}</span>
+              <span className='absolute top-0 right-1 font-bold'>{shoppingCart?.length || 0}</span>
             </div>
-            <div className="relative bg-gray-200 p-2 rounded-full cursor-pointer dark:bg-gray-700 dark:text-white transition-all duration-300">
+            {/* <div className="relative bg-gray-200 p-2 rounded-full cursor-pointer dark:bg-gray-700 dark:text-white transition-all duration-300">
               <Link href={'/cart'}><CiHeart size={24} /></Link>
               <span className='absolute -top-2 -right-0 font-bold'>0</span>
-            </div>
+            </div> */}
             <DarkMode />
 
             {/* Login / Register */}

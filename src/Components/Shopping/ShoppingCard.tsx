@@ -1,8 +1,12 @@
 'use client'
+import { addToCart } from '@/redux/feature/addToCart/addToCart'
+import { RootState } from '@/redux/store'
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 import { BsFillCartCheckFill } from 'react-icons/bs'
+import { useDispatch, useSelector } from 'react-redux'
+import { toast } from 'react-toastify'
 
 interface Products {
     title: string,
@@ -12,13 +16,28 @@ interface Products {
     stock: number,
     images: string[]
     category: string,
-    _id?:string
+    _id: string
 }
+
+
 
 type ProductsProps = {
     products: Products[]
+ 
 }
 const ShoppingCard: React.FC<ProductsProps> = ({ products }) => {
+    const dispatch = useDispatch();
+    const cartItems = useSelector((state: RootState) => state.cart.value);
+    const handledTwoCartItem = (product: Products) => {
+        const exist = cartItems.find((item) => item._id === product._id);
+        if (exist) {
+            toast.info("This item is already in your cart! quantity update");
+        } else {
+            dispatch(addToCart({ ...product, quantity: 1 }));
+            toast.success("Item added to cart!");
+        }
+    };
+
     return (
         <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4  gap-4 '>
             {
@@ -40,14 +59,14 @@ const ShoppingCard: React.FC<ProductsProps> = ({ products }) => {
 
                             <div className="flex justify-between items-center">
                                 <p className="text-xl my-2 font-bold">৳ {product.price}</p>
-                                <p className="text-red-500">{product.rating} </p>
+                                <p className="">{product.rating} </p>
                             </div>
                             <div className="flex items-center justify-between gap-4">
                                 {product.stock && <p>{product.stock} stock</p>}
 
                                 <button
-                                    
-                                    className="text-[12px] p-2 bg-gray-800 rounded-full cursor-pointer hover:bg-red-800 ">
+                                    onClick={()=>handledTwoCartItem(product)}
+                                    className="text-[12px] p-2 bg-gray-800 rounded-full cursor-pointer hover:bg-gray-600 ">
                                     <BsFillCartCheckFill size={14} color="white" />
                                 </button>
                             </div>

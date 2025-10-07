@@ -67,7 +67,7 @@ const ProductForm = () => {
     <div className="min-h-screen flex justify-center items-center py-10 bg-white dark:bg-gray-800 rounded-box">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="w-full max-w-3xl bg-white dark:bg-gray-800 dark:text-white p-8 rounded-2xl shadow-xl space-y-6"
+        className="w-full  bg-white dark:bg-gray-800 dark:text-white p-8 rounded-2xl shadow-xl space-y-6"
       >
         <h2 className="text-3xl font-bold text-gray-800 dark:text-white flex items-center gap-2">
           <PackagePlus className="text-blue-600 dark:text-white" /> Add New Product
@@ -81,7 +81,7 @@ const ProductForm = () => {
           <input
             type="text"
             placeholder="Enter Your Title..."
-            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+            className="w-full input dark:bg-gray-600"
             {...register("title", { required: true })}
           />
         </div>
@@ -92,130 +92,172 @@ const ProductForm = () => {
             Description
           </label>
           <textarea
-            rows={3}
+            rows={5}
             placeholder="Enter Your Description..."
-            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+            className="w-full textarea dark:bg-gray-600 "
             {...register("description", { required: true })}
           />
         </div>
 
         {/* Price & Discount */}
-        <div className="grid grid-cols-2 gap-4">
-          <input
-            type="number"
-            placeholder="Price"
+        <div className="grid lg:grid-cols-3 sm:grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-semibold text-gray-600 dark:text-white mb-1">
+              Price
+            </label>
+            <input
+              type="number"
+              placeholder="Price"
 
-            className="p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-            {...register("price", { required: true })}
-          />
-          <input
-            type="number"
-            placeholder="Discount Price"
-            className="p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-            {...register("discountPrice")}
-          />
-        </div>
+              className="w-full input dark:bg-gray-600"
+              {...register("price", { required: true })}
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-semibold text-gray-600 dark:text-white mb-1">
+              Discount Price
+            </label>
+            <input
+              type="number"
+              placeholder="Discount Price"
+              className="w-full input dark:bg-gray-600"
+              {...register("discountPrice")}
+            />
+          </div>
 
-        {/* Currency */}
-        <div>
-          <label className="block text-sm font-semibold text-gray-600 dark:text-white mb-1">
-            Currency
-          </label>
-          <input
-            type="text"
-            placeholder="BDT"
-            className="w-full p-3 border border-gray-300  rounded-lg focus:ring-2 focus:ring-blue-500"
-            {...register("currency", { required: true })}
-          />
-        </div>
+          {/* Currency */}
+          <div>
+            <label className="block text-sm font-semibold text-gray-600 dark:text-white mb-1">
+              Currency
+            </label>
+            <input
+              type="text"
+              placeholder="BDT"
+              className="w-full input dark:bg-gray-600"
+              {...register("currency", { required: true })}
+            />
+          </div>
 
-        {/* Category & SubCategory */}
-        <div className="grid grid-cols-2 gap-4">
-          <input
-            type="text"
-            placeholder="Category"
-            className="p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-            {...register("category", { required: true })}
-          />
-          <input
-            type="text"
-            placeholder="SubCategory"
-            className="p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-            {...register("subCategory", { required: true })}
-          />
-        </div>
+          {/* Category & SubCategory */}
 
-        {/* Brand & Rating */}
-        <div className="grid grid-cols-2 gap-4">
-          <input
-            type="text"
-            placeholder="Brand"
-            className="p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-            {...register("brand", { required: true })}
-          />
-          <input
-            type="number"
-            step="0.1"
-            placeholder="Rating (0-5)"
-            className="p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-            {...register("rating", { min: 0, max: 5 })}
-          />
-        </div>
+          <div>
+            <label className="block text-sm font-semibold text-gray-600 dark:text-white mb-1">
+              Category
+            </label>
+            <input
+              type="text"
+              placeholder="Category"
+              className="w-full input dark:bg-gray-600"
+              {...register("category", { required: true })}
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-semibold text-gray-600 dark:text-white mb-1">
+              Sub Category
+            </label>
+            <input
+              type="text"
+              placeholder="SubCategory"
+              className="w-full input dark:bg-gray-600"
+              {...register("subCategory", { required: true })}
+            />
+          </div>
+          {/* Brand & Rating */}
 
-        {/* Stock & Featured */}
-        <div className="grid grid-cols-2 gap-4">
-          <input
-            type="number"
-            placeholder="Stock"
-            className="p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-            {...register("stock", { required: true })}
-          />
-          <div className="flex items-center gap-2 border border-gray-300 rounded-lg p-3">
-            <input type="checkbox" {...register("featured")} />
-            <label>Featured</label>
+          <div>
+            <label className="block text-sm font-semibold text-gray-600 dark:text-white mb-1">
+              Brand
+            </label>
+            <input
+              type="text"
+              placeholder="Brand"
+              className="w-full input dark:bg-gray-600"
+              {...register("brand", { required: true })}
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-semibold text-gray-600 dark:text-white mb-1">
+              Rating
+            </label>
+            <input
+              type="number"
+              step="0.1"
+              placeholder="Rating (0-5)"
+              className="w-full input dark:bg-gray-600"
+              {...register("rating", { min: 0, max: 5 })}
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-semibold text-gray-600 dark:text-white mb-1">
+              Stock
+            </label>
+            <input
+              type="number"
+              placeholder="Stock"
+              className="w-full input dark:bg-gray-600"
+              {...register("stock", { required: true })}
+            />
+          </div>
+          {/* Sizes */}
+          <div>
+            <label className="block text-sm font-semibold text-gray-600 dark:text-white mb-1">
+              Sizes (comma separated)
+            </label>
+            <input
+              type="text"
+              placeholder="One Size, M, L"
+              className="w-full input dark:bg-gray-600"
+              {...register("sizes")}
+            />
+          </div>
+
+          {/* Images */}
+          <div>
+            <label className=" text-sm font-semibold text-gray-600 mb-1 dark:text-white flex items-center gap-1">
+              <CiImageOn size={20} />
+              Images (comma separated URLs)
+            </label>
+            <input
+              type="text"
+              placeholder="https://..."
+              className="w-full input dark:bg-gray-600"
+              {...register("images")}
+            />
+          </div>
+
+          {/* Tags */}
+          <div>
+            <label className="dark:text-white text-sm font-semibold text-gray-600 mb-1 flex items-center gap-1">
+              <Tag size={16} /> Tags (comma separated)
+            </label>
+            <input
+              type="text"
+              placeholder="charger, phone, usb-c"
+              className="w-full input dark:bg-gray-600"
+              {...register("tags")}
+            />
           </div>
         </div>
 
-        {/* Sizes */}
-        <div>
-          <label className="block text-sm font-semibold text-gray-600 dark:text-white mb-1">
-            Sizes (comma separated)
-          </label>
-          <input
-            type="text"
-            placeholder="One Size, M, L"
-            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-            {...register("sizes")}
-          />
+
+
+
+        <div className="">
+          <label>Featured</label>
+          <input type="checkbox" {...register("featured")} className=" checkbox dark:bg-gray-600 ml-4" />
+
         </div>
 
-        {/* Images */}
-        <div>
-          <label className=" text-sm font-semibold text-gray-600 mb-1 dark:text-white flex items-center gap-1">
-            <CiImageOn size={24} />
-            Images (comma separated URLs)
-          </label>
-          <input
-            type="text"
-            placeholder="https://..."
-            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-            {...register("images")}
-          />
-        </div>
 
-        {/* Tags */}
-        <div>
-          <label className="dark:text-white text-sm font-semibold text-gray-600 mb-1 flex items-center gap-1">
-            <Tag size={16} /> Tags (comma separated)
-          </label>
-          <input
-            type="text"
-            placeholder="charger, phone, usb-c"
-            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-            {...register("tags")}
-          />
-        </div>
+        {/* Stock & Featured */}
+        <div className="grid grid-cols-2 gap-4">
 
+
+        </div>
+        <div className="grid lg:grid-cols-2  grid-cols-1 gap-4">
+
+        </div>
         {/* Submit */}
         <button
           type="submit"
