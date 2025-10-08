@@ -1,6 +1,7 @@
 'use client'
 
 import Banner from "@/Components/Banner/Banner";
+import Blogs from "@/Components/Blogs/Blogs";
 import Faq from "@/Components/Faq/Faq";
 import Fashion from "@/Components/Footer/Fashion/Fashion";
 import Products from "@/Components/Products/Products";
@@ -14,7 +15,7 @@ export default function Home() {
       <Banner />
       <Fashion />
       <Products />
-      {/* <Offers/> */}
+      <Blogs />
       <Faq />
       <Testimonial />
       <Subscribe />
