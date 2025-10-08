@@ -1,23 +1,27 @@
 "use client"
 import { Blog } from '@/Components/Blogs/blogsInterface';
 import BlogsPageCard from '@/Components/Blogs/BlogsPageCard';
+import Pagination from '@/Components/Pagination/Pagination';
 import axios from 'axios';
 import Image from 'next/image';
 import React, { useCallback, useEffect, useState } from 'react';
 
 const Blogpage = () => {
   const [blogs, setBlogs] = useState<Blog[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [ pageArray, setPageArray] = useState([]);
 
   const getBlogsData = useCallback(async () => {
     try {
-      const res = await axios.get(`http://localhost:5000/blogs`);
+      const res = await axios.get(`http://localhost:5000/blogs?page=${currentPage}`);
       if (res.status === 200) {
-        setBlogs(res?.data);
+        setBlogs(res?.data?.blogs);
+        setPageArray(res?.data?.pageArray)
       }
     } catch (error) {
       console.error((error as Error).message);
     }
-  }, []);
+  }, [currentPage]);
 
   useEffect(() => {
     getBlogsData();
@@ -43,6 +47,8 @@ const Blogpage = () => {
         
           <div className="lg:col-span-3 xl:col-span-4 w-full">
             <BlogsPageCard blogs={blogs} />
+
+            <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} pageArray={pageArray}/>
           </div>
 
  
