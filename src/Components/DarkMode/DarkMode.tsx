@@ -10,8 +10,8 @@ const DarkMode = () => {
         setDarkMode(!darkMode);
     };
     return (
-        <button onClick={handleDarkModeToggle} className='bg-gray-200 p-2 rounded-full cursor-pointer dark:bg-gray-700 dark:text-white transition-all duration-300'>
-            {darkMode ? <MdOutlineWbSunny size={20} /> : <FiMoon size={20} />}
+        <button onClick={handleDarkModeToggle} className='bg-gray-800 sm:p-2 p-1 rounded-full cursor-pointer dark:bg-gray-700 text-white transition-all duration-300'>
+            {darkMode ? <MdOutlineWbSunny size={20} /> : <FiMoon className='text-xl max-sm:text-md' />}
         </button>
     )
 }

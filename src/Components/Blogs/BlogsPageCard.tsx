@@ -23,7 +23,7 @@ const BlogsPageCard: React.FC<BlogsType> = ({ blogs }) => {
     return (
         <div className='dark:text-white'>
             {
-                blogs.map((blog) => {
+                blogs?.map((blog) => {
                     const isExpanded = expanded[blog._id];
                     return (
                         <div key={blog._id} className='shadow  mb-10 rounded-box dark:bg-gray-800'>

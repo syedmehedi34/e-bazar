@@ -11,15 +11,17 @@ const Blogpage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [ pageArray, setPageArray] = useState([]);
 
-  const getBlogsData = useCallback(async () => {
+ const getBlogsData = useCallback(async () => {
     try {
-      const res = await axios.get(`http://localhost:5000/blogs?page=${currentPage}`);
-      if (res.status === 200) {
-        setBlogs(res?.data?.blogs);
-        setPageArray(res?.data?.pageArray)
-      }
+      const res = await fetch(`http://localhost:5000/blogs?page=${currentPage}`, {
+        cache: "no-store",
+      });
+      if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+      const data = await res.json();
+      setBlogs(data.blogs);
+      setPageArray(data.pageArray);
     } catch (error) {
-      console.error((error as Error).message);
+      console.error("Fetch Error:", (error as Error).message);
     }
   }, [currentPage]);
 
@@ -28,8 +30,8 @@ const Blogpage = () => {
   }, [getBlogsData]);
 
   return (
-    <div className="min-h-screen">
-      {/* 🧭 Header Section */}
+    <div className="min-h-screen dark:text-white">
+      
       <nav
         className="bg-cover bg-center bg-no-repeat w-full h-[200px] sm:h-[250px]"
         style={{
@@ -89,10 +91,10 @@ const Blogpage = () => {
               </ul>
             </div>
 
-            {/* 🆕 Latest Blogs */}
+            🆕 Latest Blogs
             <div className="p-4 bg-white shadow dark:bg-gray-800 dark:text-white rounded-box mb-6">
               <h2 className="mb-4 text-lg sm:text-xl font-bold border-b pb-2">Latest Blogs</h2>
-              {blogs.slice(0, 5).map((blog) => (
+              {blogs?.slice(3, 6).map((blog) => (
                 <div key={blog._id} className="flex gap-3 mb-4 items-start">
                   <Image
                     src={blog.image}

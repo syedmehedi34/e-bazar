@@ -27,6 +27,7 @@ const Products = () => {
         const res = await fetch("http://localhost:5000/get-random-products", {
           cache: "no-store"
         });
+        
         const data: Product[] = await res.json();
         setProducts(data);
       } catch (error) {

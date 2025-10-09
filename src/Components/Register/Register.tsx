@@ -10,6 +10,7 @@ import axios, { AxiosError } from 'axios';
 import Swal from 'sweetalert2'
 import { FcGoogle } from 'react-icons/fc';
 import Logo from '../Logo/Logo';
+import { toast } from 'react-toastify';
 
 interface RegisterProps { onClose: () => void; isOpen: boolean }
 const Register: React.FC<RegisterProps> = ({ onClose ,isOpen}) => {
@@ -49,10 +50,7 @@ const Register: React.FC<RegisterProps> = ({ onClose ,isOpen}) => {
             }
         } catch (error) {
             const err = error as AxiosError<{ message: string }>;
-            Swal.fire({
-                icon: "error",
-                title: err.response?.data?.message || "Something went wrong",
-            });
+            toast.error(err.response?.data?.message)
         } finally {
             setLoading(false);
         }

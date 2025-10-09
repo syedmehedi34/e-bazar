@@ -4,15 +4,16 @@ import Image from 'next/image'
 import { CiCalendarDate } from "react-icons/ci";
 import { CgProfile } from "react-icons/cg";
 type BlogsType = {
-    blogs: Blog[]
+    blogs?: Blog[]
 }
 
 
 const BlogCard: React.FC<BlogsType> = ({ blogs }) => {
+    console.log("blogs " , blogs)
     return (
-        <div className='grid lg:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-4'>
+        <div className='grid grid-cols-1 lg:grid-cols-4 md:grid-cols-2 gap-4'>
             {
-                blogs.slice(0, 4).map((blog) => {
+                blogs?.slice(0, 4).map((blog) => {
                     return (
                         <div className='shadow-md p-2 bg-white dark:bg-gray-800 dark:text-white rounded-box'>
                             <div className='overflow-hidden'>

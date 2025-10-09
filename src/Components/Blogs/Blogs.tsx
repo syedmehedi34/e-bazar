@@ -9,10 +9,10 @@ const Blogs = () => {
     const [blogs, setBlogs] = useState([]);
     const getBlogsData = useCallback(async () => {
         try {
-            const res = await axios.get(`http://localhost:5000/blogs`);
-            if (res.status === 200) {
-                setBlogs(res?.data)
-            }
+            const res = await fetch(`http://localhost:5000/blogs`, {cache:"no-store"});
+            const data = await res.json();
+            setBlogs(data.blogs)
+          
         } catch (error) {
             console.error((error as Error).message);
         }
@@ -20,7 +20,7 @@ const Blogs = () => {
 
     useEffect(() => {
         getBlogsData();
-    }, []);
+    }, [getBlogsData]);
  
     return (
         <div className='py-16'>

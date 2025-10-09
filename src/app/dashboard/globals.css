@@ -37,7 +37,7 @@ body{
   animation: slideDown 3s ease-out forwards; 
 
   z-index: 90;
-  color: #fff !important;
+
 }
 
 @keyframes slideDown {
@@ -65,9 +65,9 @@ body{
 }
 
 @media (max-width:1024) {
-  .clip-path{
-  clip-path: polygon(24.75% 0%, 100% 0%, 99.5% 100%, 24.75% 100%);
-  }
+ .clip-path {
+ clip-path: polygon(40% 0%, 100% 0%, 100% 100%, 0% 100%);
+}
 }
 .container-custom {
   @apply w-full max-w-[1280px] mx-auto px-4;

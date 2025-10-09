@@ -2,6 +2,7 @@
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay } from 'swiper/modules';
 import Button from '../Button/Button';
+import { motion } from 'framer-motion';
 
 
 const slides = [
@@ -42,10 +43,15 @@ const slides = [
 
 const Banner = () => {
   return (
-    <div className="relative h-[80vh] md:h-[100vh] lg:h-[80vh] xl:h-[100vh] border-b-2 dark:border-gray-600 border-gray-200 bg-white dark:bg-gray-900">
+    <div className="relative h-[80vh] md:h-[100vh] lg:h-[80vh] xl:h-[100vh] border-b-2 dark:border-gray-600 border-gray-200  dark:bg-gray-900">
       <div className='absolute inset-0 w-full h-full clip-path  bg-gray-600 dark:bg-gray-700'></div>
       <Swiper
         modules={[Autoplay]}
+        autoplay={{
+          delay:3000,
+          disableOnInteraction:false
+        }}
+        
         effect="fade"
         speed={2000}
         loop
@@ -65,15 +71,15 @@ const Banner = () => {
                   className="absolute inset-0 bg-cover bg-center"
                   style={{ backgroundImage: `url(${slide.mobileImg})` }}
                 />
-                <div className="absolute inset-0 bg-black/40" /> {/* overlay */}
+                <div className="absolute inset-0 bg-black/30" /> {/* overlay */}
               </div>
 
               {/* Content */}
               <div
-                className={`container-custom `}
+                className={`container-custom  `}
               >
                 <div
-                  className={`relative z-10 space-y-4 lg:text-black text-white text-center lg:text-start max-w-2xl ${
+                  className={`relative z-10 space-y-4 lg:text-black text-white text-center lg:text-start lg:max-w-2xl ${
                     slide.content.align === 'right' ? 'text-right px-6' : ''
                   }`}
                 >
@@ -81,7 +87,8 @@ const Banner = () => {
                   <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold tracking-wide dark:text-white">
                     {slide.content.title}
                   </h2>
-                  <p className="text-sm sm:text-base md:text-lg leading-6 tracking-wide dark:text-white">
+                  <p
+                  className="text-sm sm:text-base md:text-lg leading-6 tracking-wide dark:text-white">
                     {slide.content.desc}
                   </p>
                   <div className={slide.content.align === 'right' ? 'flex justify-end' : ''}>

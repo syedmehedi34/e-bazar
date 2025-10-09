@@ -14,13 +14,22 @@ const persistConfig = {
 // persisted reducer
 const persistedCartReducer = persistReducer(persistConfig, addToCartReducer)
 
-// ✅ store object (function না)
 const store = configureStore({
   reducer: {
     todo: todoSlice,
     cart: persistedCartReducer,
     orderSummary: orderSlice,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [
+          'persist/PERSIST',
+          'persist/REHYDRATE',
+          'persist/REGISTER',
+        ],
+      },
+    }),
 })
 
 export const persistor = persistStore(store)

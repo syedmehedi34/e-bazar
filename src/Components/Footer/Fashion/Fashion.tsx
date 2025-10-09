@@ -14,13 +14,11 @@ const Fashion = () => {
     return (
         <div className="py-16">
             <div className="container-custom">
-
-
-                <div className="flex flex-wrap gap-6 justify-between">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 content-center items-center">
                     {categories.map((cat, index) => (
                         <div
                             key={index}
-                            className="relative group w-full sm:w-92 h-64 sm:h-96 overflow-hidden rounded-lg shadow-lg cursor-pointer"
+                            className="relative group w-full h-92 overflow-hidden rounded-lg shadow-lg cursor-pointer"
                         >
                             <Image
                                 width={100}
