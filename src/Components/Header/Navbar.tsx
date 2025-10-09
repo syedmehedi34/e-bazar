@@ -47,10 +47,10 @@ const Navbar = () => {
   }
   const navItems = (
     <>
-      <Link href={'/'} className='text-[15px] font-medium leading-6 hover:border-b  transition-all duration-300'>Home</Link>
-      <Link href={'/shopping'} className='text-[15px] font-medium leading-6 hover:border-b  transition-all duration-300'>Shop</Link>
-      <Link href={'/about'} className='text-[15px] font-medium leading-6 hover:border-b  transition-all duration-300'>About Us</Link>
-      <Link href={'/blogs'} className='text-[15px] font-medium leading-6 hover:border-b  transition-all duration-300 '>Blog</Link>
+      <Link href={'/'} className='text-[15px] font-medium leading-6   transition-all duration-300'>Home</Link>
+      <Link href={'/shopping'} className='text-[15px] font-medium leading-6   transition-all duration-300'>Shop</Link>
+      <Link href={'/about'} className='text-[15px] font-medium leading-6   transition-all duration-300'>About Us</Link>
+      <Link href={'/blogs'} className='text-[15px] font-medium leading-6  transition-all duration-300 '>Blog</Link>
 
     </>
   )

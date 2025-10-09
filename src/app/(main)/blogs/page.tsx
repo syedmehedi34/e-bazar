@@ -47,14 +47,14 @@ const Blogpage = () => {
       <div className="container-custom py-8 px-3 sm:px-5 md:px-0">
         <div className="grid grid-cols-1 lg:grid-cols-6 gap-6">
 
-          <div className="lg:col-span-3 xl:col-span-4 w-full">
+          <div className="lg:col-span-4 w-full">
             <BlogsPageCard blogs={blogs} />
 
             <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} pageArray={pageArray} />
           </div>
 
 
-          <aside className="lg:col-span-0 xl:col-span-2 w-full">
+          <aside className="lg:col-span-2 w-full">
             {/* 🔍 Search */}
             <div className="mb-6">
               <label className="relative block">
