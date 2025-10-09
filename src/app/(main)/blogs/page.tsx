@@ -9,9 +9,9 @@ import React, { useCallback, useEffect, useState } from 'react';
 const Blogpage = () => {
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [ pageArray, setPageArray] = useState([]);
+  const [pageArray, setPageArray] = useState([]);
 
- const getBlogsData = useCallback(async () => {
+  const getBlogsData = useCallback(async () => {
     try {
       const res = await fetch(`http://localhost:5000/blogs?page=${currentPage}`, {
         cache: "no-store",
@@ -31,7 +31,7 @@ const Blogpage = () => {
 
   return (
     <div className="min-h-screen dark:text-white">
-      
+
       <nav
         className="bg-cover bg-center bg-no-repeat w-full h-[200px] sm:h-[250px]"
         style={{
@@ -45,16 +45,16 @@ const Blogpage = () => {
 
 
       <div className="container-custom py-8 px-3 sm:px-5 md:px-0">
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
-        
+        <div className="grid grid-cols-1 lg:grid-cols-6 gap-6">
+
           <div className="lg:col-span-3 xl:col-span-4 w-full">
             <BlogsPageCard blogs={blogs} />
 
-            <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} pageArray={pageArray}/>
+            <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} pageArray={pageArray} />
           </div>
 
- 
-          <aside className="lg:col-span-2 xl:col-span-1 w-full">
+
+          <aside className="lg:col-span-0 xl:col-span-2 w-full">
             {/* 🔍 Search */}
             <div className="mb-6">
               <label className="relative block">
@@ -79,7 +79,7 @@ const Blogpage = () => {
               </label>
             </div>
 
-  
+
             <div className="p-4 bg-white shadow dark:bg-gray-800 dark:text-white rounded-box mb-6">
               <h2 className="text-lg sm:text-xl font-bold mb-3 border-b pb-2">Fashion Categories</h2>
               <ul className="space-y-2 text-sm sm:text-base">
@@ -94,7 +94,7 @@ const Blogpage = () => {
             🆕 Latest Blogs
             <div className="p-4 bg-white shadow dark:bg-gray-800 dark:text-white rounded-box mb-6">
               <h2 className="mb-4 text-lg sm:text-xl font-bold border-b pb-2">Latest Blogs</h2>
-              {blogs?.slice(3, 6).map((blog) => (
+              {blogs?.slice(0, 6).map((blog) => (
                 <div key={blog._id} className="flex gap-3 mb-4 items-start">
                   <Image
                     src={blog.image}
@@ -103,7 +103,10 @@ const Blogpage = () => {
                     alt={blog.title}
                     className="w-20 h-20 object-cover rounded-md"
                   />
-                  <p className="text-sm sm:text-base line-clamp-3">{blog.shortDescription}</p>
+                  <div>
+                    <p className="text-sm sm:text-base line-clamp-2">{blog.shortDescription}</p>
+                    <button className='text-xs my-1 p-x-2 bg-gray-200 p-1 rounded-box dark:bg-gray-700 dark:text-white cursor-pointer'>See More</button>
+                  </div>
                 </div>
               ))}
             </div>
