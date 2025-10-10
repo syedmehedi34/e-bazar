@@ -114,7 +114,7 @@ const PaymentProcess = () => {
 
 
     return (
-        <div className='min-h-screen bg-gray-200 py-8 rubik'>
+        <div className='min-h-screen bg-gray-200 dark:bg-gray-950 py-8 rubik'>
             <div className='container-custom mx-auto'>
                 <div className='mb-6'>
                     <BackButton />
@@ -122,7 +122,7 @@ const PaymentProcess = () => {
 
                 <div className='grid grid-cols-1 lg:grid-cols-3 gap-6'>
                     {/* Billing Form */}
-                    <div className='col-span-2 bg-white rounded-lg shadow p-6 relative'>
+                    <div className='col-span-2 bg-white dark:bg-gray-900 dark:text-white rounded-lg shadow p-6 relative'>
                         <h2 className="text-2xl font-semibold mb-6">Order Summary</h2>
                         <form className='grid grid-cols-1  lg:grid-cols-2 gap-4  '>
                             <div>
@@ -131,7 +131,7 @@ const PaymentProcess = () => {
                                     type="text"
                                     id="name"
                                     placeholder="Enter Your Name.."
-                                    className='input input-bordered w-full'
+                                    className='input input-bordered w-full dark:bg-gray-700'
 
                                     value={session?.user?.email}
                                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
@@ -144,7 +144,7 @@ const PaymentProcess = () => {
                                     type="text"
                                     id="phone"
                                     placeholder="+8801XXXXXXXXX"
-                                    className='input input-bordered w-full'
+                                    className='input input-bordered w-full dark:bg-gray-700'
                                     value={formData.phone}
                                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                                 />
@@ -156,7 +156,7 @@ const PaymentProcess = () => {
                                     type="email"
                                     id="email"
                                     placeholder="example@mail.com"
-                                    className='input input-bordered w-full'
+                                    className='input input-bordered w-full dark:bg-gray-700'
                                     value={session?.user?.email}
                                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                                 />
@@ -168,7 +168,7 @@ const PaymentProcess = () => {
                                     type="text"
                                     id="address"
                                     placeholder="123 Main St, City"
-                                    className='input input-bordered w-full'
+                                    className='input input-bordered w-full dark:bg-gray-700'
                                     value={formData.address}
                                     onChange={(e) => setFormData({ ...formData, address: e.target.value })}
                                 />
@@ -180,7 +180,7 @@ const PaymentProcess = () => {
                                     type="text"
                                     id="deliveryAddress"
                                     placeholder="Apartment, Street, City"
-                                    className='input input-bordered w-full'
+                                    className='input input-bordered w-full dark:bg-gray-700'
                                     value={formData.deliveryAddress}
                                     onChange={(e) => setFormData({ ...formData, deliveryAddress: e.target.value })}
                                 />
@@ -192,7 +192,7 @@ const PaymentProcess = () => {
                                     type="text"
                                     id="note"
                                     placeholder="Any special instructions?"
-                                    className='input input-bordered w-full'
+                                    className='input input-bordered w-full dark:bg-gray-700'
                                     value={formData.note}
                                     onChange={(e) => setFormData({ ...formData, note: e.target.value })}
                                 />
@@ -206,29 +206,29 @@ const PaymentProcess = () => {
 
                             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
                                 {/* Card Payment */}
-                                <label className="flex items-center gap-2 cursor-pointer  border border-gray-300 p-3 rounded-lg shadow-sm hover:shadow-md transition">
+                                <label className="flex items-center gap-2 cursor-pointer  border border-gray-300 p-3 rounded-lg shadow-sm hover:shadow-md transition dark:bg-gray-900 ">
                                     <input
                                         onChange={() => setPaymentMethod("card")}
                                         type="radio"
                                         name="payment"
-                                        className="radio"
+                                        className="radio "
                                     />
                                     <FaRegCreditCard className="text-blue-600 text-xl" />
-                                    <span className="text-gray-700 font-medium">
+                                    <span className="text-gray-700 dark:text-white font-medium">
                                         Credit / Debit Card
                                     </span>
                                 </label>
 
                                 {/* Cash Payment */}
-                                <label className="flex items-center gap-2 cursor-pointer border border-gray-300 p-3 rounded-lg shadow-sm hover:shadow-md transition">
+                                <label className="flex items-center gap-2 cursor-pointer border border-gray-300 p-3 rounded-lg shadow-sm hover:shadow-md transition dark:bg-gray-900 ">
                                     <input
                                         onChange={() => setPaymentMethod("cash")}
                                         type="radio"
                                         name="payment"
-                                        className="radio"
+                                        className="radio "
                                     />
                                     <MdOutlineLocalAtm className="text-green-600 text-xl" />
-                                    <span className="text-gray-700 font-medium">
+                                    <span className="text-gray-700 dark:text-white font-medium">
                                         Cash on Delivery
                                     </span>
                                 </label>
@@ -241,7 +241,7 @@ const PaymentProcess = () => {
                     </div>
 
                     {/* Product Summary */}
-                    <div className="col-span-1 bg-white rounded-lg shadow p-6 ">
+                    <div className="col-span-1 bg-white dark:bg-gray-900 dark:text-white rounded-lg shadow p-6 ">
                         <h3 className="text-xl font-semibold ">Product Details</h3>
                         {
                             !products ? (<p>No product details available.</p>
@@ -258,12 +258,12 @@ const PaymentProcess = () => {
                                     </figure>
                                     <div className='flex flex-col gap-2'>
                                         <p className='font-semibold text-lg'>{products.productName}</p>
-                                        <p className='text-gray-600'>Brand: {products.productBrand}</p>
-                                        <p className='text-gray-600'>Category: {products.productCategory}</p>
-                                        <p className='text-gray-600 '>Sizes: {products.productSizes}</p>
-                                        <p className='text-gray-600'>Quantity: {products.quantity}</p>
-                                        <p className='text-gray-600'>Delivery Charge: <strong>৳ 100</strong></p>
-                                        <p className='text-gray-800 font-bold'>Total: ৳ {products.totalPrice}</p>
+                                        <p className='text-gray-600 dark:text-gray-100 '>Brand: {products.productBrand}</p>
+                                        <p className='text-gray-600 dark:text-gray-100 '>Category: {products.productCategory}</p>
+                                        <p className='text-gray-600 dark:text-gray-100  '>Sizes: {products.productSizes}</p>
+                                        <p className='text-gray-600 dark:text-gray-100 '>Quantity: {products.quantity}</p>
+                                        <p className='text-gray- dark:text-gray-100 '>Delivery Charge: <strong>৳ 100</strong></p>
+                                        <p className='text-gray-800 dark:text-gray-100  font-bold'>Total: ৳ {products.totalPrice}</p>
                                         <p>Estimated Delivery Date: <span className='font-semibold'>{deliveryDate}</span></p>
                                     </div>
                                 </div>

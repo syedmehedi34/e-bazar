@@ -7,6 +7,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
 import { useDeliveryDate } from '@/hook/useDeliveryDate/useDeliveryDate';
+import { color } from 'framer-motion';
 
 interface ProductDetails {
   totalPrice: number;
@@ -158,7 +159,7 @@ const Payment: React.FC<PaymentProps> = ({ onClose, products, formData }) => {
     <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50">
       <form
         onSubmit={handlePayment}
-        className="w-[400px] bg-white p-6 rounded-2xl shadow-xl relative border border-gray-200"
+        className="w-[400px] bg-white dark:bg-gray-800 dark:border-gray-600 dark:text-white p-6 rounded-2xl shadow-xl relative border border-gray-200"
       >
         {/* Close Button */}
         <button
@@ -170,20 +171,22 @@ const Payment: React.FC<PaymentProps> = ({ onClose, products, formData }) => {
         </button>
 
         {/* Title */}
-        <h2 className="text-2xl font-bold text-black mb-6 text-center">
+        <h2 className="text-2xl font-bold text-black dark:text-white mb-6 text-center">
           Payment By Card
         </h2>
 
         {/* Card Input */}
-        <div className="p-3 border border-gray-300 rounded-lg mb-4 bg-gray-50">
+        <div className="p-3 border border-gray-300 rounded-lg mb-4 bg-gray-50  ">
           <CardElement
-            options={{
+            
+            options={{ 
               style: {
                 base: {
                   fontSize: "16px",
                   color: "#000", 
                   fontFamily: "Rubik, sans-serif",
-                  "::placeholder": { color: "#555" }, 
+                  "::placeholder": {color:"#555"},
+                 
                 },
                 invalid: { color: "#e53935" }, 
               },

@@ -153,7 +153,7 @@ const CheckoutDetails: React.FC<CheckoutDetailsProps> = ({ products, selectedIma
                                     [...prev, s]
                                 )}
                                 key={s}
-                                className={`py-2 px-3 ${selectedSize.includes(s)? "bg-black text-white" : ""} h-10 flex justify-center items-center shadow shadow-gray-400 rounded-box hover:cursor-pointer`}
+                                className={`py-2 px-3 ${selectedSize.includes(s)? "bg-black dark:bg-gray-600 text-white" : ""} h-10 flex justify-center items-center shadow shadow-gray-400 rounded-box hover:cursor-pointer`}
                             >
                                 {s}
                             </span>
