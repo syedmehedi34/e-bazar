@@ -3,7 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useDispatch, useSelector } from 'react-redux';
 import { MdDeleteForever } from "react-icons/md";
-import { decrementQuantity, incrementQuantity,  removeAllFromCart, removeFromCart } from '@/redux/feature/addToCart/addToCart';
+import { decrementQuantity, incrementQuantity, removeAllFromCart, removeFromCart } from '@/redux/feature/addToCart/addToCart';
 import Button from '@/Components/Button/Button';
 import { MdArrowRightAlt } from "react-icons/md";
 import { RootState } from '@/redux/store';
@@ -82,18 +82,11 @@ const ShoppingCart = () => {
   return (
     <div className='min-h-screen bg-gray-200 dark:bg-gray-900 dark:text-white'>
       <div className=''>
-        <div className='min-h-[24vh] flex justify-center items-center flex-col gap-2 bg-gray-100 dark:bg-gray-900 rubik'>
-          <p className='md:text-4xl text-2xl font-bold tracking-wide'> Your Shopping Cart</p>
-          <div className="flex items-center justify-center gap-4 my-4">
-            {/* Back Button */}
-            <BackButton />
-
-            {/* Shop Link */}
-            <Link href="/shopping" className="btn btn-sm text-sm">
-              → Shop
-            </Link>
-          </div>
-        </div>
+      
+        <nav className='bg-cover w-full h-[200px]' style={{ backgroundImage: `url("https://preview.colorlib.com/theme/cozastore/images/bg-01.jpg.webp")` }}>
+          <h2 className='flex justify-center flex-col gap-4 items-center h-full text-2xl font-bold text-white tracking-wide'>Your Shopping Cart  <BackButton /> </h2>
+           
+        </nav>
         <div className='container-custom my-10'>
 
           {

@@ -25,8 +25,8 @@ const SearchInput: React.FC<PageProps> = ({ setSearchBox, searchBox }) => {
         exit={{ scale: 0, }}
         transition={{ duration: 0.3 }}
         className="fixed top-0 w-full bg-black/70 flex justify-center items-center py-20 px-10 overflow-hidden z-100">
-            <button onClick={() => setSearchBox(!searchBox)} className='absolute top-4 right-4 cursor-pointer'>
-                <IoClose size={30} color='black' />
+            <button onClick={() => setSearchBox(!searchBox)} className='absolute top-4 right-4 cursor-pointer text-white'>
+                <IoClose size={30}  />
             </button> 
             <form onSubmit={handleFormSubmit} className='w-full max-w-full sm:max-w-xl'>
                 <label className="relative ">

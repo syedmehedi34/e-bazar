@@ -32,15 +32,8 @@ const Blogpage = () => {
   return (
     <div className="min-h-screen dark:text-white">
 
-      <nav
-        className="bg-cover bg-center bg-no-repeat w-full h-[200px] sm:h-[250px]"
-        style={{
-          backgroundImage: `url('https://preview.colorlib.com/theme/cozastore/images/bg-02.jpg.webp')`,
-        }}
-      >
-        <div className="h-full w-full bg-black/30 flex items-center justify-center">
-          <h1 className="text-white text-3xl sm:text-4xl md:text-5xl font-bold">Our Blog</h1>
-        </div>
+      <nav className='bg-cover w-full h-[200px]' style={{ backgroundImage: `url("https://preview.colorlib.com/theme/cozastore/images/bg-01.jpg.webp")` }}>
+        <h2 className='flex justify-center items-center h-full text-2xl font-bold text-white tracking-wide'>Blogs</h2>
       </nav>
 
 

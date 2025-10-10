@@ -81,7 +81,9 @@ const Shopping = () => {
 
     return (
         <div className='min-h-screen relative dark:text-white'>
-
+            <nav className='bg-cover w-full h-[200px]' style={{ backgroundImage: `url("https://preview.colorlib.com/theme/cozastore/images/bg-01.jpg.webp")` }}>
+                <h2 className='flex justify-center items-center h-full text-2xl font-bold text-white tracking-wide'>Shopping</h2>
+            </nav>
             <div className='container-custom'>
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-5 py-6 ">
                     {/* Left side links */}
@@ -105,7 +107,7 @@ const Shopping = () => {
                         <Pricerange setMinPrice={setMinPrice} setMaxPrice={setMaxPrice} />
 
                         <button onClick={handleReset} className='btn btn-block dark:bg-gray-800 dark:text-white dark:border-gray-600 mt-4'>Reset Filter</button>
- 
+
                     </div>
                     <div className='lg:col-span-4 min-h-screen '>
                         {
