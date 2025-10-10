@@ -104,7 +104,7 @@ const Testimonial = () => {
         >
           {testimonials.map((t, index) => (
             <SwiperSlide key={index}>
-              <div className="card  shadow-md hover:shadow-md  py-5 px-2 rubik h-full my-10 hover:shadow-gray-800 hover:scale-105 transition-all duration-300 cursor-pointer dark:text-white dark:bg-gray-800">
+              <div className="card  shadow-md hover:shadow-md p-10 rubik  my-10  hover:scale-105 transition-all duration-300 cursor-pointer dark:text-white dark:bg-gray-800 h-[250px]">
                 <div className="flex items-center gap-3 mb-3 ">
                   <Image src={t.image}
                     alt={t.name}
@@ -118,10 +118,10 @@ const Testimonial = () => {
                     <p className="text-xs text-gray-600 dark:text-white">{t.date}</p>
                   </div>
                 </div>
-                <p className="text-sm text-gray-800 mb-2 line-clamp-2 dark:text-white">{t.description}</p>
+                <p className="text-sm text-gray-800 mb-2 line-clamp-3 dark:text-white">{t.description}</p>
                 <div className="flex">
                   {Array.from({ length: t.rating }).map((_, i) => (
-                    <span key={i} className="text-gray-800 dark:text-white">
+                    <span key={i} className="text-yellow-600 dark:text-white">
                       ★
                     </span>
                   ))}

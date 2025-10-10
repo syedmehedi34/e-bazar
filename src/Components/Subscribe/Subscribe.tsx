@@ -1,71 +1,60 @@
-"use client"
-import Image from "next/image";
+"use client";
 import React, { useState } from "react";
-import Button from "../Button/Button";
+import Image from "next/image";
 import Swal from "sweetalert2";
-
+import Button from "../Button/Button";
 
 const Subscribe = () => {
-    const [email, setEmail] = useState('');
+  const [email, setEmail] = useState("");
 
-    const handleSubscribe = () =>{
-       if(email){
-            Swal.fire({
-                icon:"success",
-                title:`Thanks You Subscribe! `,
-                text:`${email}`
-            })
-
-            setEmail('')
-       }
+  const handleSubscribe = () => {
+    if (email) {
+      Swal.fire({
+        icon: "success",
+        title: "Thank You for Subscribing!",
+        text: `${email}`,
+        confirmButtonColor: "#2563eb",
+      });
+      setEmail("");
     }
+  };
+
   return (
-    <div className="py-16 ">
-      <div className="container-custom">
-        <div className="flex flex-col-reverse md:flex-row justify-between items-center gap-10 md:gap-16 shadow-md  p-5 rubik">
-          {/* Left Content */}
-          <div className="text-center md:text-left space-y-4 md:space-y-6 max-w-lg">
-            <h3 className="text-lg font-medium ">
-              Subscribe and get
-            </h3>
-            <h4 className="text-4xl md:text-5xl font-bold text-gray-800">
-              20% Off
-            </h4>
-            <p className="text-gray-600 text-sm md:text-base">
-              Get 20% discount on all products by subscribing to our newsletter.
-            </p>
+    <section className="relative py-16 overflow-hidden">
+      {/* Background Image */}
+  
 
-            {/* Email Form */}
-            <form className="mt-4">
-              <div className="flex items-center flex-col sm:flex-row gap-3">
-                <input
-                  type="email"
-                  name="email"
-                  onChange={(e)=>setEmail(e.target.value)}
-                  placeholder="mail@site.com"
-                  required
-                  value={email}
-                  className=" bg-gray-100  input-bordered w-full sm:w-auto flex-1 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-gray-500"
-                />
-                <Button text={"Join"} type={"button"} action={handleSubscribe}/>
-              </div>
-            </form>
-          </div>
+      <div className="container-custom dark:bg-gray-800 bg-gray-100 shadow dark:text-white p-5 relative z-10 flex flex-col items-center justify-center text-center space-y-5 px-4 rubik">
+        <h3 className="text-xl md:text-2xl font-semibold text-gray-800 dark:text-white flex flex-col sm:flex-row items-center gap-2">
+          Subscribe and get{" "}
+          <span className="text-3xl font-extrabold text-yellow-600">
+            20% Off
+          </span>
+        </h3>
 
-          {/* Right Image */}
-          <div className="flex justify-center md:justify-end w-full max-w-md relative z-20">
-            <div className="w-72 h-72 rounded-full bg-gray-400 absolute top-[50%] translate-y-[-50%] left-[50%] translate-x-[-50%] z-[-1] blur-lg animate-pulse"></div>
-            <Image
-              src="https://i.postimg.cc/Z5LkCz7X/portrait-afro-american-couple.png"
-              width={300}
-              height={300}
-              alt="subscribe products images"
-              className="w-full h-[300px] object-contain rounded-lg "
-            />
-          </div>
-        </div>
+        <p className="text-gray-600 dark:text-white text-sm md:text-base max-w-lg">
+          Get an exclusive 20% discount on all products by subscribing to our
+          newsletter. Stay updated with the latest offers and trends.
+        </p>
+
+        {/* Email Form */}
+        <form
+          onSubmit={(e) => e.preventDefault()}
+          className="mt-4 flex flex-col sm:flex-row items-center gap-3 w-full max-w-md"
+        >
+          <input
+            type="email"
+            name="email"
+            onChange={(e) => setEmail(e.target.value)}
+            value={email}
+            placeholder="Enter your email"
+            required
+            className="w-full flex-1 px-4 py-3 rounded-lg border border-gray-300 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-500 shadow-sm"
+          />
+          <button className="dark:bg-gray-600 py-3 bg-gray-900 text-white rounded-box px-4 cursor-pointer">Join</button>
+        </form>
       </div>
-    </div>
+    </section>
   );
 };
 
