@@ -3,17 +3,20 @@ import React, { useState } from 'react'
 import { AiOutlineMail } from "react-icons/ai";
 import { CiLocationOn } from "react-icons/ci";
 import { PiPhoneThin } from "react-icons/pi";
+import { toast } from 'react-toastify';
 interface FormData {
     fastName: string,
     lastName: string,
-    email: string
+    email: string,
+    message: string
 
 }
 const ContactPage = () => {
     const [formData, setFormData] = useState<FormData>({
         fastName: '',
         lastName: "",
-        email: ""
+        email: "",
+        message:'',
     })
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -22,7 +25,18 @@ const ContactPage = () => {
     }
     const handleSubmit = (e: React.FormEvent<HTMLElement>) => {
         e.preventDefault();
-        console.log(formData)
+        if (!formData.fastName || !formData.lastName || !formData.email || !formData.message) {
+            return toast.error("Please fill in all fields!");
+        }
+        if (formData.fastName || formData.email || formData.lastName || formData.message) {
+            toast.success("Your Message Send Successfully!");
+            setFormData({
+                fastName: '',
+                lastName: "",
+                email: "",
+                message:''
+            })
+        }
     }
 
 
@@ -71,6 +85,9 @@ const ContactPage = () => {
                         <div className='mb-6'>
                             <textarea
                                 rows={8}
+                                name='message'
+                                value={formData.message}
+                                onChange={handleChange}
                                 placeholder="Write Your Message..."
                                 className="w-full  p-2 border rounded-sm border-gray-300 dark:border-gray-600  py-3 dark:bg-gray-800 dark:text-white"
                             />
