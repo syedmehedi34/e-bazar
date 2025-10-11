@@ -2,9 +2,6 @@
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay } from 'swiper/modules';
 import Button from '../Button/Button';
-import { motion } from 'framer-motion';
-
-
 const slides = [
   {
     desktopImg: 'https://i.postimg.cc/qBxrBpzt/hero-1-2.png',

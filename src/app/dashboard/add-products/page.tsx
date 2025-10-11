@@ -46,7 +46,8 @@ const ProductForm = () => {
 
       const res = await axios.post(
         "http://localhost:5000/admin/add-products",
-        payload
+        payload,
+        {withCredentials:true}
       );
       if (res.status === 200) {
         Swal.fire({

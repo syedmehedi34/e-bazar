@@ -15,6 +15,7 @@ import { Order } from "@/lib/orders";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useReactToPrint } from "react-to-print";
+
 interface Summary {
     totalOrders: number;
     totalPaid: number;
@@ -44,15 +45,10 @@ const MyOrdersPage = () => {
         try {
             setLoading(true);
             const res = await axios.get(
-                `http://localhost:5000/user-orders?email=${session.user.email}&page=${currentPage}`, {
-                headers: {
-                    'Cache-Control': 'no-cache',
-                    'Pragma': 'no-cache',
-                    'Expires': '0',
-                },
-            }
+                `http://localhost:5000/user-orders?email=${session.user.email}&page=${currentPage}`, 
+                {withCredentials:true}
             );
-            (res)
+            
             setOrders(res?.data?.orders || []);
             setSummary(res?.data?.summary);
             setPageArray(res?.data?.pageArray)
@@ -100,13 +96,13 @@ const MyOrdersPage = () => {
             if (result.isConfirmed) {
                 try {
 
-                    const res = await axios.delete(`http://localhost:5000/user/order/${id}`);
+                    const res = await axios.delete(`http://localhost:5000/user/order/${id}`,{withCredentials:true});
                     if (res.status === 200) {
                         toast.success("Your order has been cancel.");
                         getOrder();
                     }
                 } catch (error) {
-                    Swal.fire("Error!", "Something went wrong while cancel.", "error");
+                    toast.error((error as Error).message)
                 }
             }
         });

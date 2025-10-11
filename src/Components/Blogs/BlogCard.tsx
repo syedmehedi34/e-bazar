@@ -15,7 +15,7 @@ const BlogCard: React.FC<BlogsType> = ({ blogs }) => {
             {
                 blogs?.slice(0, 4).map((blog) => {
                     return (
-                        <div className='shadow-md p-2 bg-white dark:bg-gray-800 dark:text-white rounded-box'>
+                        <div key={blog._id} className='shadow-md p-2 bg-white dark:bg-gray-800 dark:text-white rounded-box'>
                             <div className='overflow-hidden'>
                                 <Image
                                     src={blog.image}

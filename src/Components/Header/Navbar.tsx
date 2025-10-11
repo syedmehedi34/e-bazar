@@ -2,11 +2,11 @@
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 import Logo from '../Logo/Logo'
-import { CiShoppingCart, CiHeart } from "react-icons/ci";
+import { CiShoppingCart } from "react-icons/ci";
 import { User, ShoppingCart, Box, LifeBuoy, LayoutDashboard } from "lucide-react";
 import Register from '../Register/Register'
 import { signOut, useSession } from 'next-auth/react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { RootState } from '@/redux/store'
 import { AxiosError } from 'axios'
 import Image from 'next/image'
@@ -62,7 +62,7 @@ const Navbar = () => {
         ? scrollY > 50
           ? "fixed-nav bg-white/95 dark:bg-gray-900 dark:text-white    shadow"
           : " relative sm:absolute top-0 left-0 sm:bg-transparent text-black dark:text-white w-full bg-white"
-        : scrollY > 50 
+        : scrollY > 50
           ? "fixed-nav bg-white/95 dark:bg-gray-800 dark:text-white shadow"
           : "bg-white  dark:bg-gray-800 dark:text-white dark:shadow-gray-700  shadow"
         }`}>
@@ -90,7 +90,7 @@ const Navbar = () => {
 
             </div>
             <div className="relative bg-gray-800 sm:p-2 p-1 rounded-full cursor-pointer dark:bg-gray-700 text-white transition-all duration-300">
-              <Link href={'/shopping-cart'}><CiShoppingCart className='text-xl max-sm:text-md'  /></Link>
+              <Link href={'/shopping-cart'}><CiShoppingCart className='text-xl max-sm:text-md' /></Link>
               <span className='absolute sm:top-0 -top-1 sm:right-1 right-1 font-bold'>{shoppingCart?.length || 0}</span>
             </div>
             {/* <div className="relative bg-gray-200 p-2 rounded-full cursor-pointer dark:bg-gray-700 dark:text-white transition-all duration-300">
@@ -102,15 +102,15 @@ const Navbar = () => {
             {/* Login / Register */}
             {!session?.user ? (
               <div className='hidden lg:block'>
-                <button onClick={() => setIsOpen(true)} className="btn btn-sm btn-outline border-gray-400 text-white bg-gray-900 hover:bg-gray-800  rounded-md hover:text-white transition-all duration-300 mr-2">
+                <Link href={'/auth/login'} className="btn btn-sm btn-outline border-gray-400 text-white bg-gray-900 hover:bg-gray-800  rounded-md hover:text-white transition-all duration-300 mr-2">
                   Login
                   <FaArrowRightFromBracket />
-                </button>
-                <button onClick={() => setIsOpenRegisterPage(true)} className="btn btn-sm btn-outline text-white  hover:bg-gray-800 rounded-md hover:text-white transition-all duration-300 bg-gray-900">
+                </Link>
+                <Link href ={"/auth/register"} className="btn btn-sm btn-outline text-white  hover:bg-gray-800 rounded-md hover:text-white transition-all duration-300 bg-gray-900">
                   Register
                   <FaArrowRightFromBracket />
 
-                </button>
+                </Link>
               </div>
             ) : (
               <div className="dropdown dropdown-end ">

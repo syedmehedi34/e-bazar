@@ -1,5 +1,4 @@
 'use client'
-import axios from 'axios';
 import React, { useCallback, useEffect, useState } from 'react'
 import BlogCard from './BlogCard';
 import Link from 'next/link';

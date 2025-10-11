@@ -1,6 +1,7 @@
 export const DashboardCardData = async () => {
   const res = await fetch('http://localhost:5000/admin/dashboard/card', {
-    cache: 'no-store'
+    cache: 'no-store',
+    credentials: 'include',
   })
 
   const data = await res.json()
@@ -17,7 +18,8 @@ export const DashboardCardData = async () => {
 
 export const GetSalesAnalytics = async () => {
   const res = await fetch('http://localhost:5000/admin/sales/analytics', {
-    cache: 'no-store'
+    cache: 'no-store',
+    credentials: 'include'
   })
 
   const data = await res.json()
@@ -28,7 +30,8 @@ export const GetSalesAnalytics = async () => {
 }
 export const LatestOrderList = async () => {
   const res = await fetch('http://localhost:5000/admin/latest/order', {
-    cache: 'no-store'
+    cache: 'no-store',
+    credentials: 'include',
   })
 
   const data = await res.json()

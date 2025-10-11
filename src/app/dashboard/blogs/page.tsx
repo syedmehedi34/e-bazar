@@ -82,7 +82,7 @@ const BlogsForm: React.FC = () => {
         e.preventDefault();
         console.log(formData)
         try {
-            const res = await axios.post(`http://localhost:5000/blog`, formData);
+            const res = await axios.post(`http://localhost:5000/blog`, formData,{withCredentials:true});
             if (res?.status === 200) {
                 toast.success("Blogs post successfull")
             }

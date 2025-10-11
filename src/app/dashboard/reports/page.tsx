@@ -43,7 +43,7 @@ const ReportPage: React.FC = () => {
 
   const getReport = useCallback(async () => {
     try {
-      const res = await axios.get("http://localhost:5000/admin/report");
+      const res = await axios.get("http://localhost:5000/admin/report",{withCredentials:true});
       if (res.status === 200) {
         setReport(res.data);
       }

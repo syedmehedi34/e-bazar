@@ -1,11 +1,11 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 
 type CountdownProps = {
     targetDate: string | Date;
     onComplete?: () => void;
     className?: string;
-    showLabels?: boolean; // label (Days/Hours...) দেখাবেকি
+    showLabels?: boolean;
 };
 
 type TimeLeft = {
@@ -19,7 +19,7 @@ const pad = (n: number) => n.toString().padStart(2, "0");
 
 const getTimeLeft = (target: Date): TimeLeft => {
     const now = new Date();
-    let diff = Math.max(0, target.getTime() - now.getTime()); // milliseconds, never negative
+    let diff = Math.max(0, target.getTime() - now.getTime());
     const days = Math.floor(diff / (1000 * 60 * 60 * 24));
     diff -= days * (1000 * 60 * 60 * 24);
     const hours = Math.floor(diff / (1000 * 60 * 60));
@@ -36,17 +36,20 @@ export default function Countdown({
     className = "",
     showLabels = true,
 }: CountdownProps) {
-    const target = typeof targetDate === "string" ? new Date(targetDate) : targetDate;
+    // ✅ always memoize date
+    const target = useMemo(
+        () => (typeof targetDate === "string" ? new Date(targetDate) : targetDate),
+        [targetDate]
+    );
 
-    // validate date
-    if (Number.isNaN(target.getTime())) {
-        console.error("Countdown: invalid targetDate:", targetDate);
-        return <div className="text-red-500">Invalid target date</div>;
-    }
+    const invalidDate = Number.isNaN(target.getTime());
+    const [timeLeft, setTimeLeft] = useState<TimeLeft>(() =>
+        invalidDate ? { days: 0, hours: 0, minutes: 0, seconds: 0 } : getTimeLeft(target)
+    );
 
-    const [timeLeft, setTimeLeft] = useState<TimeLeft>(() => getTimeLeft(target));
     useEffect(() => {
-        // sync on prop change
+        if (invalidDate) return;
+
         setTimeLeft(getTimeLeft(target));
         let finished = false;
         const id = setInterval(() => {
@@ -59,47 +62,44 @@ export default function Countdown({
         }, 1000);
 
         return () => clearInterval(id);
-    }, [targetDate]); // re-run if targetDate changes
+    }, [target, onComplete, invalidDate]);
+
+    if (invalidDate) {
+        return <div className="text-red-500">Invalid target date</div>;
+    }
 
     return (
         <div className={`flex gap-4 items-center ${className}`} aria-live="polite">
             {/* Days */}
             <div className="text-center">
                 <div className="text-3xl md:text-4xl font-bold flex items-end gap-2">
-
-
                     {timeLeft.days}
-                    {showLabels && <div className="text-sm  text-white rubik italic">Day</div>}
+                    {showLabels && <div className="text-sm text-white rubik italic">Day</div>}
                 </div>
-
             </div>
 
             {/* Hours */}
-            <div className="text-center ">
+            <div className="text-center">
                 <div className="text-3xl md:text-4xl font-bold flex items-end gap-2">
                     {pad(timeLeft.hours)}
                     {showLabels && <div className="text-sm rubik italic">Hours</div>}
                 </div>
-
             </div>
 
             {/* Minutes */}
             <div className="text-center">
                 <div className="text-3xl md:text-4xl font-bold flex items-end gap-2">
-                    
                     {pad(timeLeft.minutes)}
                     {showLabels && <div className="text-sm rubik italic">Min</div>}
                 </div>
-                
             </div>
 
             {/* Seconds */}
             <div className="text-center w-20">
-                <div className="text-3xl md:text-4xl font-bold flex items-end gap-2 ">
+                <div className="text-3xl md:text-4xl font-bold flex items-end gap-2">
                     {pad(timeLeft.seconds)}
-                    {showLabels && <div className="text-sm rubik italic ">Sec</div>}
+                    {showLabels && <div className="text-sm rubik italic">Sec</div>}
                 </div>
-                
             </div>
         </div>
     );

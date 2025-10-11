@@ -2,7 +2,6 @@
 import React, { useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import axios from "axios";
-import Swal from "sweetalert2";
 import { toast } from "react-toastify";
 
 interface Products {

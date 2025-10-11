@@ -7,7 +7,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
 import { useDeliveryDate } from '@/hook/useDeliveryDate/useDeliveryDate';
-import { color } from 'framer-motion';
+
 
 interface ProductDetails {
   totalPrice: number;
@@ -72,7 +72,7 @@ const Payment: React.FC<PaymentProps> = ({ onClose, products, formData }) => {
 
       const res = await axios.post(`http://localhost:5000/create-payment-intent`,
         { amount: products?.totalPrice, id: products?.productId });
-      (res)
+      
       const clientSecret = res?.data?.clientSecret;
       //confirm payment
       const { paymentIntent, error: confirmError } =

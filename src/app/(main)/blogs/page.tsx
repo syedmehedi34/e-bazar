@@ -2,7 +2,6 @@
 import { Blog } from '@/Components/Blogs/blogsInterface';
 import BlogsPageCard from '@/Components/Blogs/BlogsPageCard';
 import Pagination from '@/Components/Pagination/Pagination';
-import axios from 'axios';
 import Image from 'next/image';
 import React, { useCallback, useEffect, useState } from 'react';
 
@@ -84,7 +83,7 @@ const Blogpage = () => {
               </ul>
             </div>
 
-            🆕 Latest Blogs
+            Latest Blogs
             <div className="p-4 bg-white shadow dark:bg-gray-800 dark:text-white rounded-box mb-6">
               <h2 className="mb-4 text-lg sm:text-xl font-bold border-b pb-2">Latest Blogs</h2>
               {blogs?.slice(0, 6).map((blog) => (
