@@ -45,7 +45,7 @@ const ProductForm = () => {
       };
 
       const res = await axios.post(
-        "http://localhost:5000/admin/add-products",
+        "https://e-bazaar-server-three.vercel.app/admin/add-products",
         payload,
         {withCredentials:true}
       );

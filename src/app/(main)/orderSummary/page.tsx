@@ -101,7 +101,7 @@ const PaymentProcess = () => {
                 updatedAt: new Date().toISOString(),
             };
 
-            const res = await axios.post('http://localhost:5000/order', { orderDetails })
+            const res = await axios.post('https://e-bazaar-server-three.vercel.app/order', { orderDetails })
        
             if (res.status === 200) {
                 toast.success('Your Order Place Successfully!')

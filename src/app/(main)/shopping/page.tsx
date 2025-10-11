@@ -45,7 +45,7 @@ const Shopping = () => {
             params.set('limit', '12');
             if (search) params.set('search', search);
 
-            const res = await axios.get(`http://localhost:5000/shopping?${params.toString()}`, {
+            const res = await axios.get(`https://e-bazaar-server-three.vercel.app/shopping?${params.toString()}`, {
                 withCredentials:true
             });
 

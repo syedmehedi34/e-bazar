@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 import Logo from '../Logo/Logo'
 import { CiShoppingCart } from "react-icons/ci";
 import { User, ShoppingCart, Box, LifeBuoy, LayoutDashboard } from "lucide-react";
-import Register from '../Register/Register'
+
 import { signOut, useSession } from 'next-auth/react'
 import { useSelector } from 'react-redux'
 import { RootState } from '@/redux/store'
@@ -106,7 +106,7 @@ const Navbar = () => {
                   Login
                   <FaArrowRightFromBracket />
                 </Link>
-                <Link href ={"/auth/register"} className="btn btn-sm btn-outline text-white  hover:bg-gray-800 rounded-md hover:text-white transition-all duration-300 bg-gray-900">
+                <Link href={"/auth/register"} className="btn btn-sm btn-outline text-white  hover:bg-gray-800 rounded-md hover:text-white transition-all duration-300 bg-gray-900">
                   Register
                   <FaArrowRightFromBracket />
 
@@ -182,7 +182,7 @@ const Navbar = () => {
 
       }
 
-      {isOpenRegisterPage && <Register onClose={() => setIsOpenRegisterPage(false)} isOpen={isOpenRegisterPage} />}
+
       <AnimatePresence>
         {searchBox && <SearchInput setSearchBox={setSearchBox} searchBox={searchBox} />}
       </AnimatePresence>

@@ -24,7 +24,7 @@ const Products = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await fetch("http://localhost:5000/get-random-products", {
+        const res = await fetch("https://e-bazaar-server-three.vercel.app/get-random-products", {
           cache: "no-store"
         });
         

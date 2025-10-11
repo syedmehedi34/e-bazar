@@ -8,7 +8,7 @@ const Blogs = () => {
     const [blogs, setBlogs] = useState([]);
     const getBlogsData = useCallback(async () => {
         try {
-            const res = await fetch(`http://localhost:5000/blogs`, {cache:"no-store"});
+            const res = await fetch(`https://e-bazaar-server-three.vercel.app/blogs`, {cache:"no-store"});
             const data = await res.json();
             setBlogs(data.blogs)
           

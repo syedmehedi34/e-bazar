@@ -80,9 +80,9 @@ const BlogsForm: React.FC = () => {
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
-        console.log(formData)
+        
         try {
-            const res = await axios.post(`http://localhost:5000/blog`, formData,{withCredentials:true});
+            const res = await axios.post(`https://e-bazaar-server-three.vercel.app/blog`, formData,{withCredentials:true});
             if (res?.status === 200) {
                 toast.success("Blogs post successfull")
             }

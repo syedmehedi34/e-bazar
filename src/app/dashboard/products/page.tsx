@@ -14,7 +14,7 @@ const ProductsList = () => {
     const [search, setSearch] = useState('')
 
     const getProductsData = useCallback(async () => {
-        const res = await axios.get(`http://localhost:5000/admin/products/list?page=${currentPage}&sort=${sort}&search=${search}`);
+        const res = await axios.get(`https://e-bazaar-server-three.vercel.app/admin/products/list?page=${currentPage}&sort=${sort}&search=${search}`);
         const data = res?.data;
         setProducts(data?.products);
         setPageArray(data?.pageArray)
@@ -37,7 +37,7 @@ const ProductsList = () => {
             if (result.isConfirmed) {
                 try {
 
-                    const res = await axios.delete(`http://localhost:5000/admin/products/${id}`);
+                    const res = await axios.delete(`https://e-bazaar-server-three.vercel.app/admin/products/${id}`);
                     if(res.status === 200){
                     toast.success("Your product has been deleted.");
                     getProductsData();

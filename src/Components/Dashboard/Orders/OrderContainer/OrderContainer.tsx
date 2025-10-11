@@ -50,7 +50,7 @@ const OrderContainer: React.FC<OrderContainerProps> = ({ orders, getOrders ,setS
         try {
           
             const res = await axios.patch(
-                `http://localhost:5000/admin/orders/payment-status`,
+                `https://e-bazaar-server-three.vercel.app/admin/orders/payment-status`,
                 {  status, orderId }
             );
 

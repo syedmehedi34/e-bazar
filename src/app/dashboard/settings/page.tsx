@@ -16,7 +16,7 @@ const SettingPage = () => {
   const [currenPage, setCurrentPage] = useState(1);
   const [pageArray, setPageArray] = useState([])
   const getUser = useCallback(async () => {
-    const res = await axios.get(`http://localhost:5000/admin/user-list?page=${currenPage}`,{withCredentials:true});
+    const res = await axios.get(`https://e-bazaar-server-three.vercel.app/admin/user-list?page=${currenPage}`,{withCredentials:true});
     if (res.status === 200) {
       setUsers(res?.data?.user);
       setPageArray(res?.data?.pageArray)

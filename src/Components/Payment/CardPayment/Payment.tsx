@@ -70,7 +70,7 @@ const Payment: React.FC<PaymentProps> = ({ onClose, products, formData }) => {
     try {
       setLoading(true);
 
-      const res = await axios.post(`http://localhost:5000/create-payment-intent`,
+      const res = await axios.post(`https://e-bazaar-server-three.vercel.app/create-payment-intent`,
         { amount: products?.totalPrice, id: products?.productId });
       
       const clientSecret = res?.data?.clientSecret;
@@ -135,7 +135,7 @@ const Payment: React.FC<PaymentProps> = ({ onClose, products, formData }) => {
           updatedAt: new Date().toISOString(),
         };
 
-        const res = await axios.post('http://localhost:5000/order', { orderDetails })
+        const res = await axios.post('https://e-bazaar-server-three.vercel.app/order', { orderDetails })
 
         if (res.status === 200) {
           toast.success('Your Payment Successfully!')

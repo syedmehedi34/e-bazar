@@ -38,7 +38,7 @@ const handler = NextAuth({
             email: credentials?.email,
             password: credentials?.password
           }
-          const res = await axios.post(`http://localhost:5000/login`, userInfo)
+          const res = await axios.post(`https://e-bazaar-server-three.vercel.app/login`, userInfo)
           if (res.status === 200) {
             return res?.data.user
           }
@@ -82,7 +82,7 @@ const handler = NextAuth({
      if (account?.provider === "google") {
         try {
          
-          await axios.post("http://localhost:5000/create/user", {
+          await axios.post("https://e-bazaar-server-three.vercel.app/create/user", {
             name: user.name,
             email: user.email,
             image: user.image,

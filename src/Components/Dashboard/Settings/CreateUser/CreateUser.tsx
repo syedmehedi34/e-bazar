@@ -33,7 +33,7 @@ const CreateUser: React.FC<CreateUserProps> = ({ onGetUserFn }) => {
         };
 
         try {
-            const res = await axios.post(`http://localhost:5000/create/user`, userInfo);
+            const res = await axios.post(`https://e-bazaar-server-three.vercel.app/create/user`, userInfo);
 
             if (res.status === 200 || res.status === 201) {
                 toast.success("User created successfully!")

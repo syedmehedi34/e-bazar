@@ -1,5 +1,5 @@
 export const DashboardCardData = async () => {
-  const res = await fetch('http://localhost:5000/admin/dashboard/card', {
+  const res = await fetch('https://e-bazaar-server-three.vercel.app/admin/dashboard/card', {
     cache: 'no-store',
     credentials: 'include',
   })
@@ -17,7 +17,7 @@ export const DashboardCardData = async () => {
 }
 
 export const GetSalesAnalytics = async () => {
-  const res = await fetch('http://localhost:5000/admin/sales/analytics', {
+  const res = await fetch('https://e-bazaar-server-three.vercel.app/admin/sales/analytics', {
     cache: 'no-store',
     credentials: 'include'
   })
@@ -29,7 +29,7 @@ export const GetSalesAnalytics = async () => {
  
 }
 export const LatestOrderList = async () => {
-  const res = await fetch('http://localhost:5000/admin/latest/order', {
+  const res = await fetch('https://e-bazaar-server-three.vercel.app/admin/latest/order', {
     cache: 'no-store',
     credentials: 'include',
   })

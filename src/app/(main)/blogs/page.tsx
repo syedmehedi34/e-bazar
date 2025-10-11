@@ -12,7 +12,7 @@ const Blogpage = () => {
 
   const getBlogsData = useCallback(async () => {
     try {
-      const res = await fetch(`http://localhost:5000/blogs?page=${currentPage}`, {
+      const res = await fetch(`https://e-bazaar-server-three.vercel.app/blogs?page=${currentPage}`, {
         cache: "no-store",
       });
       if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);

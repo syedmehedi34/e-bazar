@@ -45,7 +45,7 @@ const MyOrdersPage = () => {
         try {
             setLoading(true);
             const res = await axios.get(
-                `http://localhost:5000/user-orders?email=${session.user.email}&page=${currentPage}`, 
+                `https://e-bazaar-server-three.vercel.app/user-orders?email=${session.user.email}&page=${currentPage}`, 
                 {withCredentials:true}
             );
             
@@ -96,7 +96,7 @@ const MyOrdersPage = () => {
             if (result.isConfirmed) {
                 try {
 
-                    const res = await axios.delete(`http://localhost:5000/user/order/${id}`,{withCredentials:true});
+                    const res = await axios.delete(`https://e-bazaar-server-three.vercel.app/user/order/${id}`,{withCredentials:true});
                     if (res.status === 200) {
                         toast.success("Your order has been cancel.");
                         getOrder();

@@ -13,7 +13,7 @@ const AdminOrdersPage = () => {
     const [sort, setSort] = useState('latest')
 
     const getOrders = useCallback(async()=>{
-        const res = await axios.get(`http://localhost:5000/admin/order?search=${search}&sort=${sort}&page=${currentPage}`, {withCredentials:true});
+        const res = await axios.get(`https://e-bazaar-server-three.vercel.app/admin/order?search=${search}&sort=${sort}&page=${currentPage}`, {withCredentials:true});
         if(res.status === 200){
             setOrders(res?.data.order);
             setPageArray(res?.data?.pageArray)

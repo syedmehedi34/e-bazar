@@ -67,7 +67,7 @@ const LoginPage = () => {
     return (
         <div className='min-h-screen flex justify-center items-center  '>
             <div className="container-custom ">
-                <BackButton />
+               
                 <div className="bg-white dark:bg-gray-800 py-10 rounded-2xl shadow-lg w-[500px] max-w-full mx-auto p-6 relative">
 
                     {/* Header */}
