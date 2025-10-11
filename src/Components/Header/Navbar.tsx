@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react'
 import Logo from '../Logo/Logo'
 import { CiShoppingCart } from "react-icons/ci";
 import { User, ShoppingCart, Box, LifeBuoy, LayoutDashboard } from "lucide-react";
-
 import { signOut, useSession } from 'next-auth/react'
 import { useSelector } from 'react-redux'
 import { RootState } from '@/redux/store'
@@ -12,18 +11,14 @@ import { AxiosError } from 'axios'
 import Image from 'next/image'
 import { FaSearch } from 'react-icons/fa'
 import SearchInput from '../SearchInput/SearchInput'
-import LoginPage from '../Login/login'
 import { AnimatePresence } from 'framer-motion'
 import Sidebar from './Sidebar'
 import { FaArrowRightFromBracket } from "react-icons/fa6";
 import { toast } from 'react-toastify'
 import DarkMode from '../DarkMode/DarkMode';
 import { usePathname } from 'next/navigation';
-
 const Navbar = () => {
   const [scrollY, setScrollY] = useState(0);
-  const [isOpen, setIsOpen] = useState(false);
-
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const shoppingCart = useSelector((state: RootState) => state.cart.value);
   const [searchBox, setSearchBox] = useState(false)
