@@ -5,12 +5,9 @@ import Link from 'next/link';
 import React, { useState } from 'react'
 import { FcGoogle } from "react-icons/fc";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-
 import { toast } from 'react-toastify';
 import Logo from '@/Components/Logo/Logo';
-import BackButton from '@/Components/Button/BackButton/BackButton';
 import { useSearchParams,useRouter } from 'next/navigation';
-
 const LoginPage = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
