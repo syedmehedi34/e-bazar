@@ -23,7 +23,7 @@ import { usePathname } from 'next/navigation';
 const Navbar = () => {
   const [scrollY, setScrollY] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
-  const [isOpenRegisterPage, setIsOpenRegisterPage] = useState(false);
+
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const shoppingCart = useSelector((state: RootState) => state.cart.value);
   const [searchBox, setSearchBox] = useState(false)
@@ -167,7 +167,7 @@ const Navbar = () => {
 
 
 
-            <Sidebar isOpen={mobileMenuOpen} setIsOpen={setMobileMenuOpen} setIsOpenRegisterPage={setIsOpenRegisterPage} isLogin={setIsOpen} navItems={navItems} />
+            <Sidebar navItems={navItems} isOpen={mobileMenuOpen} setIsOpen={setMobileMenuOpen} />
 
 
           )}
@@ -175,12 +175,7 @@ const Navbar = () => {
 
 
       </header>
-      {/* Modals */}
-      {isOpen &&
-
-        <LoginPage onClose={() => setIsOpen(false)} isOpen={isOpen} />
-
-      }
+    
 
 
       <AnimatePresence>
