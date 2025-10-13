@@ -40,7 +40,7 @@ const slides = [
 
 const Banner = () => {
   return (
-    <div className="relative h-[80vh] md:h-[100vh] lg:h-[80vh] xl:h-[100vh] border-b-2 dark:border-gray-600 border-gray-200  dark:bg-gray-900">
+    <div className="relative h-[90vh] md:h-[100vh] lg:h-[90vh] xl:h-[100vh] border-b-2 dark:border-gray-600 border-gray-200  dark:bg-gray-900">
       <div className='absolute inset-0 w-full h-full clip-path  bg-gray-600 dark:bg-gray-700'></div>
       <Swiper
         modules={[Autoplay]}
