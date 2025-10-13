@@ -64,7 +64,7 @@ const Navbar = () => {
         <div className="container-custom flex items-center justify-between py-4">
           <div className='flex items-center gap-4'>
             {/* Mobile Menu Button */}
-            <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="lg:hidden  text-black  cursor-pointer">
+            <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="lg:hidden  text-black dark:text-white  cursor-pointer">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={mobileMenuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"} />
               </svg>
@@ -81,12 +81,12 @@ const Navbar = () => {
           {/* Icons + Auth Buttons */}
           <div className="flex items-center gap-4">
             <div className="">
-              <button className=' bg-gray-800 sm:p-2 p-1 rounded-full cursor-pointer dark:bg-gray-700 text-white transition-all duration-300 ' onClick={() => setSearchBox(!searchBox)} ><FaSearch className='text-xl max-sm:text-md' /></button>
+              <button className=' bg-gray-200 sm:p-2 p-1 rounded-full cursor-pointer dark:text-white text-black dark:bg-gray-700  transition-all duration-300 ' onClick={() => setSearchBox(!searchBox)} ><FaSearch className='text-xl max-sm:text-md' /></button>
 
             </div>
-            <div className="relative bg-gray-800 sm:p-2 p-1 rounded-full cursor-pointer dark:bg-gray-700 text-white transition-all duration-300">
+            <div className="relative bg-gray-200 text-black sm:p-2 p-1 rounded-full cursor-pointer dark:text-white dark:bg-gray-700  transition-all duration-300">
               <Link href={'/shopping-cart'}><CiShoppingCart className='text-xl max-sm:text-md' /></Link>
-              <span className='absolute sm:top-0 -top-1 sm:right-1 right-1 font-bold'>{shoppingCart?.length || 0}</span>
+              <span className='absolute -sm:top-0 -top-1 sm:right-1 right-1 font-bold text-sm '>{shoppingCart?.length || 0}</span>
             </div>
             {/* <div className="relative bg-gray-200 p-2 rounded-full cursor-pointer dark:bg-gray-700 dark:text-white transition-all duration-300">
               <Link href={'/cart'}><CiHeart size={24} /></Link>
@@ -109,8 +109,8 @@ const Navbar = () => {
               </div>
             ) : (
               <div className="dropdown dropdown-end ">
-                <div tabIndex={0} className="btn btn-ghost btn-circle avatar">
-                  <div className="sm:w-10 w-8 sm:h-10 h-8 rounded-full">
+                <div tabIndex={0} className="sm:btn btn-sm btn-ghost btn-circle avatar">
+                  <div className="sm:w-10 w-6 sm:h-10 h-6 rounded-full">
                     <Image src={session?.user?.image || "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"} alt="Avatar" fill className='rounded-full' />
                   </div>
                 </div>

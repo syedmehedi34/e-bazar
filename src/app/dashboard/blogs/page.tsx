@@ -104,7 +104,7 @@ const BlogsForm: React.FC = () => {
                     <h2 className="text-3xl font-bold mb-6 text-gray-900 dark:text-white">
                         Add New Blog
                     </h2>
-                    <div className="grid lg:grid-cols-4 grid-cols-2 gap-4">
+                    <div className="grid lg:grid-cols-4 sm:grid-cols-2 gap-4">
                         {/* Title */}
                         <div>
                             <label className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -174,7 +174,7 @@ const BlogsForm: React.FC = () => {
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid sm:grid-cols-2 gap-4">
                         {/* Date */}
                         <div>
                             <label className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">

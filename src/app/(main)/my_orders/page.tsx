@@ -108,17 +108,16 @@ const MyOrdersPage = () => {
         });
     }
 
-    const handleInvoice = (order: Order) => {
+    const handleInvoice = (_id: string) => {
         setIsOpen(!isOpen);
-        const orderData = encodeURIComponent(JSON.stringify(order));
-        router.push(`/invoice?order=${orderData}`);
+        router.push(`/invoice?id=${_id}`);
     }
 
 
     return (
-        <div className="min-h-screen p-6 dark:text-white relative">
+        <div className="min-h-screen  dark:text-white relative">
 
-            <div className="container-custom">
+            <div className="container-custom my-10">
                 <nav className="md:flex items-center justify-between gap-4">
                     <div className="mb-4 md:mb-0">
                         <h1 className="text-xl font-bold mb-2 dark:text-white">Your Orders</h1>

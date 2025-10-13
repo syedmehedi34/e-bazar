@@ -8,6 +8,7 @@ import {
   LatestOrderList,
 } from "@/lib/dashboardCardData/dashboardCardData";
 import { TrendingUp } from "lucide-react";
+import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 import { FaShoppingCart, FaDollarSign, FaUsers, FaBox } from "react-icons/fa";
 interface DashboardData {
@@ -29,6 +30,7 @@ const Page: React.FC = () => {
   const [products, setProducts] = useState<ProductAnalytics[]>([]);
   const [latestOrder, setLatestOrder] = useState([]);
   const [loading, setLoading] = useState(true);
+  const {data:session} = useSession()
 
   useEffect(() => {
     const getData = async () => {
@@ -102,7 +104,7 @@ const Page: React.FC = () => {
     },
   ];
 
-  
+  console.log("SESSION",session)
 
   return (
     <div>

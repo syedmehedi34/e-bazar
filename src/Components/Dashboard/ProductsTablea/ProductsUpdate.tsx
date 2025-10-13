@@ -72,7 +72,7 @@ const ProductsUpdate: React.FC<ProductsUpdateProps> = ({
     };
 
     return (
-        <div className="w-6/12 mx-auto bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+        <div className="md:w-6/12 mx-auto  bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
             <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-100">
                 Update Product
             </h2>

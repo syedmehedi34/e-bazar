@@ -120,7 +120,7 @@ const CheckoutDetails: React.FC<CheckoutDetailsProps> = ({ products, selectedIma
 
 
     return (
-        <div className='rubik dark:text-white '>
+        <div className='rubik dark:text-white max-md:flex max-md:flex-col justify-center items-center '>
 
             <h2 className='text-3xl font-semibold mb-4 max-md:text-center'>{products?.title}</h2>
             <p className='mb-2 flex items-center'>{[...Array(Math.floor(Number(products?.rating) || 0)).keys()].map((i) => (

@@ -29,7 +29,7 @@ const Blogpage = () => {
   }, [getBlogsData]);
 
   return (
-    <div className="min-h-screen dark:text-white py-16">
+    <div className="min-h-screen dark:text-white ">
 
       <nav className='bg-cover w-full h-[200px]' style={{ backgroundImage: `url("https://preview.colorlib.com/theme/cozastore/images/bg-01.jpg.webp")` }}>
         <h2 className='flex justify-center items-center h-full text-2xl font-bold text-white tracking-wide'>Blogs</h2>

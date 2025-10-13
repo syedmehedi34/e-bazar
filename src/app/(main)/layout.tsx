@@ -1,7 +1,7 @@
 
 
 import type { Metadata } from "next";
-import { Poppins, Rubik } from "next/font/google";
+import { poppins, rubik } from "@/lib/fonts";
 import "./globals.css"
 
 import ReduxProvider from "@/Provider/ReduxPresistProbider/ReduxPresistProbider"
@@ -9,23 +9,6 @@ import Navbar from "@/Components/Header/Navbar";
 import Footer from "@/Components/Footer/Footer";
 import SessionWrapper from "@/Components/SessionWrapper/SessionWrapper";
 import ToastProvider from "@/Components/ToastProvider/ToastProvider";
-
-
-
-export const poppins = Poppins({
-  weight: ['400', '500', '600', '700', '800'],
-  style: ['normal', 'italic'],
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-poppins',
-});
-export const rubik = Rubik({
-  weight: ['400', '500', '600', '700'],
-  style: ['normal', 'italic'],
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-rubik',
-});
 
 export const metadata: Metadata = {
   title: "E-bazaar",
@@ -41,14 +24,14 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={`${poppins.variable} ${rubik.variable} relative dark:bg-gray-900`}
-       
+
       >
 
         <SessionWrapper>
           <ReduxProvider>
             <Navbar />
             {children}
-            <ToastProvider/>
+            <ToastProvider />
             <Footer />
           </ReduxProvider>
         </SessionWrapper>

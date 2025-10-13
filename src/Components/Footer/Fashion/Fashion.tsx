@@ -21,7 +21,7 @@ const Fashion = () => {
                             className="relative group w-full h-92 overflow-hidden rounded-lg shadow-lg cursor-pointer"
                         >
                             <Image
-                                width={100}
+                                width={200}
                                 height={100}
                                 src={cat.img}
                                 alt={cat.name}

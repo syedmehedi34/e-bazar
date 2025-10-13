@@ -16,7 +16,7 @@ const Sorting: React.FC<PageProps> = ({ setSort,total }) => {
             </p>
 
             <select
-                className="w-full sm:w-[200px] md:w-[250px] lg:w-[300px] select dark:bg-gray-600 "
+                className="w-full sm:w-[200px] md:w-[250px] lg:w-[300px] select dark:bg-gray-700 "
                 defaultValue="latest"
                 onChange={(e) => setSort(e.target.value)}
             >

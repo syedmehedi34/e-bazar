@@ -18,12 +18,12 @@ const Navber:React.FC<NavbarProps> = ({onhandleSidebarOpen,sidebarOpen}) => {
       
 
       {/* Middle - Search Bar */}
-      <div className="flex items-center w-1/2 max-w-lg">
-        <div className="relative w-full">
+      <div className="flex items-center w-1/2 max-w-lg ">
+        <div className="relative w-full hidden sm:block">
           <input
             type="text"
             placeholder="Search..."
-            className="input pl-10 dark:bg-gray-700"
+            className="input pl-10 dark:bg-gray-700 "
           />
           <FaSearch className="absolute left-3 top-2.5 text-gray-300 w-5 h-5" />
         </div>

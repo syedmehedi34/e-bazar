@@ -8,7 +8,8 @@ import BackButton from '@/Components/Button/BackButton/BackButton'
 import ImagesGalleryClientWrapper from '@/Components/Checkout/ImagesGalleryClientWrapper'
 
 const CheckoutPage = async ({params}: { params: Promise<{ id: string }> }) => {
-    const {id} = await params
+    const {id} = await params;
+  
     const products = await getCheckoutDataById(id)
   
     return (
@@ -19,7 +20,7 @@ const CheckoutPage = async ({params}: { params: Promise<{ id: string }> }) => {
                 </div>
                     <ImagesGalleryClientWrapper products={products} />
 
-                <div>
+                <div >
                     {/* <CheckoutDescription/> */}
                     <CheckoutDescription products={products}/>
                 </div>

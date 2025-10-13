@@ -1,17 +1,30 @@
 "use client"
-import React, { useRef } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
 import { MdPrint } from "react-icons/md";
 import BackButton from '@/Components/Button/BackButton/BackButton';
 import { useReactToPrint } from "react-to-print";
-
+import axios from 'axios';
+import { Order } from '@/lib/orders';
 const OrderInvoice = () => {
+    const [order, setOrder] = useState<Order | null>(null);
     const searchParams = useSearchParams();
-    const orderData = searchParams.get("order");
-    const order = orderData ? JSON.parse(decodeURIComponent(orderData)) : null;
+    const id = searchParams.get("id");
     const contentRef = useRef<HTMLDivElement>(null);
     const reactToPrintFn = useReactToPrint({ contentRef });
+
+    const getOrderById = useCallback(async () => {
+        const res = await axios.get(`http://localhost:5000/user/order/${id}`);
+        console.log(res)
+        if (res.status === 200) {
+            setOrder(res.data)
+        }
+    }, [])
+
+    useEffect(()=>{
+        getOrderById();
+    },[])
 
     return (
         <div className='container-custom my-10 min-h-screen'>
@@ -63,7 +76,7 @@ const OrderInvoice = () => {
                                                 Name
                                             </td>
                                             <td className="py-1 px-3 dark:text-gray-200">
-                                                {order.customer.name}
+                                                {order?.customer.name}
                                             </td>
                                         </tr>
                                         <tr className="border-b border-gray-300 dark:border-gray-700">
@@ -71,7 +84,7 @@ const OrderInvoice = () => {
                                                 Email
                                             </td>
                                             <td className="py-1 px-3 dark:text-gray-200">
-                                                {order.customer.email}
+                                                {order?.customer?.email}
                                             </td>
                                         </tr>
                                         <tr className="border-b border-gray-300 dark:border-gray-700">
@@ -79,7 +92,7 @@ const OrderInvoice = () => {
                                                 Phone
                                             </td>
                                             <td className="py-2 px-3 dark:text-gray-200">
-                                                {order.customer.phone || "N/A"}
+                                                {order?.customer?.phone || "N/A"}
                                             </td>
                                         </tr>
                                         <tr className="border-b border-gray-300 dark:border-gray-700">
@@ -87,7 +100,7 @@ const OrderInvoice = () => {
                                                 Address
                                             </td>
                                             <td className="py-1 px-3 dark:text-gray-200">
-                                                {order.customer.address || "N/A"}
+                                                {order?.customer.address || "N/A"}
                                             </td>
                                         </tr>
                                         <tr>
@@ -95,7 +108,7 @@ const OrderInvoice = () => {
                                                 Delivery Address
                                             </td>
                                             <td className="py-1 px-3 dark:text-gray-200">
-                                                {order.customer.deliveryAddress || "N/A"}
+                                                {order?.customer?.deliveryAddress || "N/A"}
                                             </td>
                                         </tr>
                                     </tbody>
@@ -121,15 +134,15 @@ const OrderInvoice = () => {
                                                 <Image
                                                     width={100}
                                                     height={100}
-                                                    src={order.product.image}
-                                                    alt={order.product.name}
+                                                    src={order?.product?.image}
+                                                    alt={'products images'}
                                                     className="w-10 h-10 object-cover rounded"
                                                 />
                                             </td>
-                                            <td className="py-1 px-3 dark:text-gray-200">{order.product.name}</td>
-                                            <td className="py-1 px-3 dark:text-gray-200">{order.product.quantity || 1}</td>
+                                            <td className="py-1 px-3 dark:text-gray-200">{order?.product.name}</td>
+                                            <td className="py-1 px-3 dark:text-gray-200">{order?.product.quantity || 1}</td>
 
-                                            <td className="py-2 px-3 dark:text-gray-200">{order.product.totalPrice}</td>
+                                            <td className="py-2 px-3 dark:text-gray-200">{order?.product.totalPrice}</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -138,7 +151,7 @@ const OrderInvoice = () => {
                             {/* Total Price */}
                             <div className="mt-4 flex justify-end">
                                 <div className="text-right dark:text-white">
-                                    <p className="font-semibold text-sm">Total Price: {order.product.totalPrice} {order.product.currency || "BDT"}</p>
+                                    <p className="font-semibold text-sm">Total Price: {order?.product.totalPrice} {order?.product.currency || "BDT"}</p>
                                 </div>
                             </div>
 

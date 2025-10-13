@@ -32,7 +32,7 @@ interface Order {
 interface UserOrdersTableProps {
     orders: Order[];
     onDelete: (id: string) => void;
-    onInvoice: (order:Order) => void;
+    onInvoice: (id:string) => void;
 }
 
 const UserOrdersTable: React.FC<UserOrdersTableProps> = ({
@@ -41,7 +41,7 @@ const UserOrdersTable: React.FC<UserOrdersTableProps> = ({
     onInvoice,
 }) => {
     return (
-        <div className="overflow-x-auto   p-4 transition-colors duration-300">
+        <div className="overflow-x-auto   transition-colors duration-300">
             <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-100">
                 My Orders
             </h2>
@@ -168,7 +168,7 @@ const UserOrdersTable: React.FC<UserOrdersTableProps> = ({
                                 {/* ✅ Actions */}
                                 <td className="flex items-center gap-2">
                                     <button
-                                        onClick={() => onInvoice(order)}
+                                        onClick={() => onInvoice(order._id)}
                                         className="btn btn-sm bg-gray-800 text-white flex items-center gap-1"
                                     >
                                         <FaFileInvoice />

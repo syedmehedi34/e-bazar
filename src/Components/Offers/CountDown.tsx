@@ -69,7 +69,7 @@ export default function Countdown({
     }
 
     return (
-        <div className={`flex gap-4 items-center ${className}`} aria-live="polite">
+        <div className={`flex flex-wrap justify-center gap-4 items-center ${className}`} aria-live="polite">
             {/* Days */}
             <div className="text-center">
                 <div className="text-3xl md:text-4xl font-bold flex items-end gap-2">

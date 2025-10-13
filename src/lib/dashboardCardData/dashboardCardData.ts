@@ -1,42 +1,49 @@
+import axios from "axios";
+
+const baseURL = "https://e-bazaar-server-three.vercel.app";
+
 export const DashboardCardData = async () => {
-  const res = await fetch('https://e-bazaar-server-three.vercel.app/admin/dashboard/card', {
-    cache: 'no-store',
-    credentials: 'include',
-  })
+  try {
+    const res = await axios.get(`${baseURL}/admin/dashboard/card`, {
+      withCredentials: true,
+    });
 
-  const data = await res.json()
+    const { totalSales, totalUsers, totalProducts, totalOrders } = res.data;
 
-  const { totalSales, totalUsers, totalProducts, totalOrders } = data
-
-  return {
-    totalSales,
-    totalUsers,
-    totalProducts,
-    totalOrders
+    return {
+      totalSales,
+      totalUsers,
+      totalProducts,
+      totalOrders,
+    };
+  } catch (error) {
+    console.error("DashboardCardData Error:", error);
+    throw error;
   }
-}
+};
 
 export const GetSalesAnalytics = async () => {
-  const res = await fetch('https://e-bazaar-server-three.vercel.app/admin/sales/analytics', {
-    cache: 'no-store',
-    credentials: 'include'
-  })
+  try {
+    const res = await axios.get(`${baseURL}/admin/sales/analytics`, {
+      withCredentials: true,
+    });
 
-  const data = await res.json()
-  return data
-  
+    return res.data;
+  } catch (error) {
+    console.error("GetSalesAnalytics Error:", error);
+    throw error;
+  }
+};
 
- 
-}
 export const LatestOrderList = async () => {
-  const res = await fetch('https://e-bazaar-server-three.vercel.app/admin/latest/order', {
-    cache: 'no-store',
-    credentials: 'include',
-  })
+  try {
+    const res = await axios.get(`${baseURL}/admin/latest/order`, {
+      withCredentials: true,
+    });
 
-  const data = await res.json()
-  return data
-  
-
- 
-}
+    return res.data;
+  } catch (error) {
+    console.error("LatestOrderList Error:", error);
+    throw error;
+  }
+};

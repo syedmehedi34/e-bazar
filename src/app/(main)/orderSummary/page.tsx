@@ -122,7 +122,7 @@ const PaymentProcess = () => {
 
                 <div className='grid grid-cols-1 lg:grid-cols-3 gap-6'>
                     {/* Billing Form */}
-                    <div className='col-span-2 bg-white dark:bg-gray-900 dark:text-white rounded-lg shadow p-6 relative'>
+                    <div className='sm:col-span-2 bg-white dark:bg-gray-900 dark:text-white rounded-lg shadow p-6 relative'>
                         <h2 className="text-2xl font-semibold mb-6">Order Summary</h2>
                         <form className='grid grid-cols-1  lg:grid-cols-2 gap-4  '>
                             <div>
@@ -204,7 +204,7 @@ const PaymentProcess = () => {
                                 Select Payment Method
                             </h3>
 
-                            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                            <div className="flex flex-col sm:flex-row  items-center gap-4">
                                 {/* Card Payment */}
                                 <label className="flex items-center gap-2 cursor-pointer  border border-gray-300 p-3 rounded-lg shadow-sm hover:shadow-md transition dark:bg-gray-900 ">
                                     <input
@@ -220,7 +220,7 @@ const PaymentProcess = () => {
                                 </label>
 
                                 {/* Cash Payment */}
-                                <label className="flex items-center gap-2 cursor-pointer border border-gray-300 p-3 rounded-lg shadow-sm hover:shadow-md transition dark:bg-gray-900 ">
+                                <label className="flex items-center gap-2 cursor-pointer border border-gray-300 p-3 rounded-lg shadow-sm hover:shadow-md transition dark:bg-gray-900  ">
                                     <input
                                         onChange={() => setPaymentMethod("cash")}
                                         type="radio"
@@ -241,7 +241,7 @@ const PaymentProcess = () => {
                     </div>
 
                     {/* Product Summary */}
-                    <div className="col-span-1 bg-white dark:bg-gray-900 dark:text-white rounded-lg shadow p-6 ">
+                    <div className="sm:col-span-1 bg-white dark:bg-gray-900 dark:text-white rounded-lg shadow p-6 ">
                         <h3 className="text-xl font-semibold ">Product Details</h3>
                         {
                             !products ? (<p>No product details available.</p>

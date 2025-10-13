@@ -14,7 +14,7 @@ const ProductsList = () => {
     const [search, setSearch] = useState('')
 
     const getProductsData = useCallback(async () => {
-        const res = await axios.get(`https://e-bazaar-server-three.vercel.app/admin/products/list?page=${currentPage}&sort=${sort}&search=${search}`);
+        const res = await axios.get(`https://e-bazaar-server-three.vercel.app/admin/products/list?page=${currentPage}&sort=${sort}&search=${search}`, {withCredentials:true});
         const data = res?.data;
         setProducts(data?.products);
         setPageArray(data?.pageArray)

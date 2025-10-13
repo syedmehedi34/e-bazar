@@ -16,7 +16,7 @@ type CheckoutDetailsProps = {
 
 const CheckoutDescription: React.FC<CheckoutDetailsProps> = ({ products }) => {
     return (
-        <div className="rubik my-10">
+        <div className="rubik my-10  ">
             {/* Product Description */}
             <h2 className="text-2xl font-semibold mb-4">Product Description</h2>
             <p className="text-gray-700 dark:text-gray-100 leading-7">{products?.description}</p>
