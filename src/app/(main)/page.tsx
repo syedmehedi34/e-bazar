@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import Banner from "@/Components/Banner/Banner";
 import Blogs from "@/Components/Blogs/Blogs";
@@ -10,7 +10,6 @@ import Subscribe from "@/Components/Subscribe/Subscribe";
 import Testimonial from "@/Components/Testimonial/Testimonial";
 import TrustCard from "@/Components/Trustcard/TrustCard";
 export default function Home() {
-
   return (
     <div>
       <Banner />
