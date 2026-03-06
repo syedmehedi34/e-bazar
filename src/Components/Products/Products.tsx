@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
 import { useEffect, useState } from "react";
 import Button from "../Button/Button";
 import ProductsCard from "./ProductsCard";
-import Link from 'next/link';
+import Link from "next/link";
 import Loader from "@/app/(main)/loading";
 
 interface Product {
@@ -24,10 +24,13 @@ const Products = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await fetch("https://e-bazaar-server-three.vercel.app/get-random-products", {
-          cache: "no-store"
-        });
-        
+        const res = await fetch(
+          "https://e-bazaar-server-three.vercel.app/get-random-products",
+          {
+            cache: "no-store",
+          },
+        );
+
         const data: Product[] = await res.json();
         setProducts(data);
       } catch (error) {
@@ -41,9 +44,7 @@ const Products = () => {
   }, []);
 
   if (loading) {
-    return (
-     <Loader/>
-    );
+    return <Loader />;
   }
 
   if (products.length === 0) {
@@ -68,8 +69,8 @@ const Products = () => {
         </div>
 
         <div className="flex justify-center my-4">
-          <Link href={'/shopping'}>
-            <Button text={"See More"} />
+          <Link href={"/shopping"}>
+            <Button text={"Find More"} />
           </Link>
         </div>
       </div>

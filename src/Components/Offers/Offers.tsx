@@ -4,16 +4,16 @@ import Image from "next/image";
 import React from "react";
 import Countdown from "./CountDown";
 import Link from "next/link";
+import { offer } from "@/lib/offers";
 
 const Offers = () => {
+  const offerDetails = offer;
   return (
     <div className="container-custom my-16 relative">
       <div className="lg:flex">
         <div className="lg:flex-1 bg-gray-300 flex justify-center items-center">
           <Image
-            src={
-              "https://i.postimg.cc/G2FT0xCn/fashion-portrait-two-smiling-brunette-women-models-summer-casual-hipster-overcoat-posing-gray-Photor.png"
-            }
+            src={offerDetails.offerImage}
             width={500}
             height={100}
             alt="offer images"
@@ -21,21 +21,25 @@ const Offers = () => {
         </div>
         <div className="lg:flex-1 flex justify-center items-center flex-col gap-10 bg-gray-800 text-white  ">
           <div className="flex flex-col gap-2 items-center relative z-[100] ">
-            <p className="text-white tracking-wider text-center">Discount</p>
+            <p className="text-white tracking-wider text-center">
+              {offerDetails.offerType}
+            </p>
             <h2 className="text-4xl italic tracking-wider font-bold">
-              Summer 2025
+              {offerDetails.offerName}
             </h2>
             <p>
-              SALE{" "}
-              <span className="text-xl text-yellow-600 font-bold">50%</span>
+              {offerDetails.offerDetails}{" "}
+              <span className="text-xl text-yellow-600 font-bold">
+                {offerDetails.offerPercentage}%
+              </span>
             </p>
           </div>
 
           <div>
             <Countdown
-              targetDate="2026-11-31T23:59:59Z"
+              targetDate={offerDetails.offerEndDate}
               className=""
-              onComplete={() => alert("Countdown finished!")}
+              // onComplete={() => alert("Countdown finished!")}
             />
           </div>
           <div>
