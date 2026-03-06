@@ -139,9 +139,7 @@ const Navbar = () => {
               </svg>
             </button>
             {/* Logo */}
-            <Link href={"/"}>
-              <Logo />
-            </Link>
+            <Logo />
           </div>
 
           {/* Desktop Nav */}

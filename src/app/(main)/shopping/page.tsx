@@ -32,6 +32,7 @@ const Shopping = () => {
   ];
   const [total, setTotal] = useState(0);
 
+  // fetch products based on filters
   const fetchData = useCallback(async () => {
     try {
       setLoading(true);
@@ -67,6 +68,7 @@ const Shopping = () => {
     fetchData();
   }, [fetchData]);
 
+  // reset all filters and search
   const handleReset = () => {
     setSort("");
     setSelectedCategory("");
@@ -81,17 +83,20 @@ const Shopping = () => {
 
   return (
     <div className="min-h-screen relative dark:text-white">
-      <nav
-        className="bg-cover w-full h-[200px]"
+      {/* shop page header */}
+      {/* <nav
+        className="bg-cover w-full h-[200px] bgblack/50"
         style={{
-          backgroundImage: `url("https://preview.colorlib.com/theme/cozastore/images/bg-01.jpg.webp")`,
+          backgroundImage: `url("https://images.unsplash.com/photo-1546213290-e1b492ab3eee?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D")`,
         }}
       >
         <h2 className="flex justify-center items-center h-full text-2xl font-bold text-white tracking-wide">
           Shopping
         </h2>
-      </nav>
+      </nav> */}
+
       <div className="container-custom">
+        {/* sorting and nav section  */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-5 py-6 ">
           {/* Left side links */}
           <div className="flex gap-1 text-sm">
@@ -115,6 +120,7 @@ const Shopping = () => {
         </div>
 
         <div className="grid lg:grid-cols-5 gap-5 my-5">
+          {/* category and price range filter section */}
           <div className="lg:col-span-1">
             <Category
               products={category}
@@ -129,6 +135,8 @@ const Shopping = () => {
               Reset Filter
             </button>
           </div>
+
+          {/* product display section */}
           <div className="lg:col-span-4 min-h-screen ">
             {loading ? (
               <Loader />
