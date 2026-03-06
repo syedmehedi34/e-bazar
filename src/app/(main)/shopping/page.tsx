@@ -124,6 +124,7 @@ const Shopping = () => {
           <div className="lg:col-span-1">
             <Category
               products={category}
+              selectedCategory={selectedCategory}
               setSelectedCategory={setSelectedCategory}
             />
             <Pricerange setMinPrice={setMinPrice} setMaxPrice={setMaxPrice} />
