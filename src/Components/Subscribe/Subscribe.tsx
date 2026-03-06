@@ -2,7 +2,6 @@
 import React, { useState } from "react";
 import { toast } from "react-toastify";
 
-
 const Subscribe = () => {
   const [email, setEmail] = useState("");
 
@@ -21,7 +20,6 @@ const Subscribe = () => {
   return (
     <section className="relative py-16 overflow-hidden">
       {/* Background Image */}
-
 
       <div className="container-custom dark:bg-gray-800 bg-gray-100 shadow dark:text-white p-5 relative z-10 flex flex-col items-center justify-center text-center space-y-5 px-4 rubik">
         <h3 className="text-xl md:text-2xl font-semibold text-gray-800 dark:text-white flex flex-col sm:flex-row items-center gap-2">
@@ -50,7 +48,12 @@ const Subscribe = () => {
             required
             className="w-full flex-1 px-4 py-3 rounded-lg border border-gray-300 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-500 shadow-sm"
           />
-          <button type="submit" className="dark:bg-gray-600 py-3 bg-gray-900 text-white rounded-box px-4 cursor-pointer">Join</button>
+          <button
+            type="submit"
+            className="dark:bg-gray-600 py-3 bg-gray-900 text-white rounded-box px-4 cursor-pointer"
+          >
+            Join
+          </button>
         </form>
       </div>
     </section>

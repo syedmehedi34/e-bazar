@@ -15,12 +15,11 @@ export default function Home() {
       <Products />
       <Offers />
       <Blogs />
-
       <Faq />
-
       <Testimonial />
-
       <TrustCard />
+
+      {/* need to add email subscription (emailjs) */}
       <Subscribe />
     </div>
   );

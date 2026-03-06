@@ -47,7 +47,7 @@ const Offers = () => {
               href={"/shopping"}
               className="border-b-2 pb-1 font-bold tracking-wider"
             >
-              Shop
+              Shop Now
             </Link>
           </div>
         </div>
