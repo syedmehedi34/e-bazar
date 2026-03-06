@@ -1,7 +1,7 @@
 import "./globals.css";
 
 import ToastProvider from "@/Components/ToastProvider/ToastProvider";
-import BackButton from '@/Components/Button/BackButton/BackButton';
+import BackButton from "@/Components/Button/BackButton/BackButton";
 
 export default function DashboardLayout({
   children,
@@ -10,8 +10,8 @@ export default function DashboardLayout({
 }) {
   return (
     <html lang="en">
-      <body >
-        <div className="mt-10 container-custom">
+      <body>
+        <div className="pt-4 bg-gray-50 pl-10 sm:pl-32">
           <BackButton />
         </div>
         <main>{children}</main>
