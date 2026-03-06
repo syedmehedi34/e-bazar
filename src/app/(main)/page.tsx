@@ -1,5 +1,3 @@
-"use client";
-
 import Banner from "@/Components/Banner/Banner";
 import Blogs from "@/Components/Blogs/Blogs";
 import Faq from "@/Components/Faq/Faq";
