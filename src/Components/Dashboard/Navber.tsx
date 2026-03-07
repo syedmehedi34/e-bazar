@@ -5,17 +5,18 @@ import React from "react";
 import { FaBell, FaHome, FaSearch, FaUserCircle } from "react-icons/fa";
 import { IoClose, IoMenu } from "react-icons/io5";
 
-type NavbarProps ={
-  onhandleSidebarOpen: ()=> void;
-  sidebarOpen:boolean
-}
+type NavbarProps = {
+  onhandleSidebarOpen: () => void;
+  sidebarOpen: boolean;
+};
 
-
-const Navber:React.FC<NavbarProps> = ({onhandleSidebarOpen,sidebarOpen}) => {
+const Navber: React.FC<NavbarProps> = ({
+  onhandleSidebarOpen,
+  sidebarOpen,
+}) => {
   return (
     <header className="flex justify-between items-center p-4 bg-white dark:bg-gray-900 dark:text-white dark:shadow-gray-700 to-gray-900 shadow">
       {/* Left - Title */}
-      
 
       {/* Middle - Search Bar */}
       <div className="flex items-center w-1/2 max-w-lg ">
@@ -31,11 +32,18 @@ const Navber:React.FC<NavbarProps> = ({onhandleSidebarOpen,sidebarOpen}) => {
 
       {/* Right - Icons & Profile */}
       <div className="flex items-center gap-6">
-        <button onClick={DarkModetoggle} className="p-2 bg-gray-100 dark:bg-gray-600 cursor-pointer rounded-full"><Moon /></button>
+        <button
+          onClick={DarkModetoggle}
+          className="p-2 bg-gray-100 dark:bg-gray-600 cursor-pointer rounded-full"
+        >
+          <Moon />
+        </button>
         {/* Home */}
-        <Link href={'/'} className=" p-2 bg-gray-100 dark:bg-gray-600 cursor-pointer rounded-full ">
+        <Link
+          href={"/"}
+          className=" p-2 bg-gray-100 dark:bg-gray-600 cursor-pointer rounded-full "
+        >
           <FaHome size={20} />
-         
         </Link>
 
         {/* Notifications */}
@@ -47,16 +55,21 @@ const Navber:React.FC<NavbarProps> = ({onhandleSidebarOpen,sidebarOpen}) => {
         </button>
 
         {/* Profile */}
-        <Link href={'/dashboard/admin-profile'} className=" transition flex items-center p-2 bg-gray-100 dark:bg-gray-600 cursor-pointer rounded-full">
+        <Link
+          href={"/dashboard/admin-profile"}
+          className=" transition flex items-center p-2 bg-gray-100 dark:bg-gray-600 cursor-pointer rounded-full"
+        >
           <FaUserCircle size={20} />
         </Link>
-        <button 
-        onClick={onhandleSidebarOpen}
-        className=" transition flex items-center cursor-pointer lg:hidden">
-          {
-            !sidebarOpen ? <IoMenu className="w-6 h-6" /> : <IoClose size={20}/>
-          }
-          
+        <button
+          onClick={onhandleSidebarOpen}
+          className=" transition flex items-center cursor-pointer lg:hidden"
+        >
+          {!sidebarOpen ? (
+            <IoMenu className="w-6 h-6" />
+          ) : (
+            <IoClose size={20} />
+          )}
         </button>
       </div>
     </header>

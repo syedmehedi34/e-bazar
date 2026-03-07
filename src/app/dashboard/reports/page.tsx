@@ -11,13 +11,13 @@ interface RevenueData {
   dailyRevenue: number;
 }
 
-interface ITopSellingProduct{
+interface ITopSellingProduct {
   _id: string;
-    title: string;
-    image: string;
-    category: string;
-    totalQuantity: number;
-    totalSales: number;
+  title: string;
+  image: string;
+  category: string;
+  totalQuantity: number;
+  totalSales: number;
 }
 
 interface Report {
@@ -27,7 +27,7 @@ interface Report {
   TotalPendingOrder: number;
   totalOrders: number;
   revenueData: RevenueData[];
-  topSellingProducts: ITopSellingProduct[]
+  topSellingProducts: ITopSellingProduct[];
 }
 
 const ReportPage: React.FC = () => {
@@ -38,12 +38,15 @@ const ReportPage: React.FC = () => {
     TotalPendingOrder: 0,
     totalOrders: 0,
     revenueData: [],
-    topSellingProducts:[]
+    topSellingProducts: [],
   });
 
   const getReport = useCallback(async () => {
     try {
-      const res = await axios.get("https://e-bazaar-server-three.vercel.app/admin/report",{withCredentials:true});
+      const res = await axios.get(
+        "https://e-bazaar-server-three.vercel.app/admin/report",
+        { withCredentials: true },
+      );
       if (res.status === 200) {
         setReport(res.data);
       }
@@ -87,7 +90,7 @@ const ReportPage: React.FC = () => {
     },
     {
       title: "Total Sales",
-      value:`৳ ${report.TotalSalesReport}`,
+      value: `৳ ${report.TotalSalesReport}`,
       icon: <FaBox className="text-3xl text-orange-500" />,
       bg: "bg-orange-100",
       growth: 7,
@@ -96,8 +99,6 @@ const ReportPage: React.FC = () => {
 
   return (
     <div className="">
-     
-
       {/* Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
         {cards.map((card, idx) => (
@@ -128,10 +129,10 @@ const ReportPage: React.FC = () => {
           </div>
         ))}
       </div>
-        <div>
-          <RevenuneChart revenueData={report?.revenueData} />
-          <TopSellingProducts topSellingProduct={report?.topSellingProducts}/>
-        </div>
+      <div>
+        <RevenuneChart revenueData={report?.revenueData} />
+        <TopSellingProducts topSellingProduct={report?.topSellingProducts} />
+      </div>
     </div>
   );
 };

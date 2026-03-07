@@ -20,7 +20,10 @@ const UserProfilePage = () => {
         {/* 🔹 Cover Photo */}
         <div className="h-[300px] bg-gradient-to-r from-blue-600 to-indigo-500 relative">
           <Image
-            src={session?.user?.image || "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"}
+            src={
+              session?.user?.image ||
+              "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+            }
             alt="cover photo"
             fill
             className="object-cover opacity-90"
@@ -83,9 +86,11 @@ const UserProfilePage = () => {
             About
           </h3>
           <p className="leading-relaxed">
-            Hi! I’m {userName}. I enjoy connecting with friends, exploring new places, and sharing experiences. I love discovering new trends, learning about technology, and staying connected with my community. Life is all about making memories and enjoying every moment.
+            Hi! I’m {userName}. I enjoy connecting with friends, exploring new
+            places, and sharing experiences. I love discovering new trends,
+            learning about technology, and staying connected with my community.
+            Life is all about making memories and enjoying every moment.
           </p>
-
         </div>
       </div>
     </div>

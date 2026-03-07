@@ -3,7 +3,7 @@ import axios, { AxiosError } from "axios";
 import React from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import Swal from "sweetalert2";
-import { Tag, PackagePlus, } from "lucide-react";
+import { Tag, PackagePlus } from "lucide-react";
 import { CiImageOn } from "react-icons/ci";
 
 interface ProductFormInputs {
@@ -47,7 +47,7 @@ const ProductForm = () => {
       const res = await axios.post(
         "https://e-bazaar-server-three.vercel.app/admin/add-products",
         payload,
-        {withCredentials:true}
+        { withCredentials: true },
       );
       if (res.status === 200) {
         Swal.fire({
@@ -71,7 +71,8 @@ const ProductForm = () => {
         className="w-full  bg-white dark:bg-gray-800 dark:text-white p-8 rounded-2xl shadow-xl space-y-6"
       >
         <h2 className="text-3xl font-bold text-gray-800 dark:text-white flex items-center gap-2">
-          <PackagePlus className="text-blue-600 dark:text-white" /> Add New Product
+          <PackagePlus className="text-blue-600 dark:text-white" /> Add New
+          Product
         </h2>
 
         {/* Title */}
@@ -109,7 +110,6 @@ const ProductForm = () => {
             <input
               type="number"
               placeholder="Price"
-
               className="w-full input dark:bg-gray-600"
               {...register("price", { required: true })}
             />
@@ -241,24 +241,18 @@ const ProductForm = () => {
           </div>
         </div>
 
-
-
-
         <div className="">
           <label>Featured</label>
-          <input type="checkbox" {...register("featured")} className=" checkbox dark:bg-gray-600 ml-4" />
-
+          <input
+            type="checkbox"
+            {...register("featured")}
+            className=" checkbox dark:bg-gray-600 ml-4"
+          />
         </div>
-
 
         {/* Stock & Featured */}
-        <div className="grid grid-cols-2 gap-4">
-
-
-        </div>
-        <div className="grid lg:grid-cols-2  grid-cols-1 gap-4">
-
-        </div>
+        <div className="grid grid-cols-2 gap-4"></div>
+        <div className="grid lg:grid-cols-2  grid-cols-1 gap-4"></div>
         {/* Submit */}
         <button
           type="submit"

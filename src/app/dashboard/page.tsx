@@ -19,10 +19,10 @@ interface DashboardData {
 }
 
 interface ProductAnalytics {
-    name: string;
-    totalPrice: number;
-    amount?: number;
-    date: string;
+  name: string;
+  totalPrice: number;
+  amount?: number;
+  date: string;
 }
 
 const Page: React.FC = () => {
@@ -30,7 +30,7 @@ const Page: React.FC = () => {
   const [products, setProducts] = useState<ProductAnalytics[]>([]);
   const [latestOrder, setLatestOrder] = useState([]);
   const [loading, setLoading] = useState(true);
-  const {data:session} = useSession()
+  const { data: session } = useSession();
 
   useEffect(() => {
     const getData = async () => {
@@ -55,7 +55,7 @@ const Page: React.FC = () => {
   }, []);
 
   if (loading) {
-    return <Loader/>
+    return <Loader />;
   }
 
   if (!data) {
@@ -104,7 +104,7 @@ const Page: React.FC = () => {
     },
   ];
 
-  console.log("SESSION",session)
+  console.log("SESSION", session);
 
   return (
     <div>

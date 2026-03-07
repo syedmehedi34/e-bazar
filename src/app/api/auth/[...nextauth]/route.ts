@@ -1,93 +1,98 @@
-import NextAuth from 'next-auth'
-import GoogleProvider from 'next-auth/providers/google'
-import axios from 'axios'
-import CredentialsProvider from 'next-auth/providers/credentials'
+import NextAuth from "next-auth";
+import GoogleProvider from "next-auth/providers/google";
+import axios from "axios";
+import CredentialsProvider from "next-auth/providers/credentials";
 
-declare module 'next-auth' {
+declare module "next-auth" {
   interface User {
-    role?: string
-    id?: string
+    role?: string;
+    id?: string;
   }
   interface Session {
     user: {
-      id?: string
-      role?: string
-      email?: string
-      name?: string
-      image?: string
-    }
+      id?: string;
+      role?: string;
+      email?: string;
+      name?: string;
+      image?: string;
+    };
   }
 }
 
 const handler = NextAuth({
   providers: [
     CredentialsProvider({
-      name: 'Credentials',
+      name: "Credentials",
       credentials: {
-        email: { label: 'Email', type: 'email', placeholder: 'your@email.com' },
-        password: { label: 'Password', type: 'password' }
+        email: { label: "Email", type: "email", placeholder: "your@email.com" },
+        password: { label: "Password", type: "password" },
       },
-      async authorize (credentials) {
+      async authorize(credentials) {
         // Replace this with your actual user authentication logic
         if (!credentials?.email || !credentials?.password) {
-          return null
+          return null;
         }
 
         try {
           const userInfo = {
             email: credentials?.email,
-            password: credentials?.password
-          }
-          const res = await axios.post(`https://e-bazaar-server-three.vercel.app/login`, userInfo)
+            password: credentials?.password,
+          };
+          const res = await axios.post(
+            `https://e-bazaar-server-three.vercel.app/login`,
+            userInfo,
+          );
           if (res.status === 200) {
-            return res?.data.user
+            return res?.data.user;
           }
         } catch (error) {
-          if(error) return  null
+          if (error) return null;
         }
-      }
+      },
     }),
 
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID as string,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string
-    })
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+    }),
   ],
 
   pages: {
-    signIn: '/src/Components/Login/login.tsx'
+    signIn: "/src/Components/Login/login.tsx",
   },
   session: {
-    strategy: 'jwt',
-    maxAge: 24 * 60 * 60
+    strategy: "jwt",
+    maxAge: 24 * 60 * 60,
   },
   secret: process.env.NEXTAUTH_SECRET as string,
 
   callbacks: {
-    async jwt ({ token, user }) {
+    async jwt({ token, user }) {
       if (user) {
-        token.id = user.id as string
-        token.role = user.role as string
+        token.id = user.id as string;
+        token.role = user.role as string;
       }
-      return token
+      return token;
     },
-    async session ({ session, token }) {
+    async session({ session, token }) {
       if (token) {
-        session.user.id = token.id as string
-        session.user.role = token.role as string
+        session.user.id = token.id as string;
+        session.user.role = token.role as string;
       }
-      return session
+      return session;
     },
-    async signIn ({user,account}) {
-     if (account?.provider === "google") {
+    async signIn({ user, account }) {
+      if (account?.provider === "google") {
         try {
-         
-          await axios.post("https://e-bazaar-server-three.vercel.app/create/user", {
-            name: user.name,
-            email: user.email,
-            image: user.image,
-            role: ["user"],
-          });
+          await axios.post(
+            "https://e-bazaar-server-three.vercel.app/create/user",
+            {
+              name: user.name,
+              email: user.email,
+              image: user.image,
+              role: ["user"],
+            },
+          );
           return true;
         } catch (error) {
           console.error("Google sign-in failed", error);
@@ -95,9 +100,8 @@ const handler = NextAuth({
         }
       }
       return true;
-    }
- 
-  }
-})
+    },
+  },
+});
 
-export { handler as GET, handler as POST }
+export { handler as GET, handler as POST };

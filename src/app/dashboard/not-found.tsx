@@ -10,7 +10,8 @@ export default function NotFound() {
         Oops! Page not found
       </h2>
       <p className="text-gray-600 mb-6 text-center max-w-md">
-        The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.
+        The page you are looking for might have been removed, had its name
+        changed, or is temporarily unavailable.
       </p>
       <Link
         href="/"
@@ -28,5 +29,5 @@ export default function NotFound() {
         />
       </div>
     </div>
-  )
+  );
 }

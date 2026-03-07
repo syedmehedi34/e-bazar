@@ -1,13 +1,12 @@
-"use client"
-import React, { useState } from 'react'
-import { IoClose } from 'react-icons/io5'
-import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js'
+"use client";
+import React, { useState } from "react";
+import { IoClose } from "react-icons/io5";
+import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 
-import axios from 'axios';
-import { toast } from 'react-toastify';
-import { useRouter } from 'next/navigation';
-import { useDeliveryDate } from '@/hook/useDeliveryDate/useDeliveryDate';
-
+import axios from "axios";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
+import { useDeliveryDate } from "@/hook/useDeliveryDate/useDeliveryDate";
 
 interface ProductDetails {
   totalPrice: number;
@@ -27,8 +26,8 @@ interface ProductDetails {
 }
 
 type PaymentProps = {
-  onClose: () => void
-  products: ProductDetails
+  onClose: () => void;
+  products: ProductDetails;
   formData: {
     name: string;
     phone: string;
@@ -38,24 +37,25 @@ type PaymentProps = {
     deliveryAddress: string;
     paymentMethod: string;
   };
-
-}
+};
 
 const Payment: React.FC<PaymentProps> = ({ onClose, products, formData }) => {
-  const stripe = useStripe()
-  const elements = useElements()
+  const stripe = useStripe();
+  const elements = useElements();
   const [error, setError] = useState("");
   const [cardError, setCardError] = useState("");
   const [loading, setLoading] = useState(false);
-  const router = useRouter()
-  const deliveryData = useDeliveryDate(3)
+  const router = useRouter();
+  const deliveryData = useDeliveryDate(3);
   const generateTransactionId = () => {
     const prefix = "pay-e-bazaar";
     const randomNumber = Math.floor(1000 + Math.random() * 9000);
-    const randomChars = Math.random().toString(36).substring(2, 6).toUpperCase();
+    const randomChars = Math.random()
+      .toString(36)
+      .substring(2, 6)
+      .toUpperCase();
     return `${prefix}-${randomNumber}-${randomChars}`;
-  }
-
+  };
 
   const handlePayment = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -70,9 +70,11 @@ const Payment: React.FC<PaymentProps> = ({ onClose, products, formData }) => {
     try {
       setLoading(true);
 
-      const res = await axios.post(`https://e-bazaar-server-three.vercel.app/create-payment-intent`,
-        { amount: products?.totalPrice, id: products?.productId });
-      
+      const res = await axios.post(
+        `https://e-bazaar-server-three.vercel.app/create-payment-intent`,
+        { amount: products?.totalPrice, id: products?.productId },
+      );
+
       const clientSecret = res?.data?.clientSecret;
       //confirm payment
       const { paymentIntent, error: confirmError } =
@@ -83,18 +85,15 @@ const Payment: React.FC<PaymentProps> = ({ onClose, products, formData }) => {
               name: formData.name,
               email: formData.email,
               phone: formData.phone,
-
-
-            }
-          }
-        })
+            },
+          },
+        });
 
       if (confirmError) {
-        toast.error(confirmError.message)
+        toast.error(confirmError.message);
       }
 
-      if (paymentIntent?.status === 'succeeded') {
-
+      if (paymentIntent?.status === "succeeded") {
         const orderDetails = {
           customer: {
             name: formData.name,
@@ -109,8 +108,12 @@ const Payment: React.FC<PaymentProps> = ({ onClose, products, formData }) => {
             name: products.productName,
             brand: products.productBrand,
             category: products.productCategory,
-            sizes: Array.isArray(products.productSizes) ? products.productSizes : [products.productSizes],
-            colors: Array.isArray(products.productColors) ? products.productColors : [products.productColors],
+            sizes: Array.isArray(products.productSizes)
+              ? products.productSizes
+              : [products.productSizes],
+            colors: Array.isArray(products.productColors)
+              ? products.productColors
+              : [products.productColors],
             quantity: products.quantity,
             totalPrice: products.totalPrice,
             currency: products.productCurrency,
@@ -120,7 +123,7 @@ const Payment: React.FC<PaymentProps> = ({ onClose, products, formData }) => {
           payment: {
             method: formData.paymentMethod || "Card",
             orderStatus: "pending",
-            paymentStatus: 'paid',
+            paymentStatus: "paid",
             verifiedByAdmin: false,
             transactionId: generateTransactionId(),
             amount: products.totalPrice,
@@ -135,25 +138,25 @@ const Payment: React.FC<PaymentProps> = ({ onClose, products, formData }) => {
           updatedAt: new Date().toISOString(),
         };
 
-        const res = await axios.post('https://e-bazaar-server-three.vercel.app/order', { orderDetails })
+        const res = await axios.post(
+          "https://e-bazaar-server-three.vercel.app/order",
+          { orderDetails },
+        );
 
         if (res.status === 200) {
-          toast.success('Your Payment Successfully!')
-          router.push('/my_orders')
+          toast.success("Your Payment Successfully!");
+          router.push("/my_orders");
         } else {
-          console.error(res.data.message)
+          console.error(res.data.message);
         }
       }
     } catch (error) {
       setError("Payment failed. Please try again.");
       console.error("Payment error:", (error as Error).message);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-
-  }
-
-
+  };
 
   return (
     <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50">
@@ -178,17 +181,15 @@ const Payment: React.FC<PaymentProps> = ({ onClose, products, formData }) => {
         {/* Card Input */}
         <div className="p-3 border border-gray-300 rounded-lg mb-4 bg-gray-50  ">
           <CardElement
-            
-            options={{ 
+            options={{
               style: {
                 base: {
                   fontSize: "16px",
-                  color: "#000", 
+                  color: "#000",
                   fontFamily: "Rubik, sans-serif",
-                  "::placeholder": {color:"#555"},
-                 
+                  "::placeholder": { color: "#555" },
                 },
-                invalid: { color: "#e53935" }, 
+                invalid: { color: "#e53935" },
               },
             }}
             onChange={(event) => {
@@ -214,13 +215,15 @@ const Payment: React.FC<PaymentProps> = ({ onClose, products, formData }) => {
           type="submit"
           className="w-full py-3 bg-black text-white font-semibold rounded-lg hover:bg-gray-900 transition"
         >
-
-          {loading ? <span className="loading loading-bars loading-xs"></span> : `Pay ৳ ${products.totalPrice}`}
+          {loading ? (
+            <span className="loading loading-bars loading-xs"></span>
+          ) : (
+            `Pay ৳ ${products.totalPrice}`
+          )}
         </button>
       </form>
-
     </div>
-  )
-}
+  );
+};
 
-export default Payment
+export default Payment;

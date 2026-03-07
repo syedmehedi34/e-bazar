@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { IoIosArrowRoundForward ,IoIosArrowRoundBack } from "react-icons/io";
+import { IoIosArrowRoundForward, IoIosArrowRoundBack } from "react-icons/io";
 type PaginationProps = {
   currentPage: number;
   setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
@@ -21,14 +21,15 @@ const Pagination: React.FC<PaginationProps> = ({
           disabled={currentPage === 0}
           onClick={() => setCurrentPage((prev) => prev - 1)}
         >
-          <span className="hidden sm:inline"><IoIosArrowRoundBack  size={20}/></span>
+          <span className="hidden sm:inline">
+            <IoIosArrowRoundBack size={20} />
+          </span>
           <span className="sm:hidden">←</span>
         </button>
 
         {/* Page Numbers */}
         <div className="flex items-center gap-1">
           {pageArray?.map((page) => {
-         
             if (
               typeof window !== "undefined" &&
               window.innerWidth < 640 &&
@@ -56,7 +57,7 @@ const Pagination: React.FC<PaginationProps> = ({
                 }`}
                 onClick={() => setCurrentPage(page)}
               >
-                {page }
+                {page}
               </button>
             );
           })}
@@ -68,7 +69,9 @@ const Pagination: React.FC<PaginationProps> = ({
           disabled={pageArray?.length - 1 === currentPage}
           onClick={() => setCurrentPage((prev) => prev + 1)}
         >
-          <span className="hidden sm:inline"><IoIosArrowRoundForward size={20} /></span>
+          <span className="hidden sm:inline">
+            <IoIosArrowRoundForward size={20} />
+          </span>
           <span className="sm:hidden">→</span>
         </button>
       </nav>

@@ -50,7 +50,9 @@ const OrderCard: React.FC<orderSummaryProps> = ({ orderSummary }) => {
         >
           <div className="card-body flex flex-col items-center justify-center text-center p-2">
             <div className="mb-3">{card.icon}</div>
-            <h2 className="card-title text-gray-800 dark:text-gray-100 text-lg">{card.title}</h2>
+            <h2 className="card-title text-gray-800 dark:text-gray-100 text-lg">
+              {card.title}
+            </h2>
             <p className="text-3xl font-bold text-gray-900 dark:text-white mt-2">
               {card.value}
             </p>

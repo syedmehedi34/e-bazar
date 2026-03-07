@@ -5,14 +5,17 @@ import { Edit, Settings } from "lucide-react";
 import { useSession } from "next-auth/react";
 
 export default function ProfilePage() {
-    const {data:session} = useSession()
+  const { data: session } = useSession();
   return (
     <div className="min-h-screen flex items-center justify-center bg-white dark:bg-gray-800 transition-colors duration-300">
       <div className="w-full max-w-md bg-white dark:bg-gray-800 shadow-2xl rounded-2xl p-6 border border-gray-200 dark:border-gray-700">
         {/* Profile Image */}
         <div className="flex flex-col items-center">
           <Image
-            src={session?.user?.image || "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"}
+            src={
+              session?.user?.image ||
+              "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+            }
             alt="Profile"
             width={120}
             height={120}
@@ -44,11 +47,15 @@ export default function ProfilePage() {
           </div>
           <div>
             <p className="text-2xl font-bold text-blue-500">120</p>
-            <p className="text-sm text-gray-600 dark:text-gray-400">Followers</p>
+            <p className="text-sm text-gray-600 dark:text-gray-400">
+              Followers
+            </p>
           </div>
           <div>
             <p className="text-2xl font-bold text-blue-500">80</p>
-            <p className="text-sm text-gray-600 dark:text-gray-400">Following</p>
+            <p className="text-sm text-gray-600 dark:text-gray-400">
+              Following
+            </p>
           </div>
         </div>
       </div>

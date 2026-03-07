@@ -1,11 +1,11 @@
-"use client"
-import Sidebar from '@/Components/Dashboard/Sidebar';
-import './globals.css';
-import Navber from '@/Components/Dashboard/Navber';
-import SessionWrapper from '@/Components/SessionWrapper/SessionWrapper';
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import ToastProvider from '@/Components/ToastProvider/ToastProvider';
+"use client";
+import Sidebar from "@/Components/Dashboard/Sidebar";
+import "./globals.css";
+import Navber from "@/Components/Dashboard/Navber";
+import SessionWrapper from "@/Components/SessionWrapper/SessionWrapper";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import ToastProvider from "@/Components/ToastProvider/ToastProvider";
 export default function DashboardLayout({
   children,
 }: {
@@ -13,8 +13,8 @@ export default function DashboardLayout({
 }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const handleOpenSidebar = () => {
-    setSidebarOpen(!sidebarOpen)
-  }
+    setSidebarOpen(!sidebarOpen);
+  };
   return (
     <html lang="en">
       <body className="bg-gray-100 dark:bg-gray-900">
@@ -23,8 +23,8 @@ export default function DashboardLayout({
             {/* Sidebar */}
 
             <div
-
-              className={`lg:block hidden  transition-all duration-700 fixed h-full bg-white dark:shadow-gray-700 dark:bg-gray-900 dark:text-white z-[100] w-52 shadow`}>
+              className={`lg:block hidden  transition-all duration-700 fixed h-full bg-white dark:shadow-gray-700 dark:bg-gray-900 dark:text-white z-[100] w-52 shadow`}
+            >
               <Sidebar />
             </div>
             <AnimatePresence>
@@ -41,18 +41,20 @@ export default function DashboardLayout({
               )}
             </AnimatePresence>
 
-
             {/* Main Content */}
             <main className="flex-1 flex flex-col">
               {/* Navbar */}
               <div className="sticky top-0 z-50 lg:ml-52">
-                <Navber onhandleSidebarOpen={handleOpenSidebar} sidebarOpen={sidebarOpen} />
+                <Navber
+                  onhandleSidebarOpen={handleOpenSidebar}
+                  sidebarOpen={sidebarOpen}
+                />
               </div>
 
               {/* Page Content */}
               <div className="flex-1 p-4 overflow-auto lg:ml-52">
                 {children}
-                <ToastProvider/>
+                <ToastProvider />
               </div>
             </main>
           </div>

@@ -1,5 +1,5 @@
-'use client'
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+"use client";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export interface CartItem {
   _id: string;
@@ -16,15 +16,15 @@ export interface addToCartState {
 }
 
 const initialState: addToCartState = {
-  value: []
-}
+  value: [],
+};
 
 export const addToCartSlice = createSlice({
-  name: 'addToCart',
+  name: "addToCart",
   initialState,
   reducers: {
     addToCart: (state, action: PayloadAction<CartItem>) => {
-      const exist = state.value.find(cart => cart._id === action.payload._id);
+      const exist = state.value.find((cart) => cart._id === action.payload._id);
       if (exist) {
         exist.quantity += 1;
       } else {
@@ -32,32 +32,32 @@ export const addToCartSlice = createSlice({
       }
     },
     incrementQuantity: (state, action: PayloadAction<string>) => {
-      const exist = state.value.find(cart => cart._id === action.payload);
+      const exist = state.value.find((cart) => cart._id === action.payload);
       if (exist) {
         exist.quantity += 1;
       }
     },
     decrementQuantity: (state, action: PayloadAction<string>) => {
-      const exist = state.value.find(cart => cart._id === action.payload);
+      const exist = state.value.find((cart) => cart._id === action.payload);
       if (exist && exist.quantity > 1) {
         exist.quantity -= 1;
       }
     },
     removeFromCart: (state, action: PayloadAction<string>) => {
-      state.value = state.value.filter(cart => cart._id !== action.payload);
+      state.value = state.value.filter((cart) => cart._id !== action.payload);
     },
     removeAllFromCart: (state) => {
       state.value = [];
-    }
-  }
-})
+    },
+  },
+});
 
 export const {
   addToCart,
   incrementQuantity,
   decrementQuantity,
   removeFromCart,
-  removeAllFromCart
+  removeAllFromCart,
 } = addToCartSlice.actions;
 
 export default addToCartSlice.reducer;

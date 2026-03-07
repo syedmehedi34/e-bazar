@@ -24,7 +24,7 @@ interface Product {
 
 type ProductsTableProps = {
   products: Products[];
-  onUpdate?: () => void
+  onUpdate?: () => void;
   onDelete?: (id: string) => void;
 };
 
@@ -97,7 +97,8 @@ const ProductsTable: React.FC<ProductsTableProps> = ({
                   <button
                     title="Delete"
                     onClick={() => onDelete?.(product._id)}
-                    className="p-2 bg-gray-100 dark:bg-gray-600 cursor-pointer rounded-full hover:text-secondary transition-all duration-300">
+                    className="p-2 bg-gray-100 dark:bg-gray-600 cursor-pointer rounded-full hover:text-secondary transition-all duration-300"
+                  >
                     <Trash />
                   </button>
                 </td>
@@ -109,7 +110,11 @@ const ProductsTable: React.FC<ProductsTableProps> = ({
 
       {isOpen && updateProducts && (
         <div className="fixed inset-0 z-100 bg-black/50 flex justify-center items-center">
-          <ProductsUpdate setIsOpen={setIsOpen} updateProducts={updateProducts} onUpdate={onUpdate || (() => { })} />
+          <ProductsUpdate
+            setIsOpen={setIsOpen}
+            updateProducts={updateProducts}
+            onUpdate={onUpdate || (() => {})}
+          />
         </div>
       )}
     </div>

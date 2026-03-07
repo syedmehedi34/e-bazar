@@ -1,9 +1,7 @@
-import React from 'react'
+import React from "react";
 
 const Userpage = () => {
-  return (
-    <div>Userpage</div>
-  )
-}
+  return <div>Userpage</div>;
+};
 
-export default Userpage
+export default Userpage;

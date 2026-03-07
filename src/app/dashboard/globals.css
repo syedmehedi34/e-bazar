@@ -1,31 +1,32 @@
 @import "tailwindcss";
 
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
- @plugin "daisyui" {
-  themes: light --default, dark --prefersdark;
+@plugin "daisyui" {
+  themes:
+    light --default,
+    dark --prefersdark;
   themes: light --default;
- }
+}
 
 /* globals.css */
 :root {
-  --font-poppins: 'Poppins', sans-serif;
-  --font-rubik: 'Rubik', sans-serif;
+  --font-poppins: "Poppins", sans-serif;
+  --font-rubik: "Rubik", sans-serif;
 }
-@theme{
-  --color-dark:'#eff3f6'
+@theme {
+  --color-dark: "#eff3f6";
 }
 .poppins {
   font-family: var(--font-poppins);
 }
 
-.rubik{
+.rubik {
   font-family: var(--font-rubik);
 }
 
-body{
+body {
   font-family: var(--font-poppins);
   position: relative;
-   
 }
 
 .fixed-nav {
@@ -33,11 +34,10 @@ body{
   top: 0;
   left: 0;
   width: 100%;
-  
-  animation: slideDown 3s ease-out forwards; 
+
+  animation: slideDown 3s ease-out forwards;
 
   z-index: 90;
-
 }
 
 @keyframes slideDown {
@@ -49,28 +49,25 @@ body{
   }
 }
 
-
 .swiper-pagination-bullet {
-  background: #09090a !important; 
-  opacity: 0.10;
+  background: #09090a !important;
+  opacity: 0.1;
 }
 
 .swiper-pagination-bullet-active {
-  background: #fff !important; 
+  background: #fff !important;
   opacity: 1;
 }
 
 .clip-path {
- clip-path: polygon(40% 0%, 100% 0%, 100% 100%, 0% 100%);
+  clip-path: polygon(40% 0%, 100% 0%, 100% 100%, 0% 100%);
 }
 
-@media (max-width:1024) {
- .clip-path {
- clip-path: polygon(40% 0%, 100% 0%, 100% 100%, 0% 100%);
-}
+@media (max-width: 1024) {
+  .clip-path {
+    clip-path: polygon(40% 0%, 100% 0%, 100% 100%, 0% 100%);
+  }
 }
 .container-custom {
   @apply w-full max-w-[1280px] mx-auto px-4;
 }
-
-
