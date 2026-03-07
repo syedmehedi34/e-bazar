@@ -4,7 +4,7 @@ interface PageProps {
   setSort: (value: string) => void;
 }
 
-const Sorting: React.FC<PageProps> = ({ setSort, total }) => {
+const Sorting: React.FC<PageProps> = ({ setSort }) => {
   return (
     <div className="w-full sm:w-auto z-10">
       <select

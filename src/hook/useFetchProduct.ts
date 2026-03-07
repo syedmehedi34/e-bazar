@@ -1,15 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
+// API call to fetch products
 const fetchProducts = async () => {
-  const res = await axios.get(
-    "https://e-bazaar-server-three.vercel.app/shopping?limit=1000",
-    {
-      withCredentials: true,
-    },
-  );
-
-  return res.data;
+  const res = await axios.get("/api/products");
+  return res.data; // { message, data: [...] } returns
+  console.log(res);
 };
 
 export const useFetchProduct = () => {
@@ -19,10 +15,11 @@ export const useFetchProduct = () => {
   });
 
   return {
-    products: data?.product || [],
-    allProducts: data?.allProducts || [],
-    loading: isLoading,
-    error: isError ? error : null,
-    refetch,
+    products: data?.data || [],
+    productsLoading: isLoading,
+    productsError: isError ? error : null,
+    refetchProducts: refetch,
   };
 };
+
+// const { products, productsLoading, productsError, refetchProducts } = useFetchProduct();

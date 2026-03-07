@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 import { Category } from "@/Components/Shopping/Category";
 import ShoppingCard from "@/Components/Shopping/ShoppingCard";
@@ -10,50 +11,23 @@ import axios from "axios";
 import { useRouter, useSearchParams } from "next/navigation";
 import Loader from "@/Components/Loader/Loader";
 import Pagination from "@/Components/Pagination2";
+import { useFetchProduct } from "@/hook/useFetchProduct";
 
 const Shopping = () => {
+  const { products, productsLoading, productsError, refetchProducts } =
+    useFetchProduct();
+
   const searchParams = useSearchParams();
   const search = searchParams.get("search") || "";
-  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   const itemsPerPage = 12;
-  const [products, setProducts] = useState([]); // all products
   const [paginatedProducts, setPaginatedProducts] = useState([]); // current page products
-
   const [category, setCategory] = useState([]);
   const [sort, setSort] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [minPrice, setMinPrice] = useState<number>(0);
   const [maxPrice, setMaxPrice] = useState<number>(0);
-
-  // fetch products based on filters
-  const fetchData = useCallback(async () => {
-    try {
-      setLoading(true);
-
-      // fetch all products
-      const res = await axios.get(
-        `https://e-bazaar-server-three.vercel.app/shopping?limit=1000`,
-        {
-          withCredentials: true,
-        },
-      );
-
-      console.log(res?.data);
-      setProducts(res?.data?.product); // all products
-      setPaginatedProducts(res?.data?.product); // initial page data
-      setCategory(res?.data?.allProducts); // for category filter
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    fetchData();
-  }, [fetchData]);
 
   // reset all filters and search
   const handleReset = () => {
@@ -112,7 +86,7 @@ const Shopping = () => {
 
           {/* product display section */}
           <div className="lg:col-span-4 min-h-screen ">
-            {loading ? (
+            {productsLoading ? (
               <Loader />
             ) : products.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-72 text-center">
