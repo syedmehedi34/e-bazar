@@ -7,30 +7,29 @@ import React, { useCallback, useEffect, useState } from "react";
 import Sorting from "@/Components/Shopping/Sorting";
 import Pricerange from "@/Components/Shopping/Pricerange";
 import axios from "axios";
-import Pagination from "@/Components/Pagination/Pagination";
 import { useRouter, useSearchParams } from "next/navigation";
 import Loader from "@/Components/Loader/Loader";
+import Pagination from "@/Components/Pagination2";
+
 const Shopping = () => {
   const searchParams = useSearchParams();
   const search = searchParams.get("search") || "";
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const [products, setProducts] = useState([]);
+
+  const [products, setProducts] = useState([]); // all products
+  const [paginatedProducts, setPaginatedProducts] = useState([]); // current page products
+
   const [category, setCategory] = useState([]);
   const [sort, setSort] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [minPrice, setMinPrice] = useState<number>(0);
   const [maxPrice, setMaxPrice] = useState<number>(0);
-  const [count, setCount] = useState(0);
-  const [currentPage, setCurrentPage] = useState<number>(1);
 
-  const pageNumber = Math.ceil(count / 15) || 1;
-  const pageArray = [
-    ...Array(pageNumber)
-      .keys()
-      .map((i) => i + 1),
-  ];
   const [total, setTotal] = useState(0);
+
+  // items per page for client-side pagination
+  const itemsPerPage = 12;
 
   // fetch products based on filters
   const fetchData = useCallback(async () => {
@@ -42,9 +41,10 @@ const Shopping = () => {
       if (selectedCategory) params.set("category", selectedCategory);
       if (minPrice) params.set("minPrice", minPrice.toString());
       if (maxPrice) params.set("maxPrice", maxPrice.toString());
-      if (currentPage) params.set("page", currentPage.toString());
-      params.set("limit", "12");
       if (search) params.set("search", search);
+
+      // fetch all filtered products for client-side pagination
+      params.set("limit", "1000"); // large limit to get all data
 
       const res = await axios.get(
         `https://e-bazaar-server-three.vercel.app/shopping?${params.toString()}`,
@@ -54,7 +54,7 @@ const Shopping = () => {
       );
 
       setProducts(res?.data?.product);
-      setCount(res?.data?.total);
+      setPaginatedProducts(res?.data?.product); // changed: initial page data
       setTotal(res?.data?.totalProducts);
       setCategory(res?.data?.allProducts);
     } catch (error) {
@@ -62,7 +62,7 @@ const Shopping = () => {
     } finally {
       setLoading(false);
     }
-  }, [sort, selectedCategory, minPrice, maxPrice, currentPage, search]);
+  }, [sort, selectedCategory, minPrice, maxPrice, search]);
 
   useEffect(() => {
     fetchData();
@@ -74,9 +74,7 @@ const Shopping = () => {
     setSelectedCategory("");
     setMinPrice(0);
     setMaxPrice(0);
-    setCurrentPage(1);
     const params = new URLSearchParams(searchParams.toString());
-
     params.delete("search");
     router.push(`/shopping?${params.toString()}`);
   };
@@ -152,12 +150,14 @@ const Shopping = () => {
               </div>
             ) : (
               <div>
-                {<ShoppingCard products={products} />}
+                {/* paginatedProducts used instead of products */}
+                {<ShoppingCard products={paginatedProducts} />}
+
                 {/* Pagination */}
                 <Pagination
-                  currentPage={currentPage}
-                  setCurrentPage={setCurrentPage}
-                  pageArray={pageArray}
+                  data={products} // full data
+                  itemsPerPage={itemsPerPage} // items per page
+                  onPageDataChange={setPaginatedProducts} // update current page
                 />
               </div>
             )}
