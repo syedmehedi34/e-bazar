@@ -2,11 +2,9 @@ import type { Metadata } from "next";
 import { poppins, rubik } from "@/lib/fonts";
 import "./globals.css";
 
-import ReduxProvider from "@/Provider/ReduxPresistProbider/ReduxPresistProbider";
 import Navbar from "@/Components/Header/Navbar";
 import Footer from "@/Components/Footer/Footer";
-import SessionWrapper from "@/Components/SessionWrapper/SessionWrapper";
-import ToastProvider from "@/Components/ToastProvider/ToastProvider";
+import Providers from "../../Provider/providers";
 
 export const metadata: Metadata = {
   title: "E-Catalog",
@@ -19,22 +17,19 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="en">
       <body
         className={`${poppins.variable} ${rubik.variable} relative dark:bg-gray-900`}
       >
-        <SessionWrapper>
-          <ReduxProvider>
-            <Navbar />
-            {children}
-            <ToastProvider />
-            <Footer />
-          </ReduxProvider>
-        </SessionWrapper>
+        <Providers>
+          <Navbar />
+          {children}
+          <Footer />
+        </Providers>
       </body>
     </html>
   );

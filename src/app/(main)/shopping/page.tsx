@@ -17,6 +17,7 @@ const Shopping = () => {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
+  const itemsPerPage = 12;
   const [products, setProducts] = useState([]); // all products
   const [paginatedProducts, setPaginatedProducts] = useState([]); // current page products
 
@@ -26,43 +27,29 @@ const Shopping = () => {
   const [minPrice, setMinPrice] = useState<number>(0);
   const [maxPrice, setMaxPrice] = useState<number>(0);
 
-  const [total, setTotal] = useState(0);
-
-  // items per page for client-side pagination
-  const itemsPerPage = 12;
-
   // fetch products based on filters
   const fetchData = useCallback(async () => {
     try {
       setLoading(true);
 
-      const params = new URLSearchParams();
-      if (sort) params.set("sort", sort);
-      if (selectedCategory) params.set("category", selectedCategory);
-      if (minPrice) params.set("minPrice", minPrice.toString());
-      if (maxPrice) params.set("maxPrice", maxPrice.toString());
-      if (search) params.set("search", search);
-
-      // fetch all filtered products for client-side pagination
-      params.set("limit", "1000"); // large limit to get all data
-
+      // fetch all products
       const res = await axios.get(
-        `https://e-bazaar-server-three.vercel.app/shopping?${params.toString()}`,
+        `https://e-bazaar-server-three.vercel.app/shopping?limit=1000`,
         {
           withCredentials: true,
         },
       );
 
-      setProducts(res?.data?.product);
-      setPaginatedProducts(res?.data?.product); // changed: initial page data
-      setTotal(res?.data?.totalProducts);
-      setCategory(res?.data?.allProducts);
+      console.log(res?.data);
+      setProducts(res?.data?.product); // all products
+      setPaginatedProducts(res?.data?.product); // initial page data
+      setCategory(res?.data?.allProducts); // for category filter
     } catch (error) {
       console.error(error);
     } finally {
       setLoading(false);
     }
-  }, [sort, selectedCategory, minPrice, maxPrice, search]);
+  }, []);
 
   useEffect(() => {
     fetchData();
@@ -81,18 +68,6 @@ const Shopping = () => {
 
   return (
     <div className="min-h-screen relative dark:text-white">
-      {/* shop page header */}
-      {/* <nav
-        className="bg-cover w-full h-[200px] bgblack/50"
-        style={{
-          backgroundImage: `url("https://images.unsplash.com/photo-1546213290-e1b492ab3eee?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D")`,
-        }}
-      >
-        <h2 className="flex justify-center items-center h-full text-2xl font-bold text-white tracking-wide">
-          Shopping
-        </h2>
-      </nav> */}
-
       <div className="container-custom">
         {/* sorting and nav section  */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-5 py-6 ">
@@ -114,7 +89,7 @@ const Shopping = () => {
           </div>
 
           {/* Right side filter + result */}
-          <Sorting setSort={setSort} total={total} />
+          <Sorting setSort={setSort} />
         </div>
 
         <div className="grid lg:grid-cols-5 gap-5 my-5">
