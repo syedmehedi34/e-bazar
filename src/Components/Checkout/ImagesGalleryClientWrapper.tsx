@@ -26,7 +26,7 @@ type Props = {
 
 const ImagesGalleryClientWrapper: React.FC<Props> = ({ products }) => {
   const [selectedImage, setSelectedImage] = useState<string>(
-    products.images[0],
+    products?.images[0],
   );
 
   return (

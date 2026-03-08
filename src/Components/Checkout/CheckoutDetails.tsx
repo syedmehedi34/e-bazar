@@ -58,9 +58,9 @@ const CheckoutDetails: React.FC<CheckoutDetailsProps> = ({
   const [selectedColor, setSelectedColor] = useState<string[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const dispatch = useDispatch();
-  const [totalPrice, setTotalPrice] = useState(products.price);
+  const [totalPrice, setTotalPrice] = useState(products?.price);
   const [totaldiscountPrice, setTotalDiscountPrice] = useState(
-    products.discountPrice,
+    products?.discountPrice,
   );
 
   const router = useRouter();

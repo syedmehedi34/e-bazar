@@ -4,10 +4,9 @@ import { Category } from "@/Components/Shopping/Category";
 import ShoppingCard from "@/Components/Shopping/ShoppingCard";
 
 import Link from "next/link";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useState } from "react";
 import Sorting from "@/Components/Shopping/Sorting";
 import Pricerange from "@/Components/Shopping/Pricerange";
-import axios from "axios";
 import { useRouter, useSearchParams } from "next/navigation";
 import Loader from "@/Components/Loader/Loader";
 import Pagination from "@/Components/Pagination2";
