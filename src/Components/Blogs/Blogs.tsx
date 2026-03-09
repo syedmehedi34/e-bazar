@@ -1,27 +1,19 @@
 "use client";
-import React, { useCallback, useEffect, useState } from "react";
+
+import React from "react";
 import BlogCard from "./BlogCard";
 import Link from "next/link";
+import { useFetchBlog } from "@/hook/useFetchBlog";
+import type { Blog } from "./blogsInterface";
+import Loader from "@/app/(main)/loading";
 
 const Blogs = () => {
-  const [blogs, setBlogs] = useState([]);
-  console.log(blogs);
-  const getBlogsData = useCallback(async () => {
-    try {
-      const res = await fetch(
-        `https://e-bazaar-server-three.vercel.app/blogs`,
-        { cache: "no-store" },
-      );
-      const data = await res.json();
-      setBlogs(data.blogs);
-    } catch (error) {
-      console.error((error as Error).message);
-    }
-  }, []);
+  const { blogs, blogsLoading } = useFetchBlog();
+  const typedBlogs = (blogs as unknown as Blog[]) || [];
 
-  useEffect(() => {
-    getBlogsData();
-  }, [getBlogsData]);
+  if (blogsLoading) {
+    return <Loader />;
+  }
 
   return (
     <div className="py-16">
@@ -38,7 +30,7 @@ const Blogs = () => {
           </p>
         </div>
         <div>
-          {<BlogCard blogs={blogs} />}
+          {<BlogCard blogs={typedBlogs} />}
 
           <div className="mt-10 flex justify-center items-center">
             <Link

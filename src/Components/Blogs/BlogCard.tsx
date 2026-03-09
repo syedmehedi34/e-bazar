@@ -10,7 +10,7 @@ type BlogsType = {
 const BlogCard: React.FC<BlogsType> = ({ blogs }) => {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-4 md:grid-cols-2 gap-4">
-      {blogs?.slice(0, 4).map((blog) => {
+      {blogs?.slice(0, 4)?.map((blog) => {
         return (
           <div
             key={blog._id}
