@@ -13,7 +13,7 @@ type DashboardLayoutClientProps = {
 const DashboardLayoutClient = ({ children }: DashboardLayoutClientProps) => {
   const { data: session, status } = useSession();
   const router = useRouter();
-  console.log(session?.user.role?.[0]);
+  //   console.log(session?.user.role?.[0]);
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);

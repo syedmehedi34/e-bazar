@@ -8,16 +8,11 @@ import {
   FaTachometerAlt,
   FaUser,
   FaBoxOpen,
-  FaUsers,
-  FaClipboardList,
-  FaListAlt,
-  FaPlusSquare,
-  FaFileSignature,
-  FaAddressBook,
-  FaUserPlus,
   FaUsersCog,
   FaSignOutAlt,
 } from "react-icons/fa";
+import Logo from "@/Components/Logo/Logo";
+import { Logs } from "lucide-react";
 
 type NavItem = {
   path: string;
@@ -34,59 +29,19 @@ const navItems: NavItem[] = [
     roles: ["user", "hr_manager", "admin"],
   },
   {
-    path: "/dashboard/my-profile",
+    path: "/dashboard/profile",
     label: "My Profile",
     icon: <FaUser />,
-    roles: ["user", "hr_manager", "admin"],
+    roles: ["user", "admin"],
   },
   {
-    path: "/dashboard/my_assets",
-    label: "My Assets",
-    icon: <FaBoxOpen />,
+    path: "/dashboard/my-orders",
+    label: "My Orders",
+    icon: <Logs />,
     roles: ["user"],
   },
-  {
-    path: "/dashboard/my_team",
-    label: "My Team",
-    icon: <FaUsers />,
-    roles: ["employee"],
-  },
-  {
-    path: "/dashboard/request_assets",
-    label: "Request Assets",
-    icon: <FaClipboardList />,
-    roles: ["employee"],
-  },
-  {
-    path: "/dashboard/assets_list",
-    label: "Asset List",
-    icon: <FaListAlt />,
-    roles: ["hr_manager"],
-  },
-  {
-    path: "/dashboard/add_asset",
-    label: "Add an Asset",
-    icon: <FaPlusSquare />,
-    roles: ["hr_manager"],
-  },
-  {
-    path: "/dashboard/all_requests",
-    label: "All Requests",
-    icon: <FaFileSignature />,
-    roles: ["hr_manager"],
-  },
-  {
-    path: "/dashboard/employee_list",
-    label: "Employee List",
-    icon: <FaAddressBook />,
-    roles: ["hr_manager"],
-  },
-  {
-    path: "/dashboard/add_employee",
-    label: "Add Employee",
-    icon: <FaUserPlus />,
-    roles: ["hr_manager"],
-  },
+
+  // admin only
   {
     path: "/dashboard/all-users",
     label: "All Users",
@@ -94,7 +49,7 @@ const navItems: NavItem[] = [
     roles: ["admin"],
   },
   {
-    path: "/dashboard/all-assets",
+    path: "/dashboard/all-products",
     label: "All Assets",
     icon: <FaBoxOpen />,
     roles: ["admin"],
@@ -140,14 +95,13 @@ const Sidebar = ({
     >
       <div className="flex-1 overflow-y-auto">
         {/* Logo + Toggle */}
-        <div className="px-4 py-[22.6px] flex items-center justify-between border-b border-teal-500">
-          <Link href="/">
-            <h1
-              className={`${isSidebarOpen ? "block" : "hidden"} text-xl font-semibold text-white`}
-            >
-              AssetFlow
-            </h1>
-          </Link>
+        <div className="px-4 py-[21.3px] flex items-center justify-between border-b border-teal-500">
+          <div
+            className={`${isSidebarOpen ? "block" : "hidden"} text-xl font-semibold text-white`}
+          >
+            <Logo />
+          </div>
+
           <button
             className="p-2 rounded-md hover:bg-teal-500 transition-colors duration-200"
             onClick={toggleSidebar}
@@ -157,7 +111,7 @@ const Sidebar = ({
         </div>
 
         {/* Nav Items */}
-        <ul className="mt-4 space-y-1 px-2">
+        <ul className="mt-4 space-y-2.5 px-2">
           {filteredNavItems.map((item, index) => (
             <li key={index}>
               <Link
@@ -205,7 +159,7 @@ const Sidebar = ({
         <div
           className={`${isSidebarOpen ? "block" : "hidden"} mt-2 text-center text-xs text-teal-100`}
         >
-          © 2025 AssetFlow Solutions
+          © {new Date().getFullYear()} E-Catalog Ltd.
         </div>
       </div>
     </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import Image from "next/image";
 import { FaSun, FaMoon, FaBell, FaSearch } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
@@ -15,13 +16,16 @@ type TopbarProps = {
 };
 
 const newsItems = [
-  "📊 New Asset Reports Available!",
-  "👥 HR Manager: Check Employee Updates!",
-  "⏰ Admin: Review Pending Requests!",
-  "📅 Schedule Asset Maintenance Today!",
-  "🔔 Employee: Update Your Profile!",
-  "🔧 Dashboard Update: New Features Added!",
-  "✅ Admin: Approve User Access Requests!",
+  "🛍️ New Products Just Added – Check Them Out!",
+  "🔥 Big Discounts Available Today!",
+  "🚚 Fast Delivery Available on Selected Items!",
+  "🏪 New Vendors Joined Our Marketplace!",
+  "⭐ Top Rated Products Trending Now!",
+  "🎁 Special Deals on Featured Products!",
+  "📦 Track Your Orders from Your Dashboard!",
+  "💳 Secure Payments Now Available!",
+  "🛒 Add Items to Your Wishlist and Buy Later!",
+  "📢 Sell Your Latest Products Today!",
 ];
 
 const modalVariants = {
@@ -81,7 +85,6 @@ const Topbar = ({
       : "left-16 w-[calc(100%-4rem)]";
 
   return (
-    // z-50: same level as sidebar so it's never covered by overlay (z-40)
     <div
       className={`fixed top-0 z-50 flex items-center justify-between px-6 py-4 shadow-md bg-teal-900 backdrop-blur-md transition-all duration-300 ${leftClass}`}
     >
@@ -90,10 +93,10 @@ const Topbar = ({
         <div className="relative w-full max-w-md">
           <input
             type="text"
-            placeholder="Search assets, employees..."
-            className="w-full px-4 py-2 rounded-full bg-teal-800 text-teal-100 placeholder-teal-300 focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all duration-300"
+            placeholder="Search ..."
+            className="w-full px-5 py-2 rounded-full bg-teal-800 text-teal-100 placeholder-teal-300 focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all duration-300 placeholder:text-sm"
           />
-          <FaSearch className="absolute right-3 top-1/2 -translate-y-1/2 text-teal-300" />
+          <FaSearch className="absolute right-4 top-1/2 -translate-y-1/2 text-teal-300" />
         </div>
       </div>
 
@@ -106,7 +109,7 @@ const Topbar = ({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.5 }}
-            className="text-sm sm:text-base font-medium text-teal-100 text-center w-full"
+            className="text-sm font-medium text-teal-100 text-center w-full"
           >
             {newsItems[currentNews]}
           </motion.div>
@@ -144,10 +147,11 @@ const Topbar = ({
                   {getInitial(user?.name)}
                 </div>
               ) : (
-                <img
+                <Image
                   src={user.image}
                   alt="User Profile"
                   className="w-full h-full object-cover"
+                  fill
                   onError={() => setImageError(true)}
                 />
               )}
@@ -176,12 +180,10 @@ const Topbar = ({
                   <p className="text-sm font-medium text-teal-100">
                     {user?.name || "Guest User"}
                   </p>
-                  <p className="text-xs text-teal-300">
-                    {userRole || "Employee"}
-                  </p>
+                  <p className="text-xs text-teal-300">{userRole || "user"}</p>
                   <div className="mt-2 space-y-1">
                     <Link
-                      href="/dashboard/my-profile"
+                      href="/dashboard/profile"
                       className="block text-sm text-teal-100 hover:bg-teal-700 p-2 rounded-lg transition-colors duration-200"
                     >
                       Profile
@@ -235,9 +237,9 @@ const Topbar = ({
                   </p>
                   <div className="mt-2 space-y-2">
                     {[
-                      "New asset request pending.",
-                      "Employee profile updated.",
-                      "System maintenance scheduled.",
+                      "New item found.",
+                      "Your order submitted.",
+                      "Your profile updated.",
                     ].map((msg, i) => (
                       <div
                         key={i}
