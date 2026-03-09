@@ -12,7 +12,6 @@ import {
 import { FaArrowRightFromBracket } from "react-icons/fa6";
 import { FaSearch } from "react-icons/fa";
 
-//
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import Logo from "../Logo/Logo";
@@ -35,6 +34,7 @@ const Navbar = () => {
   const [searchBox, setSearchBox] = useState(false);
   const { data: session } = useSession();
   const pathname = usePathname();
+
   useEffect(() => {
     const handleScrollY = () => setScrollY(window.scrollY);
     window.addEventListener("scroll", handleScrollY);
@@ -51,8 +51,8 @@ const Navbar = () => {
     }
   };
 
-  // Navigation links
-  const navLinks = [
+  // general links
+  const commonNavLinks = [
     { href: "/", label: "Home" },
     { href: "/shopping", label: "Shop" },
     { href: "/about", label: "About Us" },
@@ -60,56 +60,72 @@ const Navbar = () => {
     { href: "/contact", label: "Contact Us" },
   ];
 
-  const navItems = (
-    <>
-      {navLinks.map((link) => {
-        const isActive = link.partial
-          ? pathname.startsWith(link.href)
-          : pathname === link.href;
+  // Role-based extra links
+  const getRoleBasedLinks = () => {
+    if (!session?.user) return [];
 
-        return (
-          <Link
-            key={link.href}
-            href={link.href}
-            className={`
-            group relative 
-            text-[15px] font-medium leading-6 
-            transition-colors duration-300 text-gray-700 dark:text-gray-300
-            ${isActive ? "font-semibold" : ""}
+    if (session.user.role?.includes("admin")) {
+      return [
+        { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+      ];
+    }
+
+    return [
+      { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+
+      { href: "/user_profile", label: "My Profile", icon: User },
+      { href: "/shopping-cart", label: "My Cart", icon: ShoppingCart },
+      { href: "/my_orders", label: "My Orders", icon: Box },
+      { href: "#", label: "Support", icon: LifeBuoy },
+    ];
+  };
+
+  // Desktop + Sidebar-এর জন্য common nav items
+  const commonNavItems = commonNavLinks.map((link) => {
+    const isActive = link.partial
+      ? pathname.startsWith(link.href)
+      : pathname === link.href;
+
+    return (
+      <Link
+        key={link.href}
+        href={link.href}
+        className={`
+          group relative 
+          text-[15px] font-medium leading-6 
+          transition-colors duration-300 text-gray-700 dark:text-gray-300
+          ${isActive ? "font-semibold" : ""}
+        `}
+      >
+        {link.label}
+
+        <span
+          className={`
+            absolute left-1/2 -translate-x-1/2 bottom-[-6px]
+            h-[2.5px] bg-gray-700 dark:bg-gray-300
+            transition-all duration-300 ease-out
+            ${
+              isActive
+                ? "w-full scale-x-100"
+                : "w-0 scale-x-0 group-hover:w-full group-hover:scale-x-100"
+            }
           `}
-          >
-            {link.label}
-
-            {/* Animated border bottom – center to corner */}
-            <span
-              className={`
-              absolute left-1/2 -translate-x-1/2 bottom-[-6px]
-              h-[2.5px] bg-gray-700 dark:bg-gray-300
-              transition-all duration-300 ease-out
-              ${
-                isActive
-                  ? "w-full scale-x-100"
-                  : "w-0 scale-x-0 group-hover:w-full group-hover:scale-x-100"
-              }
-            `}
-            />
-          </Link>
-        );
-      })}
-    </>
-  );
+        />
+      </Link>
+    );
+  });
 
   return (
     <>
       <header
-        className={`z-100  ${
+        className={`z-100 ${
           pathname === "/"
             ? scrollY > 50
-              ? "fixed-nav bg-white/95 dark:bg-gray-900 dark:text-white    shadow"
-              : " relative sm:absolute top-0 left-0 sm:bg-transparent text-black dark:text-white w-full bg-white"
+              ? "fixed-nav bg-white/95 dark:bg-gray-900 dark:text-white shadow"
+              : "relative sm:absolute top-0 left-0 sm:bg-transparent text-black dark:text-white w-full bg-white"
             : scrollY > 50
               ? "fixed-nav bg-white/95 dark:bg-gray-800 dark:text-white shadow"
-              : "bg-white  dark:bg-gray-800 dark:text-white dark:shadow-gray-700  shadow"
+              : "bg-white dark:bg-gray-800 dark:text-white dark:shadow-gray-700 shadow"
         }`}
       >
         <div className="container-custom flex items-center justify-between py-4">
@@ -117,7 +133,7 @@ const Navbar = () => {
             {/* Mobile Menu Button */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden  text-black dark:text-white  cursor-pointer"
+              className="lg:hidden text-black dark:text-white cursor-pointer"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -138,53 +154,50 @@ const Navbar = () => {
                 />
               </svg>
             </button>
-            {/* Logo */}
+
             <Logo />
           </div>
 
-          {/* Desktop Nav */}
-          <nav className="hidden lg:flex gap-10">{navItems}</nav>
+          {/* Desktop Nav — শুধু common links */}
+          <nav className="hidden lg:flex gap-10">{commonNavItems}</nav>
 
-          {/* Icons + Auth Buttons */}
+          {/* Right side icons + auth */}
           <div className="flex items-center gap-4">
-            <div className="">
-              <button
-                className=" bg-gray-200 sm:p-2 p-1 rounded-full cursor-pointer dark:text-white text-black dark:bg-gray-700  transition-all duration-300 "
-                onClick={() => setSearchBox(!searchBox)}
-              >
-                <FaSearch className="text-xl max-sm:text-md" />
-              </button>
-            </div>
-            <div className="relative bg-gray-200 text-black sm:p-2 p-1 rounded-full cursor-pointer dark:text-white dark:bg-gray-700  transition-all duration-300">
-              <Link href={"/shopping-cart"}>
+            <button
+              className="bg-gray-200 sm:p-2 p-1 rounded-full cursor-pointer dark:text-white text-black dark:bg-gray-700 transition-all duration-300"
+              onClick={() => setSearchBox(!searchBox)}
+            >
+              <FaSearch className="text-xl max-sm:text-md" />
+            </button>
+
+            <div className="relative bg-gray-200 text-black sm:p-2 p-1 rounded-full cursor-pointer dark:text-white dark:bg-gray-700 transition-all duration-300">
+              <Link href="/shopping-cart">
                 <CiShoppingCart className="text-xl max-sm:text-md" />
               </Link>
-              <span className="absolute -sm:top-0 -top-1 sm:right-1 right-1 font-bold text-sm ">
+              <span className="absolute -top-1 sm:right-1 right-1 font-bold text-sm">
                 {shoppingCart?.length || 0}
               </span>
             </div>
+
             <DarkMode />
 
-            {/* Login / Register */}
             {!session?.user ? (
-              <div className="hidden lg:block">
+              <div className="hidden lg:flex items-center gap-2">
                 <Link
-                  href={"/auth/login"}
-                  className="btn btn-sm btn-outline border-gray-400 text-white bg-gray-900 hover:bg-gray-800  rounded-md hover:text-white transition-all duration-300 mr-2"
+                  href="/auth/login"
+                  className="btn btn-sm btn-outline border-gray-400 text-white bg-gray-900 hover:bg-gray-800 rounded-md hover:text-white transition-all duration-300"
                 >
-                  Login
-                  <FaArrowRightFromBracket />
+                  Login <FaArrowRightFromBracket />
                 </Link>
                 <Link
-                  href={"/auth/register"}
-                  className="btn btn-sm btn-outline text-white  hover:bg-gray-800 rounded-md hover:text-white transition-all duration-300 bg-gray-900"
+                  href="/auth/register"
+                  className="btn btn-sm btn-outline text-white hover:bg-gray-800 rounded-md hover:text-white transition-all duration-300 bg-gray-900"
                 >
-                  Register
-                  <FaArrowRightFromBracket />
+                  Register <FaArrowRightFromBracket />
                 </Link>
               </div>
             ) : (
-              <div className="dropdown dropdown-end ">
+              <div className="dropdown dropdown-end">
                 <div
                   tabIndex={0}
                   className="sm:btn btn-sm btn-ghost btn-circle avatar"
@@ -203,40 +216,23 @@ const Navbar = () => {
                 </div>
                 <ul
                   tabIndex={0}
-                  className="dropdown-content  p-2 shadow bg-white dark:text-white dark:bg-gray-800  text-gray-800 rounded-box w-52 mt-4 "
+                  className="dropdown-content p-2 shadow bg-white dark:bg-gray-800 dark:text-white text-gray-800 rounded-box w-52 mt-4"
                 >
-                  {session?.user.role?.includes("admin") ? (
-                    <>
-                      <li className="flex items-center gap-2 mb-4 p-2 hover:bg-gray-600 hover:text-white dark:hover:text-white rounded-box transition-all duration-300">
-                        <LayoutDashboard className="text-sm" />
-                        <Link href="/dashboard">Dashboard</Link>
-                      </li>
-                    </>
-                  ) : (
-                    <div className="flex flex-col gap-4 mb-4 *:hover:bg-gray-300 dark:*:hover:bg-gray-600 *:p-2">
-                      <li className="flex items-center gap-2">
-                        <User className="text-sm " />
-                        <Link href="/user_profile">My Profile</Link>
-                      </li>
+                  {getRoleBasedLinks().map((link) => (
+                    <li key={link.href} className="mb-1">
+                      <Link
+                        href={link.href}
+                        className="flex items-center gap-2 p-2 hover:bg-gray-600 hover:text-white dark:hover:text-white rounded-box transition-all duration-300"
+                      >
+                        {link.icon && <link.icon className="text-sm" />}
+                        {link.label}
+                      </Link>
+                    </li>
+                  ))}
 
-                      <li className=" flex items-center gap-2">
-                        <ShoppingCart className="text-lg text-gray-800 dark:text-white" />
-                        <Link href="/shopping-cart">My Cart</Link>
-                      </li>
-                      <li className="flex items-center gap-2">
-                        <Box className="text-sm" />
-                        <Link href="/my_orders">My Orders</Link>
-                      </li>
-                      <li className="flex items-center gap-2">
-                        <LifeBuoy className="text-sm" />
-                        <Link href="#">Support</Link>
-                      </li>
-                    </div>
-                  )}
-
-                  <li>
+                  <li className="mt-3 border-t border-gray-200 dark:border-gray-700 pt-2">
                     <button
-                      onClick={() => handleLogout()}
+                      onClick={handleLogout}
                       className="btn btn-outline border-none w-full bg-gray-700 hover:bg-gray-600 text-white rounded-box"
                     >
                       Logout
@@ -247,18 +243,18 @@ const Navbar = () => {
             )}
           </div>
         </div>
-
-        {/* Mobile Menu */}
-        <AnimatePresence>
-          {mobileMenuOpen && (
-            <Sidebar
-              navItems={navItems}
-              isOpen={mobileMenuOpen}
-              setIsOpen={setMobileMenuOpen}
-            />
-          )}
-        </AnimatePresence>
       </header>
+
+      {/* Mobile Sidebar — শুধু common links */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <Sidebar
+            navItems={commonNavItems}
+            isOpen={mobileMenuOpen}
+            setIsOpen={setMobileMenuOpen}
+          />
+        )}
+      </AnimatePresence>
 
       <AnimatePresence>
         {searchBox && (
