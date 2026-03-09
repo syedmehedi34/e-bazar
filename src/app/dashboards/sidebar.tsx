@@ -31,20 +31,19 @@ const navItems: NavItem[] = [
     path: "/dashboard",
     label: "Dashboard",
     icon: <FaTachometerAlt />,
-    roles: ["employee", "hr_manager", "admin"],
+    roles: ["user", "hr_manager", "admin"],
   },
   {
     path: "/dashboard/my-profile",
     label: "My Profile",
     icon: <FaUser />,
-    roles: ["employee", "hr_manager", "admin"],
+    roles: ["user", "hr_manager", "admin"],
   },
-  // Employee routes
   {
     path: "/dashboard/my_assets",
     label: "My Assets",
     icon: <FaBoxOpen />,
-    roles: ["employee"],
+    roles: ["user"],
   },
   {
     path: "/dashboard/my_team",
@@ -58,7 +57,6 @@ const navItems: NavItem[] = [
     icon: <FaClipboardList />,
     roles: ["employee"],
   },
-  // HR Manager routes
   {
     path: "/dashboard/assets_list",
     label: "Asset List",
@@ -89,7 +87,6 @@ const navItems: NavItem[] = [
     icon: <FaUserPlus />,
     roles: ["hr_manager"],
   },
-  // Admin routes
   {
     path: "/dashboard/all-users",
     label: "All Users",
@@ -137,7 +134,7 @@ const Sidebar = ({
 
   return (
     <div
-      className={`fixed top-0 left-0 h-full z-10 ${
+      className={`fixed top-0 left-0 h-full z-500 ${
         isSidebarOpen ? "w-64" : "w-16"
       } bg-gradient-to-b from-teal-800 to-teal-600 text-white transition-all duration-300 flex flex-col shadow-xl`}
     >
@@ -146,9 +143,7 @@ const Sidebar = ({
         <div className="px-4 py-[22.6px] flex items-center justify-between border-b border-teal-500">
           <Link href="/">
             <h1
-              className={`${
-                isSidebarOpen ? "block" : "hidden"
-              } text-xl font-semibold text-white`}
+              className={`${isSidebarOpen ? "block" : "hidden"} text-xl font-semibold text-white`}
             >
               AssetFlow
             </h1>
@@ -180,9 +175,7 @@ const Sidebar = ({
               >
                 <span className="text-lg">{item.icon}</span>
                 <span
-                  className={`${
-                    isSidebarOpen ? "block" : "hidden"
-                  } text-sm font-medium`}
+                  className={`${isSidebarOpen ? "block" : "hidden"} text-sm font-medium`}
                 >
                   {item.label}
                 </span>
@@ -204,17 +197,13 @@ const Sidebar = ({
         >
           <FaSignOutAlt className="text-lg" />
           <span
-            className={`${
-              isSidebarOpen ? "block" : "hidden"
-            } text-sm font-medium`}
+            className={`${isSidebarOpen ? "block" : "hidden"} text-sm font-medium`}
           >
             Logout
           </span>
         </button>
         <div
-          className={`${
-            isSidebarOpen ? "block" : "hidden"
-          } mt-2 text-center text-xs text-teal-100`}
+          className={`${isSidebarOpen ? "block" : "hidden"} mt-2 text-center text-xs text-teal-100`}
         >
           © 2025 AssetFlow Solutions
         </div>

@@ -44,7 +44,6 @@ const Topbar = ({
 
   const notificationRef = useRef<HTMLDivElement>(null);
   const profileRef = useRef<HTMLDivElement>(null);
-
   const user = session?.user;
 
   useEffect(() => {
@@ -73,13 +72,18 @@ const Topbar = ({
   const getInitial = (name?: string | null) =>
     name ? name.charAt(0).toUpperCase() : "U";
 
+  // Mobile: always beside collapsed sidebar (left-16)
+  // Desktop: follows sidebar state
+  const leftClass = isMobile
+    ? "left-16 w-[calc(100%-4rem)]"
+    : isSidebarOpen
+      ? "left-64 w-[calc(100%-16rem)]"
+      : "left-16 w-[calc(100%-4rem)]";
+
   return (
+    // z-50: same level as sidebar so it's never covered by overlay (z-40)
     <div
-      className={`fixed top-0 z-20 flex items-center justify-between px-6 py-4 shadow-md bg-teal-900 backdrop-blur-md transition-all duration-300 ${
-        isSidebarOpen
-          ? "left-64 w-[calc(100%-16rem)]"
-          : "left-16 w-[calc(100%-4rem)]"
-      }`}
+      className={`fixed top-0 z-50 flex items-center justify-between px-6 py-4 shadow-md bg-teal-900 backdrop-blur-md transition-all duration-300 ${leftClass}`}
     >
       {/* Search Bar */}
       <div className="hidden lg:flex flex-1 mx-6">
@@ -89,7 +93,7 @@ const Topbar = ({
             placeholder="Search assets, employees..."
             className="w-full px-4 py-2 rounded-full bg-teal-800 text-teal-100 placeholder-teal-300 focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all duration-300"
           />
-          <FaSearch className="absolute right-3 top-1/2 transform -translate-y-1/2 text-teal-300" />
+          <FaSearch className="absolute right-3 top-1/2 -translate-y-1/2 text-teal-300" />
         </div>
       </div>
 
@@ -109,7 +113,7 @@ const Topbar = ({
         </AnimatePresence>
       </div>
 
-      {/* Right Side Actions */}
+      {/* Right Side */}
       <div className="flex items-center space-x-4">
         {/* Dark Mode Toggle */}
         <motion.button
@@ -121,7 +125,7 @@ const Topbar = ({
           {darkMode ? <FaSun /> : <FaMoon />}
         </motion.button>
 
-        {/* Profile Menu */}
+        {/* Profile */}
         <motion.div
           ref={profileRef}
           className="relative"
@@ -134,7 +138,7 @@ const Topbar = ({
             }}
             className="flex items-center space-x-2 focus:outline-none"
           >
-            <div className="w-10 h-10 md:w-12 md:h-12 rounded-full overflow-hidden border-2 border-teal-300 transition-all duration-300 hover:border-teal-400">
+            <div className="w-10 h-10 md:w-12 md:h-12 rounded-full overflow-hidden border-2 border-teal-300 hover:border-teal-400 transition-all duration-300">
               {imageError || !user?.image ? (
                 <div className="w-full h-full bg-teal-600 flex items-center justify-center text-teal-100 text-xl md:text-2xl font-bold">
                   {getInitial(user?.name)}
@@ -148,15 +152,13 @@ const Topbar = ({
                 />
               )}
             </div>
-            <div className="hidden md:flex">
-              <div className="text-teal-100 text-center md:text-left">
-                <p className="text-sm md:text-lg font-medium">
-                  {user?.name || "Guest User"}
-                </p>
-                {user?.email && (
-                  <p className="text-xs md:text-sm font-light">{user.email}</p>
-                )}
-              </div>
+            <div className="hidden md:flex flex-col text-left">
+              <p className="text-sm md:text-base font-medium text-teal-100">
+                {user?.name || "Guest User"}
+              </p>
+              {user?.email && (
+                <p className="text-xs font-light text-teal-300">{user.email}</p>
+              )}
             </div>
           </button>
 
@@ -197,7 +199,7 @@ const Topbar = ({
           </AnimatePresence>
         </motion.div>
 
-        {/* Notification Bell */}
+        {/* Notifications */}
         <motion.div
           ref={notificationRef}
           className="relative"
@@ -212,7 +214,7 @@ const Topbar = ({
             className="text-teal-100 text-xl focus:outline-none relative hover:bg-teal-800 p-2 rounded-full transition-colors duration-300"
           >
             <FaBell />
-            <span className="absolute top-0 right-0 z-10 bg-red-500 text-white text-xs rounded-full px-1">
+            <span className="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full px-1">
               3
             </span>
           </button>
