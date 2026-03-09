@@ -23,10 +23,13 @@ interface Products {
 type ProductsProps = {
   products: Products[];
   viewMode?: "grid" | "list";
+  searchKeyword?: string;
 };
+
 const ShoppingCard: React.FC<ProductsProps> = ({
   products,
   viewMode = "grid",
+  searchKeyword = "",
 }) => {
   const dispatch = useDispatch();
   const cartItems = useSelector((state: RootState) => state.cart.value);
@@ -38,6 +41,20 @@ const ShoppingCard: React.FC<ProductsProps> = ({
       dispatch(addToCart({ ...product, quantity: 1 }));
       toast.success("Item added to cart!");
     }
+  };
+
+  const highlightText = (text: string, query: string) => {
+    if (!query) return text;
+    const parts = text.split(new RegExp(`(${query})`, "gi"));
+    return parts.map((part, i) =>
+      part.toLowerCase() === query.toLowerCase() ? (
+        <span key={i} className="bg-yellow-200 dark:bg-yellow-700">
+          {part}
+        </span>
+      ) : (
+        part
+      ),
+    );
   };
 
   return (
@@ -83,7 +100,7 @@ const ShoppingCard: React.FC<ProductsProps> = ({
               </div>
               <div className="px-2 mb-2">
                 <h2 className="mt-2 font-medium line-clamp-1 ">
-                  {product.title}
+                  {highlightText(product.title, searchKeyword)}
                 </h2>
 
                 <div className="flex justify-between items-center">
@@ -141,7 +158,9 @@ const ShoppingCard: React.FC<ProductsProps> = ({
                 </button>
               </div>
               <div className="ml-4 flex-1">
-                <h2 className="mt-2 font-medium">{product.title}</h2>
+                <h2 className="mt-2 font-medium">
+                  {highlightText(product.title, searchKeyword)}
+                </h2>
 
                 <div className="flex justify-between items-center">
                   <p className="text-xl my-2 font-bold">৳ {product.price}</p>
