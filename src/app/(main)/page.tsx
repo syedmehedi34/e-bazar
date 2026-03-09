@@ -18,8 +18,7 @@ export default function Home() {
       <Faq />
       <Testimonial />
       <TrustCard />
-      {/* need to add email subscription (emailjs) */}
-      <Subscribe />
+      <Subscribe /> {/* need to add email subscription (emailjs) */}
     </div>
   );
 }

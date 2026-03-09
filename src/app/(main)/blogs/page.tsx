@@ -1,104 +1,74 @@
 "use client";
 import { Blog } from "@/Components/Blogs/blogsInterface";
 import BlogsPageCard from "@/Components/Blogs/BlogsPageCard";
-import Pagination from "@/Components/Pagination/Pagination";
+import { useFetchBlog } from "@/hook/useFetchBlog";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import Loader from "../loading";
 
-const Blogpage = () => {
-  const [blogs, setBlogs] = useState<Blog[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [pageArray, setPageArray] = useState<number[]>([]);
-  const [searchQuery, setSearchQuery] = useState<string>("");
+const BlogPage = () => {
+  // Assuming this hook fetches ALL blogs
+  const { blogs, blogsLoading, blogsError } = useFetchBlog();
 
-  // States for sidebar metadata (from all blogs)
+  // States for sidebar metadata (derived from all blogs)
   const [allCategories, setAllCategories] = useState<string[]>([]);
   const [popularTags, setPopularTags] = useState<string[]>([]);
   const [latestBlogs, setLatestBlogs] = useState<Blog[]>([]);
 
-  // Fetch paginated blogs (with optional search)
-  const getPaginatedBlogs = useCallback(async () => {
-    try {
-      let url = `https://e-bazaar-server-three.vercel.app/blogs?page=${currentPage}`;
-      if (searchQuery.trim()) {
-        url += `&search=${encodeURIComponent(searchQuery.trim())}`;
-      }
+  // Compute sidebar data whenever blogs change
+  useEffect(() => {
+    if (!blogs || blogs.length === 0) return;
 
-      const res = await fetch(url, { cache: "no-store" });
-      if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-      const data = await res.json();
+    const typedBlogs = blogs as unknown as Blog[];
 
-      setBlogs(data.blogs || []);
-      setPageArray(data.pageArray || []);
-    } catch (error) {
-      console.error("Paginated fetch error:", (error as Error).message);
-    }
-  }, [currentPage, searchQuery]);
+    // Unique categories
+    const categories = Array.from(
+      new Set(typedBlogs.map((b) => b.category)),
+    ).filter(Boolean) as string[];
+    setAllCategories(categories);
 
-  // Fetch full metadata once (categories, popular tags, latest blogs)
-  const getFullMetadata = useCallback(async () => {
-    try {
-      // Fetch all blogs or use a metadata endpoint if available
-      // Here using large limit as fallback
-      const res = await fetch(
-        "https://e-bazaar-server-three.vercel.app/blogs?limit=1000",
-        { cache: "no-store" },
-      );
-      if (!res.ok) throw new Error("Metadata fetch failed");
-      const data = await res.json();
-
-      const allBlogs: Blog[] = data.blogs || [];
-
-      // Unique categories
-      const categories = Array.from(
-        new Set(allBlogs.map((b: Blog) => b.category)),
-      ) as string[];
-      setAllCategories(categories);
-
-      // Popular tags: count frequency and take top 5
-      const tagCount: Record<string, number> = {};
-      allBlogs.forEach((blog: Blog) => {
-        blog.tags.forEach((tag) => {
-          tagCount[tag] = (tagCount[tag] || 0) + 1;
-        });
+    // Popular tags: count frequency and take top 5
+    const tagCount: Record<string, number> = {};
+    typedBlogs.forEach((blog: Blog) => {
+      blog.tags?.forEach((tag) => {
+        tagCount[tag] = (tagCount[tag] || 0) + 1;
       });
+    });
 
-      const topTags = Object.entries(tagCount)
-        .sort(([, a], [, b]) => b - a)
-        .slice(0, 5) // Only top 5
-        .map(([tag]) => `#${tag}`);
+    const topTags = Object.entries(tagCount)
+      .sort(([, a], [, b]) => b - a)
+      .slice(0, 5)
+      .map(([tag]) => `#${tag}`);
 
-      setPopularTags(topTags);
+    setPopularTags(topTags);
 
-      // Latest 4 blogs (sorted by date descending)
-      const sortedLatest = allBlogs
-        .filter((blog) => blog.createdAt)
-        .sort(
-          (a, b) =>
-            new Date(b.createdAt!).getTime() - new Date(a.createdAt!).getTime(),
-        )
-        .slice(0, 4);
+    // Latest 4 blogs (sorted by createdAt descending)
+    const sortedLatest = [...typedBlogs]
+      .filter((blog) => blog.createdAt)
+      .sort(
+        (a, b) =>
+          new Date(b.createdAt!).getTime() - new Date(a.createdAt!).getTime(),
+      )
+      .slice(0, 4);
 
-      setLatestBlogs(sortedLatest);
-    } catch (error) {
-      console.error("Metadata fetch error:", (error as Error).message);
-    }
-  }, []);
+    setLatestBlogs(sortedLatest);
+  }, [blogs]);
 
-  // Initial load
-  useEffect(() => {
-    getFullMetadata(); // Load once for sidebar
-    getPaginatedBlogs(); // Load paginated content
-  }, [getFullMetadata]);
+  if (blogsLoading) {
+    return <Loader />;
+  }
 
-  // Re-fetch paginated data when page or search changes
-  useEffect(() => {
-    getPaginatedBlogs();
-  }, [getPaginatedBlogs]);
+  if (blogsError) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-xl text-red-600">Error loading blogs</p>
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-screen dark:text-white ">
+    <div className="min-h-screen dark:text-white">
       {/* Page Banner */}
       <nav
         className="relative w-full h-[220px] md:h-[320px] lg:h-[380px] flex items-center justify-center bg-cover bg-center bg-no-repeat overflow-hidden"
@@ -122,44 +92,12 @@ const Blogpage = () => {
       <div className="container-custom py-8 px-3 sm:px-5 md:px-0">
         <div className="grid grid-cols-1 lg:grid-cols-6 gap-6">
           <div className="lg:col-span-4 w-full">
-            <BlogsPageCard blogs={blogs} />
-
-            <Pagination
-              currentPage={currentPage}
-              setCurrentPage={setCurrentPage}
-              pageArray={pageArray}
-            />
+            <BlogsPageCard blogs={(blogs as unknown as Blog[]) || []} />
+            {/* Pagination removed as requested */}
           </div>
 
           <aside className="lg:col-span-2 w-full">
-            {/* Search */}
-            <div className="mb-6">
-              <label className="relative block">
-                <input
-                  type="search"
-                  placeholder="Search blogs..."
-                  className="w-full input pl-10 border rounded-lg py-2 dark:bg-gray-800 dark:text-white"
-                  value={searchQuery}
-                  onChange={(e) => {
-                    setSearchQuery(e.target.value);
-                    setCurrentPage(1); // Reset to page 1 on search change
-                  }}
-                />
-                <svg
-                  className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-800 dark:text-gray-200"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <circle cx="11" cy="11" r="8"></circle>
-                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                </svg>
-              </label>
-            </div>
+            {/* Search – removed as per your instruction */}
 
             {/* Fashion Categories */}
             <div className="p-4 bg-white shadow dark:bg-gray-800 dark:text-white rounded-box mb-6">
@@ -167,15 +105,16 @@ const Blogpage = () => {
                 Fashion Categories
               </h2>
               <ul className="space-y-2 text-sm sm:text-base max-h-48 overflow-y-auto">
-                {allCategories.map((cat) => (
-                  <li
-                    key={cat}
-                    className="cursor-pointer hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
-                  >
-                    {cat}
-                  </li>
-                ))}
-                {allCategories.length === 0 && (
+                {allCategories.length > 0 ? (
+                  allCategories.map((cat) => (
+                    <li
+                      key={cat}
+                      className="cursor-pointer hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                    >
+                      {cat}
+                    </li>
+                  ))
+                ) : (
                   <li className="text-gray-500">No categories found</li>
                 )}
               </ul>
@@ -209,7 +148,7 @@ const Blogpage = () => {
                   </div>
                 ))
               ) : (
-                <p className="text-sm text-gray-500">Loading latest blogs...</p>
+                <p className="text-sm text-gray-500">No recent blogs found</p>
               )}
             </div>
 
@@ -242,4 +181,4 @@ const Blogpage = () => {
   );
 };
 
-export default Blogpage;
+export default BlogPage;
