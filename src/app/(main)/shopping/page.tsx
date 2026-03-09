@@ -1,3 +1,4 @@
+// client/src/app/(main)/shopping/page.tsx
 "use client";
 import { Category } from "@/Components/Shopping/Category";
 import ShoppingCard from "@/Components/Shopping/ShoppingCard";
@@ -10,6 +11,7 @@ import Loader from "@/Components/Loader/Loader";
 import Pagination from "@/Components/Pagination2";
 import { useFetchProduct } from "@/hook/useFetchProduct";
 import { FiSearch, FiX } from "react-icons/fi"; // ← add these icons (or use your own)
+import { BsGrid3X3GapFill, BsListUl } from "react-icons/bs";
 
 interface CategoryGroup {
   name: string;
@@ -38,6 +40,9 @@ const Shopping = () => {
 
   // Local state for search input (for smooth typing)
   const [searchInput, setSearchInput] = useState(currentSearch);
+
+  // View mode state
+  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 
   // Sync local input with URL when URL changes externally
   useEffect(() => {
@@ -125,16 +130,43 @@ const Shopping = () => {
               )}
             </div>
 
-            {/* Sorting */}
-            <Sorting
-              currentSort={currentSort}
-              setSort={(val) => {
-                const params = new URLSearchParams(searchParams.toString());
-                if (val) params.set("sort", val);
-                else params.delete("sort");
-                router.push(`/shopping?${params.toString()}`);
-              }}
-            />
+            {/* Sorting + View Toggle */}
+            <div className="flex items-center gap-4">
+              <Sorting
+                currentSort={currentSort}
+                setSort={(val) => {
+                  const params = new URLSearchParams(searchParams.toString());
+                  if (val) params.set("sort", val);
+                  else params.delete("sort");
+                  router.push(`/shopping?${params.toString()}`);
+                }}
+              />
+              {/* View Toggle */}
+              <div className="flex items-center bg-gray-100 dark:bg-gray-800 rounded-lg p-1 w-fit">
+                <button
+                  onClick={() => setViewMode("grid")}
+                  className={`p-2 rounded-md transition ${
+                    viewMode === "grid"
+                      ? "bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 shadow"
+                      : "text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
+                  }`}
+                >
+                  <BsGrid3X3GapFill size={18} />
+                </button>
+
+                <button
+                  onClick={() => setViewMode("list")}
+                  className={`p-2 rounded-md transition ${
+                    viewMode === "list"
+                      ? "bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 shadow"
+                      : "text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
+                  }`}
+                >
+                  <BsListUl size={18} />
+                </button>
+              </div>
+              {/*  */}
+            </div>
           </div>
         </div>
 
@@ -200,7 +232,10 @@ const Shopping = () => {
               </div>
             ) : (
               <div>
-                <ShoppingCard products={paginatedProducts} />
+                <ShoppingCard
+                  products={paginatedProducts}
+                  viewMode={viewMode}
+                />
 
                 <Pagination
                   data={products}
