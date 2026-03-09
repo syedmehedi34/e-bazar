@@ -5,6 +5,7 @@ import Button from "../Button/Button";
 import ProductsCard from "./ProductsCard";
 import Link from "next/link";
 import Loader from "@/app/(main)/loading";
+import { useFetchProduct } from "@/hook/useFetchProduct";
 
 interface Product {
   _id: string;
@@ -18,32 +19,20 @@ interface Product {
 }
 
 const Products = () => {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { products, productsLoading } = useFetchProduct();
+  const [randomProducts, setRandomProducts] = useState<Product[]>([]);
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const res = await fetch(
-          "https://e-bazaar-server-three.vercel.app/get-random-products",
-          {
-            cache: "no-store",
-          },
-        );
+    if (products && products.length > 0) {
+      const shuffled = [...products]
+        .sort(() => Math.random() - 0.5)
+        .slice(0, 15);
 
-        const data: Product[] = await res.json();
-        setProducts(data);
-      } catch (error) {
-        console.error("Failed to fetch products:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+      setRandomProducts(shuffled);
+    }
+  }, [products]);
 
-    fetchProducts();
-  }, []);
-
-  if (loading) {
+  if (productsLoading) {
     return <Loader />;
   }
 
@@ -63,14 +52,14 @@ const Products = () => {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-          {products.map((product) => (
+          {randomProducts.map((product) => (
             <ProductsCard key={product._id} product={product} />
           ))}
         </div>
 
         <div className="flex justify-center my-4">
-          <Link href={"/shopping"}>
-            <Button text={"Find More"} />
+          <Link href="/shopping">
+            <Button text="Find More" />
           </Link>
         </div>
       </div>

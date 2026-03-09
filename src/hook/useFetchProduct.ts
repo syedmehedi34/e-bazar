@@ -50,3 +50,5 @@ export const useFetchProduct = () => {
     refetchProducts: refetch,
   };
 };
+
+// const { products, categories, productsLoading, productsError, refetchProducts } = useFetchProduct();

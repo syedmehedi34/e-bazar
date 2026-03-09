@@ -12,13 +12,12 @@ export default function Home() {
     <div>
       <Banner />
       <Fashion />
-      <Products />
+      <Products /> {/* Just For You section */}
       <Offers />
       <Blogs />
       <Faq />
       <Testimonial />
       <TrustCard />
-
       {/* need to add email subscription (emailjs) */}
       <Subscribe />
     </div>

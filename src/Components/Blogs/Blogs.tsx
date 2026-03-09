@@ -5,6 +5,7 @@ import Link from "next/link";
 
 const Blogs = () => {
   const [blogs, setBlogs] = useState([]);
+  console.log(blogs);
   const getBlogsData = useCallback(async () => {
     try {
       const res = await fetch(
