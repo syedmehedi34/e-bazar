@@ -2,7 +2,6 @@
 import { signIn } from "next-auth/react";
 import React, { useState } from "react";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
-import axios, { AxiosError } from "axios";
 import { FcGoogle } from "react-icons/fc";
 import Logo from "@/Components/Logo";
 import { toast } from "react-toastify";
@@ -13,6 +12,13 @@ const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+
+  // Validation patterns
+  const validate = {
+    name: /^[a-zA-Z. ]{2,30}$/,
+    email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+    password: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/,
+  };
 
   const handleCredentialsLogin = async (
     e: React.FormEvent<HTMLFormElement>,
@@ -27,40 +33,70 @@ const Register = () => {
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
 
-    const userInfo = {
-      name,
-      email,
-      password,
-      role: ["user"],
-    };
+    // Validation
+    if (!validate.name.test(name.trim())) {
+      toast.error("Please enter a valid name (2-30 characters)");
+      setLoading(false);
+      return;
+    }
+    if (!validate.email.test(email)) {
+      toast.error("Please enter a valid email address");
+      setLoading(false);
+      return;
+    }
+    if (!validate.password.test(password)) {
+      toast.error(
+        "Password must be at least 8 characters with uppercase, lowercase, and number",
+      );
+      setLoading(false);
+      return;
+    }
 
     try {
-      const res = await axios.post(
-        "https://e-bazaar-server-three.vercel.app/create/user",
-        userInfo,
-      );
+      const res = await fetch("/api/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: name.trim(), email, password }),
+      });
 
-      if (res.status === 200 || res.status === 201) {
-        toast.success(res.data.message || "Account created successfully!");
+      const data = await res.json();
+
+      if (!res.ok) {
+        toast.error(data.message || "Something went wrong!");
+        return;
+      }
+
+      // Auto login after successful registration
+      const result = await signIn("credentials", {
+        email,
+        password,
+        redirect: false,
+        callbackUrl: "/",
+      });
+
+      if (result?.error) {
+        toast.warning("Account created! Please login manually.");
+        router.push("/auth/login");
+      } else {
+        toast.success("Account created successfully!");
         form.reset();
         router.push("/");
       }
     } catch (error) {
-      const err = error as AxiosError<{ message: string }>;
-      toast.error(err.response?.data?.message || "Something went wrong!");
+      toast.error("An unexpected error occurred. Please try again.");
     } finally {
       setLoading(false);
     }
   };
 
-  const handleLoginWithGoogle = async () => {
-    try {
-      await signIn("google", { callbackUrl: "/" });
-    } catch (error) {
-      console.error("Google login failed:", error);
-      toast.error("Google sign-in failed. Please try again.");
-    }
-  };
+  // const handleLoginWithGoogle = async () => {
+  //   try {
+  //     await signIn("google", { callbackUrl: "/" });
+  //   } catch (error) {
+  //     console.error("Google login failed:", error);
+  //     toast.error("Google sign-in failed. Please try again.");
+  //   }
+  // };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-950 py-2 px-4 sm:px-6 lg:px-8">
@@ -78,7 +114,7 @@ const Register = () => {
 
         {/* Google Sign Up */}
         <button
-          onClick={handleLoginWithGoogle}
+          // onClick={handleLoginWithGoogle}
           disabled={loading}
           className="w-full flex items-center justify-center gap-3 py-3 px-4 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-all duration-200 font-medium shadow-sm"
         >

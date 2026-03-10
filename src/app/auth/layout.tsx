@@ -9,14 +9,12 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body>
-        <div className="pt-4 bg-gray-50 pl-10 sm:pl-32">
-          <BackButton />
-        </div>
-        <main>{children}</main>
-        <ToastProvider />
-      </body>
-    </html>
+    <div>
+      <div className="pt-4 bg-gray-50 pl-10 sm:pl-32">
+        <BackButton />
+      </div>
+      <main>{children}</main>
+      <ToastProvider />
+    </div>
   );
 }
