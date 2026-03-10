@@ -21,21 +21,24 @@ type NavItem = {
   roles: string[];
 };
 
+// dashboard -> dashboards
 const navItems: NavItem[] = [
   {
-    path: "/dashboard",
-    label: "Dashboard",
+    path: "/dashboards",
+    label: "Dashboards",
     icon: <FaTachometerAlt />,
-    roles: ["user", "hr_manager", "admin"],
-  },
-  {
-    path: "/dashboard/profile",
-    label: "My Profile",
-    icon: <FaUser />,
     roles: ["user", "admin"],
   },
   {
-    path: "/dashboard/my-orders",
+    path: "/dashboards/user/profile",
+    label: "My Profile",
+    icon: <FaUser />,
+    roles: ["user"],
+  },
+
+  //
+  {
+    path: "/dashboards/user/my-orders",
     label: "My Orders",
     icon: <Logs />,
     roles: ["user"],
@@ -43,14 +46,14 @@ const navItems: NavItem[] = [
 
   // admin only
   {
-    path: "/dashboard/all-users",
+    path: "/dashboards/all-users",
     label: "All Users",
     icon: <FaUsersCog />,
     roles: ["admin"],
   },
   {
-    path: "/dashboard/all-products",
-    label: "All Assets",
+    path: "/dashboards/all-products",
+    label: "All Products",
     icon: <FaBoxOpen />,
     roles: ["admin"],
   },
@@ -83,7 +86,7 @@ const Sidebar = ({
   );
 
   const isActive = (path: string) => {
-    if (path === "/dashboard") return pathname === "/dashboard";
+    if (path === "/dashboards") return pathname === "/dashboards";
     return pathname === path || pathname.startsWith(path + "/");
   };
 
