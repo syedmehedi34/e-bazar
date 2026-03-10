@@ -76,7 +76,7 @@ const ShoppingCard: React.FC<ProductsProps> = ({
 
               <div className="relative">
                 <Link
-                  href={`checkout/${product._id}`}
+                  href={`products/${product._id}`}
                   className=" sm:h-45 h-[300px] overflow-hidden flex items-center justify-center mx-auto bg-white "
                 >
                   <Image
@@ -118,7 +118,7 @@ const ShoppingCard: React.FC<ProductsProps> = ({
                   {product.stock && <p>{product.stock} stock</p>}
 
                   <Link
-                    href={`checkout/${product._id}`}
+                    href={`products/${product._id}`}
                     className="px-3 py-1 bg-gray-600 rounded-sm cursor-pointer text-xs text-white"
                   >
                     Buy Now
@@ -135,7 +135,7 @@ const ShoppingCard: React.FC<ProductsProps> = ({
             >
               <div className="relative flex-shrink-0">
                 <Link
-                  href={`checkout/${product._id}`}
+                  href={`products/${product._id}`}
                   className="w-32 h-32 overflow-hidden flex items-center justify-center bg-white rounded-md"
                 >
                   <Image
@@ -177,7 +177,7 @@ const ShoppingCard: React.FC<ProductsProps> = ({
                   {product.stock && <p>{product.stock} stock</p>}
 
                   <Link
-                    href={`checkout/${product._id}`}
+                    href={`products/${product._id}`}
                     className="px-3 py-1 bg-gray-600 rounded-sm cursor-pointer text-xs text-white"
                   >
                     Buy Now
