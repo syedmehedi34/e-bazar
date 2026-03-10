@@ -7,6 +7,7 @@ import Products from "@/Components/Products/Products";
 import Subscribe from "@/Components/Subscribe";
 import Testimonial from "@/Components/Testimonial";
 import TrustCard from "@/Components/TrustCard";
+import useUser from "@/hook/useUser";
 export default function Home() {
   return (
     <div>
