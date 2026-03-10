@@ -13,7 +13,7 @@ type DashboardLayoutClientProps = {
 const DashboardLayoutClient = ({ children }: DashboardLayoutClientProps) => {
   const { data: session, status } = useSession();
   const router = useRouter();
-  //   console.log(session?.user.role?.[0]);
+  // console.log(session?.user.role);
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -47,11 +47,11 @@ const DashboardLayoutClient = ({ children }: DashboardLayoutClientProps) => {
 
   if (status === "unauthenticated") return null;
 
-  const userRole = (session?.user as { role?: string[] })?.role?.[0] ?? "user";
+  const userRole = session?.user?.role ?? "user";
 
   return (
     <div className="min-h-screen bg-white dark:bg-[#0B0716]">
-      {/* ── Sidebar ── always fixed, z-50 */}
+      {/* ── Sidebar */}
       <Sidebar
         isSidebarOpen={isSidebarOpen}
         toggleSidebar={toggleSidebar}
@@ -59,7 +59,7 @@ const DashboardLayoutClient = ({ children }: DashboardLayoutClientProps) => {
         isMobile={isMobile}
       />
 
-      {/* ── Mobile dark overlay ── only covers content, not sidebar/topbar */}
+      {/* ── Mobile dark overlay */}
       {isMobile && isSidebarOpen && (
         <div
           className="fixed inset-0 bg-black/50 z-40"
@@ -67,7 +67,7 @@ const DashboardLayoutClient = ({ children }: DashboardLayoutClientProps) => {
         />
       )}
 
-      {/* ── Topbar ── fixed, always on top of overlay */}
+      {/* ── Topbar */}
       <Topbar
         isSidebarOpen={isSidebarOpen}
         isMobile={isMobile}
@@ -75,7 +75,7 @@ const DashboardLayoutClient = ({ children }: DashboardLayoutClientProps) => {
         session={session}
       />
 
-      {/* ── Page content ── pushed right by sidebar, down by topbar */}
+      {/* ── Page content */}
       <main
         className={`transition-all duration-300 pt-[80px] ${
           isMobile ? "ml-16" : isSidebarOpen ? "ml-64" : "ml-16"

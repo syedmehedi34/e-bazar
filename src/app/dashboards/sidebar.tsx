@@ -12,7 +12,7 @@ import {
   FaSignOutAlt,
 } from "react-icons/fa";
 import Logo from "@/Components/Logo";
-import { Logs } from "lucide-react";
+import { Logs, Truck } from "lucide-react";
 
 type NavItem = {
   path: string;
@@ -23,12 +23,6 @@ type NavItem = {
 
 // dashboard -> dashboards
 const navItems: NavItem[] = [
-  {
-    path: "/dashboards",
-    label: "Dashboards",
-    icon: <FaTachometerAlt />,
-    roles: ["user", "admin"],
-  },
   {
     path: "/dashboards/user/profile",
     label: "My Profile",
@@ -41,6 +35,12 @@ const navItems: NavItem[] = [
     path: "/dashboards/user/my-orders",
     label: "My Orders",
     icon: <Logs />,
+    roles: ["user"],
+  },
+  {
+    path: "/dashboards/user/track-order",
+    label: "Track Order",
+    icon: <Truck />,
     roles: ["user"],
   },
 

@@ -5,8 +5,8 @@
 import DashboardLayoutClient from "./Dashboardlayoutclient";
 
 export const metadata = {
-  title: "Dashboard | AssetFlow",
-  description: "AssetFlow Dashboard",
+  title: "Dashboard | E-Catalog",
+  description: "E-Catalog Dashboard",
 };
 
 export default function DashboardLayout({

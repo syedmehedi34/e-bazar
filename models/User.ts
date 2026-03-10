@@ -11,6 +11,11 @@ const UserSchema = new mongoose.Schema(
       required: [true, "Email is required"],
       unique: true,
     },
+    photo: {
+      type: String,
+      default:
+        "uhttps://img.icons8.com/?size=100&id=undefined&format=png&color=000000r",
+    },
     password: {
       type: String,
       required: [true, "Password is required"],
