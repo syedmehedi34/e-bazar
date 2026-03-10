@@ -6,7 +6,7 @@ import Loader from "@/Components/Loader";
 import Pagination from "@/Components/Pagination2";
 
 import { useShoppingLogic } from "./useShoppingLogic";
-import { CategoryGroup, Product } from "./types";
+import { CategoryGroup } from "./types";
 import MobileDrawer from "./MobileDrawer";
 import FilterSidebar from "./FilterSidebar";
 import Toolbar from "./Toolbar";
@@ -229,7 +229,7 @@ export default function ShoppingClient() {
                     {page.map((p) => (
                       <GridCard
                         key={p._id}
-                        product={p as Product}
+                        product={p}
                         qSearch={qSearch}
                         wished={wishlist.has(p._id)}
                         onToggleWishlist={toggleWishlist}
@@ -242,7 +242,7 @@ export default function ShoppingClient() {
                     {page.map((p) => (
                       <ListCard
                         key={p._id}
-                        product={p as Product}
+                        product={p}
                         qSearch={qSearch}
                         wished={wishlist.has(p._id)}
                         onToggleWishlist={toggleWishlist}

@@ -30,7 +30,7 @@ export function useShoppingLogic() {
   const [search, setSearch] = useState(qSearch);
   const [view, setView] = useState<"grid" | "list">("grid");
   const [perPage, setPerPage] = useState(12);
-  const [page, setPage] = useState<typeof products>([]);
+  const [page, setPage] = useState<Product[]>([]);
   const [drawer, setDrawer] = useState(false);
   const [openCat, setOpenCat] = useState<string | null>(qCat || null);
   const [wishlist, setWishlist] = useState<Set<string>>(new Set());
@@ -53,7 +53,11 @@ export function useShoppingLogic() {
     const t = setTimeout(() => {
       if (search === qSearch) return;
       const p = new URLSearchParams(searchParams.toString());
-      search.trim() ? p.set("search", search.trim()) : p.delete("search");
+      if (search.trim()) {
+        p.set("search", search.trim());
+      } else {
+        p.delete("search");
+      }
       router.push(`/shopping?${p}`);
     }, 380);
     return () => clearTimeout(t);
@@ -63,7 +67,11 @@ export function useShoppingLogic() {
   const setParam = useCallback(
     (key: string, val: string | null) => {
       const p = new URLSearchParams(searchParams.toString());
-      val ? p.set(key, val) : p.delete(key);
+      if (val) {
+        p.set(key, val);
+      } else {
+        p.delete(key);
+      }
       router.push(`/shopping?${p}`);
     },
     [searchParams, router],
@@ -78,7 +86,11 @@ export function useShoppingLogic() {
   const toggleWishlist = useCallback((id: string) => {
     setWishlist((prev) => {
       const next = new Set(prev);
-      next.has(id) ? next.delete(id) : next.add(id);
+      if (next.has(id)) {
+        next.delete(id);
+      } else {
+        next.add(id);
+      }
       return next;
     });
   }, []);

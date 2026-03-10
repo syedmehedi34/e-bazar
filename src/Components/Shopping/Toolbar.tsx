@@ -18,7 +18,7 @@ interface ToolbarProps {
   view: ViewMode;
   perPage: number;
   activeCount: number;
-  searchRef: RefObject<HTMLInputElement>;
+  searchRef: RefObject<HTMLInputElement | null>;
   onSearchChange: (val: string) => void;
   onSortChange: (val: string) => void;
   onViewChange: (v: ViewMode) => void;
