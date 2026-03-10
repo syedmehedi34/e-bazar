@@ -6,12 +6,12 @@ import { FaBell, FaHome, FaSearch, FaUserCircle } from "react-icons/fa";
 import { IoClose, IoMenu } from "react-icons/io5";
 
 type NavbarProps = {
-  onhandleSidebarOpen: () => void;
+  onHandleSidebarOpen: () => void;
   sidebarOpen: boolean;
 };
 
-const Navber: React.FC<NavbarProps> = ({
-  onhandleSidebarOpen,
+const Navbar: React.FC<NavbarProps> = ({
+  onHandleSidebarOpen,
   sidebarOpen,
 }) => {
   return (
@@ -62,7 +62,7 @@ const Navber: React.FC<NavbarProps> = ({
           <FaUserCircle size={20} />
         </Link>
         <button
-          onClick={onhandleSidebarOpen}
+          onClick={onHandleSidebarOpen}
           className=" transition flex items-center cursor-pointer lg:hidden"
         >
           {!sidebarOpen ? (
@@ -76,4 +76,4 @@ const Navber: React.FC<NavbarProps> = ({
   );
 };
 
-export default Navber;
+export default Navbar;
