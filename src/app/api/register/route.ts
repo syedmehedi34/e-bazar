@@ -5,7 +5,6 @@ import dbConnect from "../../../../lib/mongodb";
 import User from "../../../../models/User";
 
 export async function POST(request: Request) {
-  console.log("object");
   try {
     const body = await request.json();
     const { name, email, password } = body;

@@ -19,13 +19,13 @@ const LoginPage = () => {
   const callbackUrl = searchParams.get("callbackUrl") || "/";
 
   const handleUserLogin = () => {
-    setEmail("mduserkhan@gmail.com");
-    setPassword("12345678");
+    setEmail("mehedihasan@email.com");
+    setPassword("user@123Login");
   };
 
   const handleAdminLogin = () => {
-    setEmail("admin123@gmail.com");
-    setPassword("12345678");
+    setEmail("admin@email.com");
+    setPassword("admin@123Login");
   };
 
   const handleCredentialsLogin = async (
@@ -40,19 +40,31 @@ const LoginPage = () => {
       return;
     }
 
-    const result = await signIn("credentials", {
-      email,
-      password,
-      redirect: false,
-    });
+    try {
+      const result = await signIn("credentials", {
+        email,
+        password,
+        redirect: false,
+        callbackUrl,
+      });
 
-    if (result?.ok && !result.error) {
-      toast.success("Login successful!");
-      router.push(callbackUrl);
-    } else {
-      toast.error(result?.error || "Invalid credentials!");
+      if (!result?.error) {
+        toast.success("Login successful!");
+        router.push(callbackUrl);
+      } else {
+        if (result.error === "CredentialsSignin") {
+          toast.error(
+            "Invalid credentials. Please check your email and password.",
+          );
+        } else {
+          toast.error(result.error || "Invalid credentials!");
+        }
+      }
+    } catch (error) {
+      toast.error("An unexpected error occurred. Please try again.");
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   const handleLoginWithGoogle = async () => {
