@@ -11,7 +11,7 @@ export default function Highlight({ text, q }: HighlightProps) {
         part.toLowerCase() === q.toLowerCase() ? (
           <mark
             key={i}
-            className="bg-amber-100 dark:bg-amber-900/40 text-inherit not-italic px-0.5 rounded"
+            className="bg-amber-200 dark:bg-amber-900/40 text-inherit not-italic px-0.5 rounded"
           >
             {part}
           </mark>
