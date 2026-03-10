@@ -140,7 +140,7 @@ const ProductInfo = ({
           <p className="text-xs font-bold text-gray-600 dark:text-gray-400 mb-2.5 flex items-center gap-1.5 uppercase tracking-wide">
             <Palette size={12} className="text-gray-400" /> Color
             {selectedColor && (
-              <span className="font-normal normal-case tracking-normal text-gray-400 capitalize">
+              <span className="font-normal tracking-normal text-gray-400 capitalize">
                 — {selectedColor}
               </span>
             )}
