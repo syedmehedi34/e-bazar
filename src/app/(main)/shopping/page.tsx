@@ -7,7 +7,7 @@ import React, { useEffect, useState } from "react";
 import Sorting from "@/Components/Shopping/Sorting";
 import Pricerange from "@/Components/Shopping/Pricerange";
 import { useRouter, useSearchParams } from "next/navigation";
-import Loader from "@/Components/Loader/Loader";
+import Loader from "@/Components/Loader";
 import Pagination from "@/Components/Pagination2";
 import { useFetchProduct } from "@/hook/useFetchProduct";
 import { FiSearch, FiX } from "react-icons/fi";

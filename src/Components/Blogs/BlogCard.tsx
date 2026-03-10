@@ -1,8 +1,8 @@
 import React from "react";
-import { Blog } from "./blogsInterface";
 import Image from "next/image";
 import { CiCalendarDate } from "react-icons/ci";
 import { CgProfile } from "react-icons/cg";
+import { Blog } from "@/types/blogsInterface";
 type BlogsType = {
   blogs?: Blog[];
 };

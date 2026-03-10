@@ -1,7 +1,7 @@
 "use client";
 import LatestOrder from "@/Components/Dashboard/LatestOrderList/LatestOrder";
 import ProductsChart from "@/Components/Dashboard/ProductsChart/ProductsChart";
-import Loader from "@/Components/Loader/Loader";
+import Loader from "@/Components/Loader";
 import {
   DashboardCardData,
   GetSalesAnalytics,

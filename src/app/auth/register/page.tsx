@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import axios, { AxiosError } from "axios";
 import { FcGoogle } from "react-icons/fc";
-import Logo from "@/Components/Logo/Logo";
+import Logo from "@/Components/Logo";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import Link from "next/link";

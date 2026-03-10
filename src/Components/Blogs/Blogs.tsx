@@ -4,8 +4,8 @@ import React from "react";
 import BlogCard from "./BlogCard";
 import Link from "next/link";
 import { useFetchBlog } from "@/hook/useFetchBlog";
-import type { Blog } from "./blogsInterface";
 import Loader from "@/app/(main)/loading";
+import { Blog } from "@/types/blogsInterface";
 
 const Blogs = () => {
   const { blogs, blogsLoading } = useFetchBlog();

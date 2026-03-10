@@ -11,7 +11,7 @@ import {
   FaUsersCog,
   FaSignOutAlt,
 } from "react-icons/fa";
-import Logo from "@/Components/Logo/Logo";
+import Logo from "@/Components/Logo";
 import { Logs } from "lucide-react";
 
 type NavItem = {

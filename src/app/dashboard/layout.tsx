@@ -4,7 +4,7 @@ import "./globals.css";
 import Navbar from "@/Components/Dashboard/Navbar";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import ToastProvider from "@/Components/ToastProvider/ToastProvider";
+import ToastProvider from "@/Components/ToastProvider";
 export default function DashboardLayout({
   children,
 }: {

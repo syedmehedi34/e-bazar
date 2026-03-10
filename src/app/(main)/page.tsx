@@ -1,12 +1,12 @@
-import Banner from "@/Components/Banner/Banner";
+import Banner from "@/Components/Banner";
 import Blogs from "@/Components/Blogs/Blogs";
-import Faq from "@/Components/Faq/Faq";
-import Fashion from "@/Components/Footer/Fashion/Fashion";
+import Faq from "@/Components/Faq";
+import Fashion from "@/Components/Footer/Fashion";
 import Offers from "@/Components/Offers/Offers";
 import Products from "@/Components/Products/Products";
-import Subscribe from "@/Components/Subscribe/Subscribe";
-import Testimonial from "@/Components/Testimonial/Testimonial";
-import TrustCard from "@/Components/Trustcard/TrustCard";
+import Subscribe from "@/Components/Subscribe";
+import Testimonial from "@/Components/Testimonial";
+import TrustCard from "@/Components/TrustCard";
 export default function Home() {
   return (
     <div>

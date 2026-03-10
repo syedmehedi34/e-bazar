@@ -1,7 +1,7 @@
 import "./globals.css";
 
-import ToastProvider from "@/Components/ToastProvider/ToastProvider";
-import BackButton from "@/Components/Button/BackButton/BackButton";
+import ToastProvider from "@/Components/ToastProvider";
+import BackButton from "@/Components/Button/BackButton";
 
 export default function DashboardLayout({
   children,

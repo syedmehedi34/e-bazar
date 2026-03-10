@@ -3,7 +3,7 @@ import React from "react";
 
 import CheckoutDescription from "@/Components/Checkout/CheckoutDescription";
 
-import BackButton from "@/Components/Button/BackButton/BackButton";
+import BackButton from "@/Components/Button/BackButton";
 import ImagesGalleryClientWrapper from "@/Components/Checkout/ImagesGalleryClientWrapper";
 
 const CheckoutPage = async ({

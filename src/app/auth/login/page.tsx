@@ -5,7 +5,7 @@ import React, { useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { toast } from "react-toastify";
-import Logo from "@/Components/Logo/Logo";
+import Logo from "@/Components/Logo";
 import { useSearchParams, useRouter } from "next/navigation";
 
 const LoginPage = () => {

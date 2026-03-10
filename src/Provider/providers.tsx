@@ -4,8 +4,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useState } from "react";
 
 import ReduxProvider from "@/Provider/ReduxPresistProbider/ReduxPresistProbider";
-import SessionWrapper from "@/Components/SessionWrapper/SessionWrapper";
-import ToastProvider from "@/Components/ToastProvider/ToastProvider";
+import SessionWrapper from "@/Components/SessionWrapper";
+import ToastProvider from "@/Components/ToastProvider";
 
 export default function Providers({ children }: { children: React.ReactNode }) {
   const [queryClient] = useState(() => new QueryClient());

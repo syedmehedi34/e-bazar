@@ -14,17 +14,17 @@ import { FaSearch } from "react-icons/fa";
 
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import Logo from "../Logo/Logo";
+import Logo from "../Logo";
 import { signOut, useSession } from "next-auth/react";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { AxiosError } from "axios";
 import Image from "next/image";
-import SearchInput from "../SearchInput/SearchInput";
+import SearchInput from "../SearchInput";
 import { AnimatePresence } from "framer-motion";
 import Sidebar from "./Sidebar";
 import { toast } from "react-toastify";
-import DarkMode from "../DarkMode/DarkMode";
+import DarkMode from "../DarkMode";
 import { usePathname } from "next/navigation";
 
 const Navbar = () => {
