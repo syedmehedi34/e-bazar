@@ -5,7 +5,6 @@ import { usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
 import {
   FaBars,
-  FaTachometerAlt,
   FaUser,
   FaBoxOpen,
   FaUsersCog,
@@ -22,6 +21,13 @@ type NavItem = {
 };
 
 const navItems: NavItem[] = [
+  // user only
+  {
+    path: "/dashboard/user",
+    label: "Dashboard",
+    icon: <FaUser />,
+    roles: ["user"],
+  },
   {
     path: "/dashboard/user/profile",
     label: "My Profile",
@@ -44,6 +50,18 @@ const navItems: NavItem[] = [
   },
 
   // admin only
+  {
+    path: "/dashboard/admin",
+    label: "Dashboard",
+    icon: <FaUser />,
+    roles: ["admin"],
+  },
+  {
+    path: "/dashboard/admin/profile",
+    label: "My Profile",
+    icon: <FaUser />,
+    roles: ["admin"],
+  },
   {
     path: "/dashboard/all-users",
     label: "All Users",
@@ -84,10 +102,7 @@ const Sidebar = ({
     item.roles.some((role) => role.toLowerCase() === normalizedRole),
   );
 
-  const isActive = (path: string) => {
-    if (path === "/dashboard") return pathname === "/dashboard";
-    return pathname === path || pathname.startsWith(path + "/");
-  };
+  const isActive = (path: string) => pathname === path;
 
   return (
     <div
