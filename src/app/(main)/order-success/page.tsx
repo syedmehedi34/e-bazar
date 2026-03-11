@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
+import { useDispatch } from "react-redux";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -18,6 +19,9 @@ import {
   Loader2,
   AlertCircle,
 } from "lucide-react";
+
+import { removeAllFromCart } from "@/redux/feature/addToCart/addToCart";
+import { clearBuyNowItem } from "@/redux/feature/buyNow/buyNow";
 
 // ─────────────────────────────────────────────
 // Types
@@ -91,11 +95,21 @@ export default function OrderSuccessPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const orderId = searchParams.get("id");
+  const dispatch = useDispatch();
 
   const [order, setOrder] = useState<OrderData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [copied, setCopied] = useState(false);
+
+  // ── Cart + BuyNow clear ───────────────────
+  // COD:        useCheckout এ already clear হয়েছে — আবার clear করলেও কোনো সমস্যা নেই
+  // SSLCommerz: gateway থেকে ফিরে এখানেই clear হবে
+  useEffect(() => {
+    dispatch(removeAllFromCart());
+    dispatch(clearBuyNowItem());
+    sessionStorage.removeItem("buyNowItem");
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // ── Fetch order from DB ───────────────────
   useEffect(() => {
@@ -161,24 +175,15 @@ export default function OrderSuccessPage() {
     order.createdAt,
   );
 
-  // ─────────────────────────────────────────────
-  // Render
-  // ─────────────────────────────────────────────
   return (
     <div className="min-h-screen bg-[#f8f9fb]">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 py-10 space-y-5">
         {/* ── Hero confirmation card ── */}
         <div className="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden">
-          {/* Top green bar */}
           <div className="h-2 bg-gradient-to-r from-teal-400 to-emerald-400" />
-
           <div className="px-6 py-8 text-center">
-            {/* Animated checkmark */}
             <div className="relative inline-flex mb-5">
-              <div
-                className="w-20 h-20 rounded-full bg-teal-50 flex items-center justify-center
-                              ring-8 ring-teal-50/60 animate-[pulse_2s_ease-in-out_1]"
-              >
+              <div className="w-20 h-20 rounded-full bg-teal-50 flex items-center justify-center ring-8 ring-teal-50/60 animate-[pulse_2s_ease-in-out_1]">
                 <CheckCircle2
                   className="w-10 h-10 text-teal-500"
                   strokeWidth={1.5}
@@ -197,17 +202,14 @@ export default function OrderSuccessPage() {
               <span className="font-semibold text-gray-700">
                 {order.deliveryAddress.fullName}
               </span>
-              !
+              !{" "}
               {isCOD
-                ? " Your order is confirmed. Please keep ৳ ready for delivery."
-                : " Your payment was successful."}
+                ? "Your order is confirmed. Please keep ৳ ready for delivery."
+                : "Your payment was successful."}
             </p>
 
             {/* Order ID chip */}
-            <div
-              className="mt-5 inline-flex items-center gap-2 bg-gray-50 border border-gray-200
-                            rounded-2xl px-5 py-3"
-            >
+            <div className="mt-5 inline-flex items-center gap-2 bg-gray-50 border border-gray-200 rounded-2xl px-5 py-3">
               <div className="text-left">
                 <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider">
                   Order ID
@@ -229,12 +231,8 @@ export default function OrderSuccessPage() {
               </button>
             </div>
 
-            {/* COD notice */}
             {isCOD && (
-              <div
-                className="mt-4 inline-flex items-center gap-2 bg-amber-50 border border-amber-200
-                              rounded-xl px-4 py-2.5 text-xs font-semibold text-amber-700"
-              >
+              <div className="mt-4 inline-flex items-center gap-2 bg-amber-50 border border-amber-200 rounded-xl px-4 py-2.5 text-xs font-semibold text-amber-700">
                 💵 Pay{" "}
                 <span className="font-black">{fmt(order.pricing.total)}</span>{" "}
                 when your order arrives
@@ -275,11 +273,7 @@ export default function OrderSuccessPage() {
                 >
                   <div
                     className={`w-7 h-7 rounded-full flex items-center justify-center border-2 transition-all
-                    ${
-                      step.done
-                        ? "bg-teal-500 border-teal-500"
-                        : "bg-white border-gray-200"
-                    }`}
+                    ${step.done ? "bg-teal-500 border-teal-500" : "bg-white border-gray-200"}`}
                   >
                     <Icon
                       className={`w-3.5 h-3.5 ${step.done ? "text-white" : "text-gray-300"}`}
@@ -394,7 +388,6 @@ export default function OrderSuccessPage() {
               Delivery Address
             </h2>
           </div>
-
           <div className="flex items-start gap-3">
             <span className="text-xl mt-0.5">
               {order.deliveryAddress.addressType === "home"
@@ -428,7 +421,6 @@ export default function OrderSuccessPage() {
               </div>
             </div>
           </div>
-
           {order.note && (
             <div className="mt-4 p-3 bg-amber-50 border border-amber-100 rounded-xl text-xs text-amber-700">
               📝 <span className="font-semibold">Delivery note:</span>{" "}
@@ -448,7 +440,6 @@ export default function OrderSuccessPage() {
             Track Order
             <ArrowRight className="w-4 h-4 ml-auto" />
           </Link>
-
           <Link
             href="/shopping"
             className="flex items-center justify-center gap-2 px-6 py-4 bg-white hover:bg-gray-50

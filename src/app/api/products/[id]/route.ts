@@ -11,7 +11,7 @@ export async function GET(
   await dbConnect();
 
   try {
-    const { id } = params;
+    const { id } = await params;
 
     // valid MongoDB ObjectId কিনা check
     if (!mongoose.Types.ObjectId.isValid(id)) {

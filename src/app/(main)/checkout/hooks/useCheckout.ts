@@ -10,12 +10,7 @@ import { clearBuyNowItem, BuyNowItem } from "@/redux/feature/buyNow/buyNow";
 import { removeAllFromCart } from "@/redux/feature/addToCart/addToCart";
 import { divisions, getDistricts, getUpazilas } from "@/data/bd-geo";
 
-import {
-  OrderItem,
-  DeliveryAddress,
-  PaymentMethod,
-  OrderPayload,
-} from "../types";
+import { OrderItem, DeliveryAddress, PaymentMethod } from "../types";
 import {
   SHIPPING_INSIDE_DHAKA,
   SHIPPING_OUTSIDE_DHAKA,
@@ -29,10 +24,16 @@ export function useCheckout(mode: string) {
   const reduxBuyNow = useSelector((s: RootState) => s.buyNow.item);
   const reduxCart = useSelector((s: RootState) => s.cart.value);
 
+  // ── Order placed flag — cart check bypass করতে ──
+  const [orderPlaced, setOrderPlaced] = useState(false);
+
   // ── Order Items ──────────────────────────────
   const [orderItems, setOrderItems] = useState<OrderItem[]>([]);
 
   useEffect(() => {
+    // Order placed হলে cart check করো না — redirect হচ্ছে
+    if (orderPlaced) return;
+
     if (mode === "buynow") {
       const item: BuyNowItem | null =
         reduxBuyNow ??
@@ -61,7 +62,7 @@ export function useCheckout(mode: string) {
         })),
       );
     }
-  }, [mode, reduxBuyNow, reduxCart, router]);
+  }, [mode, reduxBuyNow, reduxCart, router, orderPlaced]);
 
   // ── Address ──────────────────────────────────
   const [address, setAddress] = useState<DeliveryAddress>({
@@ -84,6 +85,7 @@ export function useCheckout(mode: string) {
   useEffect(() => {
     setAddress((p) => ({ ...p, district: "", upazila: "" }));
   }, [address.division]);
+
   useEffect(() => {
     setAddress((p) => ({ ...p, upazila: "" }));
   }, [address.district]);
@@ -162,6 +164,16 @@ export function useCheckout(mode: string) {
     return true;
   };
 
+  // ── Cleanup helper ────────────────────────────
+  const cleanup = useCallback(() => {
+    if (mode === "buynow") {
+      dispatch(clearBuyNowItem());
+      sessionStorage.removeItem("buyNowItem");
+    } else {
+      dispatch(removeAllFromCart());
+    }
+  }, [mode, dispatch]);
+
   const handleSubmit = async () => {
     if (!validate()) return;
     setSubmitting(true);
@@ -190,19 +202,15 @@ export function useCheckout(mode: string) {
       if (!res.ok) throw new Error("Failed");
       const { orderId, redirect } = await res.json();
 
-      // ── Cleanup Redux + sessionStorage ──
-      if (mode === "buynow") {
-        dispatch(clearBuyNowItem());
-        sessionStorage.removeItem("buyNowItem");
-      } else {
-        dispatch(removeAllFromCart());
-      }
-
-      // ── SSLCommerz → gateway এ পাঠাও ──
-      // ── COD → directly success page   ──
       if (redirect) {
+        // ── SSLCommerz / Stripe ──────────────────────────────────
+        // Cart clear করো না — /order-success page এ গিয়ে clear হবে
         window.location.href = redirect;
       } else {
+        // ── COD ──────────────────────────────────────────────────
+        // আগে flag set করো → তারপর cleanup → তারপর redirect
+        setOrderPlaced(true);
+        cleanup();
         router.replace(`/order-success?id=${orderId}`);
       }
     } catch {
@@ -213,7 +221,6 @@ export function useCheckout(mode: string) {
   };
 
   return {
-    // data
     orderItems,
     address,
     paymentMethod,
@@ -222,21 +229,17 @@ export function useCheckout(mode: string) {
     couponDiscount,
     note,
     submitting,
-    // geo
     divisionNames,
     districtNames,
     upazilaNames,
-    // prices
     subtotal,
     shipping,
     total,
-    // setters
     setField,
     setPaymentMethod,
     setCouponCode,
     setNote,
     setAddress,
-    // handlers
     handleApplyCoupon,
     removeCoupon,
     handleSubmit,
