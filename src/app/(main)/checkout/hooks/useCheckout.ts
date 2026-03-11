@@ -46,7 +46,7 @@ export function useCheckout(mode: string) {
     } else {
       if (reduxCart.length === 0) {
         toast.error("Cart is empty.");
-        router.replace("/cart");
+        router.replace("/shopping-cart");
         return;
       }
       setOrderItems(
@@ -188,9 +188,9 @@ export function useCheckout(mode: string) {
       });
 
       if (!res.ok) throw new Error("Failed");
-      const { orderId } = await res.json();
+      const { orderId, redirect } = await res.json();
 
-      // Cleanup Redux + sessionStorage
+      // ── Cleanup Redux + sessionStorage ──
       if (mode === "buynow") {
         dispatch(clearBuyNowItem());
         sessionStorage.removeItem("buyNowItem");
@@ -198,8 +198,13 @@ export function useCheckout(mode: string) {
         dispatch(removeAllFromCart());
       }
 
-      // COD → directly to success page
-      router.replace(`/order-success?id=${orderId}`);
+      // ── SSLCommerz → gateway এ পাঠাও ──
+      // ── COD → directly success page   ──
+      if (redirect) {
+        window.location.href = redirect;
+      } else {
+        router.replace(`/order-success?id=${orderId}`);
+      }
     } catch {
       toast.error("Something went wrong. Please try again.");
     } finally {

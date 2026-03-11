@@ -89,14 +89,13 @@ const OrderSchema = new Schema<IOrder>(
 );
 
 // Auto-generate orderId before save
-OrderSchema.pre("save", function (next) {
-  if (!this.orderId) {
-    const date = new Date().toISOString().slice(0, 10).replace(/-/g, "");
-    const random = Math.random().toString(36).substring(2, 7).toUpperCase();
-    this.orderId = `EB-${date}-${random}`;
-  }
-  next();
-});
+// OrderSchema.pre("save", async function () {
+//   if (!this.orderId) {
+//     const date = new Date().toISOString().slice(0, 10).replace(/-/g, "");
+//     const random = Math.random().toString(36).substring(2, 7).toUpperCase();
+//     this.orderId = `EB-${date}-${random}`;
+//   }
+// });
 
 export default mongoose.models.Order ||
   mongoose.model<IOrder>("Order", OrderSchema);
