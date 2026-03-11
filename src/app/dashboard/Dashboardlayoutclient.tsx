@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
 import Sidebar from "./sidebar";
 import Topbar from "./topbar";
 
@@ -13,7 +14,6 @@ type DashboardLayoutClientProps = {
 const DashboardLayoutClient = ({ children }: DashboardLayoutClientProps) => {
   const { data: session, status } = useSession();
   const router = useRouter();
-  // console.log(session?.user.role);
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -30,17 +30,27 @@ const DashboardLayoutClient = ({ children }: DashboardLayoutClientProps) => {
   }, []);
 
   useEffect(() => {
-    if (status === "unauthenticated") {
-      router.push("/");
-    }
+    if (status === "unauthenticated") router.push("/");
   }, [status, router]);
 
   const toggleSidebar = () => setIsSidebarOpen((prev) => !prev);
 
   if (status === "loading") {
     return (
-      <div className="flex justify-center items-center h-screen bg-gray-950">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-teal-500" />
+      <div
+        className="flex justify-center items-center h-screen
+                      bg-white dark:bg-[#0f1117]"
+      >
+        <div className="flex flex-col items-center gap-4">
+          <div
+            className="w-8 h-8 rounded-full border-2
+                          border-gray-200 dark:border-teal-500/30
+                          border-t-teal-500 animate-spin"
+          />
+          <p className="text-xs text-gray-400 dark:text-slate-600 tracking-widest uppercase">
+            Loading
+          </p>
+        </div>
       </div>
     );
   }
@@ -50,8 +60,8 @@ const DashboardLayoutClient = ({ children }: DashboardLayoutClientProps) => {
   const userRole = session?.user?.role ?? "user";
 
   return (
-    <div className="min-h-screen bg-white dark:bg-[#0B0716]">
-      {/* ── Sidebar */}
+    <div className="min-h-screen bg-gray-50 dark:bg-[#0b0e14]">
+      {/* Sidebar */}
       <Sidebar
         isSidebarOpen={isSidebarOpen}
         toggleSidebar={toggleSidebar}
@@ -59,15 +69,18 @@ const DashboardLayoutClient = ({ children }: DashboardLayoutClientProps) => {
         isMobile={isMobile}
       />
 
-      {/* ── Mobile dark overlay */}
+      {/* Mobile overlay */}
       {isMobile && isSidebarOpen && (
-        <div
-          className="fixed inset-0 bg-black/50 z-40"
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 bg-black/40 dark:bg-black/60 backdrop-blur-sm z-40"
           onClick={toggleSidebar}
         />
       )}
 
-      {/* ── Topbar */}
+      {/* Topbar */}
       <Topbar
         isSidebarOpen={isSidebarOpen}
         isMobile={isMobile}
@@ -75,14 +88,14 @@ const DashboardLayoutClient = ({ children }: DashboardLayoutClientProps) => {
         session={session}
       />
 
-      {/* ── Page content */}
-      <main
-        className={`transition-all duration-300 pt-[80px] ${
-          isMobile ? "ml-16" : isSidebarOpen ? "ml-64" : "ml-16"
-        }`}
+      {/* Page content */}
+      <motion.main
+        animate={{ marginLeft: isMobile ? 64 : isSidebarOpen ? 240 : 64 }}
+        transition={{ duration: 0.25, ease: "easeInOut" }}
+        className="pt-16 min-h-screen"
       >
-        {children}
-      </main>
+        <div className="p-4 sm:p-6">{children}</div>
+      </motion.main>
     </div>
   );
 };
