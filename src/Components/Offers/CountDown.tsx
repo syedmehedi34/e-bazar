@@ -1,11 +1,12 @@
 "use client";
+
 import React, { useEffect, useState, useMemo } from "react";
 
 type CountdownProps = {
   targetDate: string | Date;
   onComplete?: () => void;
   className?: string;
-  showLabels?: boolean;
+  accentColor?: string;
 };
 
 type TimeLeft = {
@@ -30,19 +31,26 @@ const getTimeLeft = (target: Date): TimeLeft => {
   return { days, hours, minutes, seconds };
 };
 
+const units = [
+  { key: "days", label: "Days" },
+  { key: "hours", label: "Hours" },
+  { key: "minutes", label: "Mins" },
+  { key: "seconds", label: "Secs" },
+] as const;
+
 export default function Countdown({
   targetDate,
   onComplete,
   className = "",
-  showLabels = true,
+  accentColor = "#f59e0b",
 }: CountdownProps) {
-  // ✅ always memoize date
   const target = useMemo(
     () => (typeof targetDate === "string" ? new Date(targetDate) : targetDate),
     [targetDate],
   );
 
   const invalidDate = Number.isNaN(target.getTime());
+
   const [timeLeft, setTimeLeft] = useState<TimeLeft>(() =>
     invalidDate
       ? { days: 0, hours: 0, minutes: 0, seconds: 0 }
@@ -51,7 +59,6 @@ export default function Countdown({
 
   useEffect(() => {
     if (invalidDate) return;
-
     setTimeLeft(getTimeLeft(target));
     let finished = false;
     const id = setInterval(() => {
@@ -65,55 +72,55 @@ export default function Countdown({
         t.seconds === 0
       ) {
         finished = true;
-        if (onComplete) onComplete();
+        onComplete?.();
       }
     }, 1000);
-
     return () => clearInterval(id);
   }, [target, onComplete, invalidDate]);
 
-  if (invalidDate) {
-    return <div className="text-red-500">Invalid target date</div>;
-  }
+  if (invalidDate)
+    return <div className="text-red-400 text-sm">Invalid date</div>;
 
   return (
     <div
-      className={`flex flex-wrap justify-center gap-4 items-center ${className}`}
+      className={`flex items-center gap-3 sm:gap-4 ${className}`}
       aria-live="polite"
     >
-      {/* Days */}
-      <div className="text-center">
-        <div className="text-3xl md:text-4xl font-bold flex items-end gap-2">
-          {timeLeft.days}
-          {showLabels && (
-            <div className="text-sm text-white rubik italic">Day</div>
+      {units.map(({ key, label }, i) => (
+        <React.Fragment key={key}>
+          {/* Box */}
+          <div className="flex flex-col items-center">
+            <div
+              className="relative w-16 sm:w-20 h-16 sm:h-20 rounded-2xl
+                         flex items-center justify-center
+                         bg-white/10 dark:bg-black/20 backdrop-blur-sm
+                         border border-white/20"
+            >
+              {/* Top shine */}
+              <div className="absolute inset-x-0 top-0 h-px bg-white/30 rounded-t-2xl" />
+
+              <span
+                className="text-2xl sm:text-3xl font-extrabold tabular-nums rubik"
+                style={{ color: key === "seconds" ? accentColor : "white" }}
+              >
+                {key === "days"
+                  ? String(timeLeft.days).padStart(2, "0")
+                  : pad(timeLeft[key])}
+              </span>
+            </div>
+            <span className="mt-1.5 text-[10px] font-bold uppercase tracking-widest text-white/50">
+              {label}
+            </span>
+          </div>
+
+          {/* Separator — not after last */}
+          {i < units.length - 1 && (
+            <span className="text-xl font-bold text-white/30 mb-5 select-none">
+              :
+            </span>
           )}
-        </div>
-      </div>
-
-      {/* Hours */}
-      <div className="text-center">
-        <div className="text-3xl md:text-4xl font-bold flex items-end gap-2">
-          {pad(timeLeft.hours)}
-          {showLabels && <div className="text-sm rubik italic">Hours</div>}
-        </div>
-      </div>
-
-      {/* Minutes */}
-      <div className="text-center">
-        <div className="text-3xl md:text-4xl font-bold flex items-end gap-2">
-          {pad(timeLeft.minutes)}
-          {showLabels && <div className="text-sm rubik italic">Min</div>}
-        </div>
-      </div>
-
-      {/* Seconds */}
-      <div className="text-center w-20">
-        <div className="text-3xl md:text-4xl font-bold flex items-end gap-2">
-          {pad(timeLeft.seconds)}
-          {showLabels && <div className="text-sm rubik italic">Sec</div>}
-        </div>
-      </div>
+        </React.Fragment>
+      ))}
     </div>
   );
 }
