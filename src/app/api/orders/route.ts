@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/auth";
 import { initiateSSLCommerz } from "@/lib/sslcommerz";
+import { initiateStripe } from "@/lib/stripe";
 import dbConnect from "../../../../lib/mongodb";
 import Order from "../../../../models/Order";
 
@@ -42,7 +43,7 @@ export async function POST(req: NextRequest) {
     orderStatus: "processing",
   });
 
-  // ── COD: return directly ──
+  // ── COD ──
   if (paymentMethod === "cod") {
     return NextResponse.json(
       { orderId: order.orderId, redirect: null },
@@ -50,9 +51,18 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  // ── SSLCommerz: get gateway URL ──
+  // ── SSLCommerz ──
   if (paymentMethod === "sslcommerz") {
     const gatewayUrl = await initiateSSLCommerz(order);
+    return NextResponse.json(
+      { orderId: order.orderId, redirect: gatewayUrl },
+      { status: 201 },
+    );
+  }
+
+  // ── Stripe ──
+  if (paymentMethod === "stripe") {
+    const gatewayUrl = await initiateStripe(order);
     return NextResponse.json(
       { orderId: order.orderId, redirect: gatewayUrl },
       { status: 201 },

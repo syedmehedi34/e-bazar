@@ -71,9 +71,11 @@ const ProductsCard: React.FC<ProductsCardProps> = ({ product }) => {
         <div className="flex justify-between items-center">
           <p className="text-xl my-2 font-bold">৳ {price}</p>
           <p className="font-bold flex items-center gap-1  text-yellow-500">
-            {[...Array(Math.round(rating as number))].map((_, i) => (
-              <FaStar key={i} />
-            ))}
+            {[...Array(Math.min(5, Math.max(0, Math.round(rating ?? 0))))].map(
+              (_, i) => (
+                <FaStar key={i} />
+              ),
+            )}
             <span className="text-gray-700 dark:text-gray-300 ">{rating}</span>
           </p>
         </div>

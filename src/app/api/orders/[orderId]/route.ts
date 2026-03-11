@@ -5,11 +5,11 @@ import Order from "../../../../../models/Order";
 
 export async function GET(
   _req: NextRequest,
-  { params }: { params: { orderId: string } },
+  { params }: { params: Promise<{ orderId: string }> },
 ) {
   await dbConnect();
-
-  const order = await Order.findOne({ orderId: params.orderId }).lean();
+  const { orderId } = await params;
+  const order = await Order.findOne({ orderId }).lean();
 
   if (!order) {
     return NextResponse.json({ error: "Order not found" }, { status: 404 });

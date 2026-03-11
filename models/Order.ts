@@ -1,6 +1,5 @@
 // models/Order.ts
 import mongoose, { Schema, Document } from "mongoose";
-import { generateOrderId } from "@/lib/generateOrderId";
 
 export interface IOrder extends Document {
   orderId: string;
@@ -42,6 +41,7 @@ export interface IOrder extends Document {
     total: number;
   };
   transactionId?: string;
+  gatewayData?: object; // ← SSLCommerz ও Stripe এর raw response
   note?: string;
 }
 
@@ -83,19 +83,11 @@ const OrderSchema = new Schema<IOrder>(
       total: Number,
     },
     transactionId: String,
+    gatewayData: Schema.Types.Mixed, // ← Mixed type — যেকোনো object রাখা যাবে
     note: String,
   },
   { timestamps: true },
 );
-
-// Auto-generate orderId before save
-// OrderSchema.pre("save", async function () {
-//   if (!this.orderId) {
-//     const date = new Date().toISOString().slice(0, 10).replace(/-/g, "");
-//     const random = Math.random().toString(36).substring(2, 7).toUpperCase();
-//     this.orderId = `EB-${date}-${random}`;
-//   }
-// });
 
 export default mongoose.models.Order ||
   mongoose.model<IOrder>("Order", OrderSchema);
