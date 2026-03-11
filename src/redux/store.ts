@@ -4,6 +4,7 @@ import addToCartReducer from "./feature/addToCart/addToCart";
 import orderSlice from "./feature/orderSummarySlice/orderSummarySlice";
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
+import buyNowReducer from "@/redux/feature/buyNow/buyNow";
 
 // persist config
 const persistConfig = {
@@ -19,6 +20,7 @@ const store = configureStore({
     todo: todoSlice,
     cart: persistedCartReducer,
     orderSummary: orderSlice,
+    buyNow: buyNowReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

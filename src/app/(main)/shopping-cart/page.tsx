@@ -78,12 +78,12 @@ const ShoppingCart = () => {
     });
   };
 
-  const handleCheckout = () => {
-    router.push(`/checkout/${cartItems[0]._id}`);
-  };
-  const handleCheckoutItem = (_id: string) => {
-    router.push(`/checkout/${_id}`);
-  };
+  // const handleCheckout = () => {
+  //   router.push(`/checkout/${cartItems[0]._id}`);
+  // };
+  // const handleCheckoutItem = (_id: string) => {
+  //   router.push(`/checkout/${_id}`);
+  // };
 
   return (
     <div className="min-h-screen bg-gray-200 dark:bg-gray-900 dark:text-white">
@@ -120,7 +120,7 @@ const ShoppingCart = () => {
                     >
                       <div
                         className="list-row cursor-pointer"
-                        onClick={() => handleCheckoutItem(cart._id)}
+                        // onClick={() => handleCheckoutItem(cart._id)}
                       >
                         <div>
                           <Image
@@ -212,7 +212,8 @@ const ShoppingCart = () => {
                   </div>
                   <div>
                     <button
-                      onClick={handleCheckout}
+                      // onClick={handleCheckout}
+                      onClick={() => router.push("/checkout?mode=cart")}
                       className="flex items-center justify-center gap-4 text-center max-sm:text-sm  container-custom bg-gray-900  text-white cursor-pointer sm:p-4 p-3 rounded-box hover:bg-gray-900"
                     >
                       Go to Checkout <MdArrowRightAlt />

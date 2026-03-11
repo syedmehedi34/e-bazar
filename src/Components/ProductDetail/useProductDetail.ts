@@ -1,11 +1,17 @@
 import { useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { addToCart, CartItem } from "@/redux/feature/addToCart/addToCart";
+import { setBuyNowItem, BuyNowItem } from "@/redux/feature/buyNow/buyNow";
 import { RootState } from "@/redux/store";
 import { IProduct, TabType } from "./types";
 
 export const useProductDetail = (product: IProduct | null) => {
+  const dispatch = useDispatch();
+  const router = useRouter();
+  const cartItems = useSelector((s: RootState) => s.cart.value);
+
   // ── UI States ──────────────────────────────────────────
   const [activeImage, setActiveImage] = useState(0);
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
@@ -14,10 +20,6 @@ export const useProductDetail = (product: IProduct | null) => {
   const [wishlisted, setWishlisted] = useState(false);
   const [activeTab, setActiveTab] = useState<TabType>("description");
   const [copied, setCopied] = useState(false);
-
-  //
-  const cartItems = useSelector((s: RootState) => s.cart.value);
-  const dispatch = useDispatch();
 
   // ── Derived / computed values ─────────────────────────
   const reviewCount = product?.reviews?.length ?? 0;
@@ -53,50 +55,32 @@ export const useProductDetail = (product: IProduct | null) => {
   const prevImage = () => {
     if (!product) return;
     setActiveImage((i) => (i === 0 ? product.images.length - 1 : i - 1));
-    console.log("prevImage clicked");
   };
 
   const nextImage = () => {
     if (!product) return;
     setActiveImage((i) => (i === product.images.length - 1 ? 0 : i + 1));
-    console.log("nextImage clicked");
   };
 
-  const selectImage = (index: number) => {
-    setActiveImage(index);
-    console.log("selectImage:", index);
-  };
+  const selectImage = (index: number) => setActiveImage(index);
 
   // ── Product Option Handlers ───────────────────────────
-  const selectColor = (color: string) => {
-    setSelectedColor(color);
-    console.log("selectColor:", color);
-  };
-
-  const selectSize = (size: string) => {
-    setSelectedSize(size);
-    console.log("selectSize:", size);
-  };
+  const selectColor = (color: string) => setSelectedColor(color);
+  const selectSize = (size: string) => setSelectedSize(size);
 
   const increaseQty = () => {
     if (!product) return;
     setQuantity((q) => Math.min(product.stock, q + 1));
-    console.log("increaseQty");
   };
 
-  const decreaseQty = () => {
-    setQuantity((q) => Math.max(1, q - 1));
-    console.log("decreaseQty");
-  };
+  const decreaseQty = () => setQuantity((q) => Math.max(1, q - 1));
 
   // ── Action Handlers ───────────────────────────────────
   const toggleWishlist = () => {
     setWishlisted((prev) => !prev);
-    console.log("toggleWishlist:", !wishlisted);
     // TODO: call wishlist API
   };
 
-  //
   const handleAddToCart = useCallback(() => {
     if (!product) return;
 
@@ -119,27 +103,38 @@ export const useProductDetail = (product: IProduct | null) => {
     toast.success("Added to cart!");
   }, [product, cartItems, quantity, dispatch]);
 
-  const handleBuyNow = () => {
-    console.log("buyNow:", {
-      productId: product?._id,
-      selectedColor,
+  const handleBuyNow = useCallback(() => {
+    if (!product) return;
+
+    const buyNowItem: BuyNowItem = {
+      productId: product._id,
+      title: product.title,
+      image: product.images[0],
+      brand: product.brand,
       selectedSize,
+      selectedColor,
       quantity,
-      total: product ? product.discountPrice * quantity : 0,
-    });
-    // TODO: redirect to checkout with product info
-  };
+      unitPrice: product.discountPrice,
+      subtotal: product.discountPrice * quantity,
+    };
+
+    // ── 1. Redux-এ set করো (same-session navigation এর জন্য)
+    dispatch(setBuyNowItem(buyNowItem));
+
+    // ── 2. sessionStorage-এ backup রাখো (refresh হলেও টিকবে)
+    sessionStorage.setItem("buyNowItem", JSON.stringify(buyNowItem));
+
+    // ── 3. Checkout page-এ পাঠাও, mode=buynow দিয়ে
+    router.push("/checkout?mode=buynow");
+  }, [product, selectedSize, selectedColor, quantity, dispatch, router]);
 
   const handleShare = async () => {
     await navigator.clipboard.writeText(window.location.href);
     setCopied(true);
-    // console.log("handleShare: URL copied");
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const handleTabChange = (tab: TabType) => {
-    setActiveTab(tab);
-  };
+  const handleTabChange = (tab: TabType) => setActiveTab(tab);
 
   return {
     // states
