@@ -1,60 +1,18 @@
-"use client";
-import Sidebar from "@/Components/Dashboard/Sidebar";
-import "./globals.css";
-import Navbar from "@/Components/Dashboard/Navbar";
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import ToastProvider from "@/Components/ToastProvider";
+// app/dashboard/layout.tsx
+// This is a Server Component (no "use client" here).
+// The client-side logic lives in DashboardLayoutClient.
+
+import DashboardLayoutClient from "./Dashboardlayoutclient";
+
+export const metadata = {
+  title: "Dashboard | E-Catalog",
+  description: "E-Catalog Dashboard",
+};
+
 export default function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-  const handleOpenSidebar = () => {
-    setSidebarOpen(!sidebarOpen);
-  };
-  return (
-    <div className="bg-gray-100 dark:bg-gray-900">
-      <div className="flex flex-col lg:flex-row min-h-screen">
-        {/* Sidebar */}
-
-        <div
-          className={`lg:block hidden  transition-all duration-700 fixed h-full bg-white dark:shadow-gray-700 dark:bg-gray-900 dark:text-white z-[100] w-52 shadow`}
-        >
-          <Sidebar />
-        </div>
-        <AnimatePresence>
-          {sidebarOpen && (
-            <motion.div
-              initial={{ x: -300, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              exit={{ x: -300, opacity: 0 }}
-              transition={{ duration: 0.5 }}
-              className="fixed top-0 left-0 z-[100] h-full bg-white dark:shadow-gray-700 dark:bg-gray-900 dark:text-white shadow"
-            >
-              <Sidebar />
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {/* Main Content */}
-        <main className="flex-1 flex flex-col">
-          {/* Navbar */}
-          <div className="sticky top-0 z-50 lg:ml-52">
-            <Navbar
-              onHandleSidebarOpen={handleOpenSidebar}
-              sidebarOpen={sidebarOpen}
-            />
-          </div>
-
-          {/* Page Content */}
-          <div className="flex-1 p-4 overflow-auto lg:ml-52">
-            {children}
-            <ToastProvider />
-          </div>
-        </main>
-      </div>
-    </div>
-  );
+  return <DashboardLayoutClient>{children}</DashboardLayoutClient>;
 }

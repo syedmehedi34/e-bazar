@@ -66,12 +66,20 @@ const Navbar = () => {
 
     if (session.user.role?.includes("admin")) {
       return [
-        { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+        {
+          href: "/dashboard/admin/profile",
+          label: "Dashboard",
+          icon: LayoutDashboard,
+        },
       ];
     }
 
     return [
-      { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+      {
+        href: "/dashboard/user/profile",
+        label: "Dashboard",
+        icon: LayoutDashboard,
+      },
 
       { href: "/user_profile", label: "My Profile", icon: User },
       { href: "/shopping-cart", label: "My Cart", icon: ShoppingCart },
