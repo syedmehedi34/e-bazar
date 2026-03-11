@@ -1,75 +1,155 @@
 import Link from "next/link";
 import React from "react";
 import Logo from "../Logo";
+import {
+  Facebook,
+  Instagram,
+  Twitter,
+  Youtube,
+  MapPin,
+  Phone,
+  Mail,
+  ArrowRight,
+} from "lucide-react";
+
+const footerLinks = {
+  Shop: [
+    { label: "Men's Fashion", href: "/shopping?category=mens" },
+    { label: "Women's Fashion", href: "/shopping?category=women" },
+    { label: "Electronics", href: "/shopping?category=electronics" },
+    { label: "New Arrivals", href: "/shopping?sort=new" },
+    { label: "Sale", href: "/shopping?sale=true" },
+  ],
+  Company: [
+    { label: "About Us", href: "/about" },
+    { label: "Blog", href: "/blogs" },
+    { label: "Careers", href: "#" },
+    { label: "Contact", href: "/contact" },
+  ],
+  Support: [
+    { label: "FAQ", href: "#" },
+    { label: "Shipping Policy", href: "#" },
+    { label: "Return Policy", href: "#" },
+    { label: "Track Order", href: "/my_orders" },
+    { label: "Privacy Policy", href: "#" },
+  ],
+};
+
+const socials = [
+  { icon: Facebook, href: "#", label: "Facebook" },
+  { icon: Instagram, href: "#", label: "Instagram" },
+  { icon: Twitter, href: "#", label: "Twitter" },
+  { icon: Youtube, href: "#", label: "YouTube" },
+];
 
 const Footer = () => {
   return (
-    <div className="rubik bg-gray-800 text-white py-10">
-      {/* Top Footer */}
-      <div className="footer sm:footer-horizontal   container-custom py-4 ">
-        {/* Logo & Description */}
-        <aside className="flex flex-col items-start space-y-2">
-          <Logo logoColor={"white"} />
-          <p className="text-sm">
-            E-Catalog Industries Ltd.
-            <br />
-            Providing reliable tech since 2000
-          </p>
-        </aside>
+    <footer className="bg-gray-900 text-white rubik">
+      {/* ── Main footer ── */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 py-16">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-10">
+          {/* ── Brand col (wider) ── */}
+          <div className="lg:col-span-2 space-y-5">
+            <Logo logoColor="" />
 
-        {/* Services */}
-        <nav>
-          <h6 className="footer-title">Services</h6>
-          <Link href="#" className="link link-hover">
-            Branding
-          </Link>
-          <Link href="#" className="link link-hover">
-            Design
-          </Link>
-          <Link href="#" className="link link-hover">
-            Marketing
-          </Link>
-        </nav>
+            <p className="text-sm text-white/50 leading-relaxed max-w-xs">
+              Your one-stop destination for fashion, electronics, and lifestyle
+              products. Quality you can trust, prices you&apos;ll love.
+            </p>
 
-        {/* Company */}
-        <nav>
-          <h6 className="footer-title">Company</h6>
-          <Link href="#" className="link link-hover">
-            About us
-          </Link>
-          <Link href="#" className="link link-hover">
-            Contact
-          </Link>
-          <Link href="#" className="link link-hover">
-            Jobs
-          </Link>
-        </nav>
+            {/* Contact info */}
+            <div className="space-y-2.5">
+              {[
+                { icon: MapPin, text: "Dhaka, Bangladesh" },
+                { icon: Phone, text: "+880-123-222-323" },
+                { icon: Mail, text: "support@e-catalog.com" },
+              ].map(({ icon: Icon, text }) => (
+                <div
+                  key={text}
+                  className="flex items-center gap-2.5 text-sm text-white/50"
+                >
+                  <Icon size={13} className="text-teal-500 flex-shrink-0" />
+                  {text}
+                </div>
+              ))}
+            </div>
 
-        {/* Legal */}
-        <nav>
-          <h6 className="footer-title">Legal</h6>
-          <Link href="#" className="link link-hover">
-            Terms of use
-          </Link>
-          <Link href="#" className="link link-hover">
-            Privacy policy
-          </Link>
-          <Link href="#" className="link link-hover">
-            Cookie policy
-          </Link>
-        </nav>
+            {/* Socials */}
+            <div className="flex items-center gap-2 pt-1">
+              {socials.map(({ icon: Icon, href, label }) => (
+                <Link
+                  key={label}
+                  href={href}
+                  aria-label={label}
+                  className="w-9 h-9 rounded-xl bg-white/5 hover:bg-teal-500
+                             flex items-center justify-center
+                             text-white/50 hover:text-white
+                             border border-white/[0.06] hover:border-teal-500
+                             transition-all duration-200"
+                >
+                  <Icon size={15} />
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          {/* ── Link columns ── */}
+          {Object.entries(footerLinks).map(([heading, links]) => (
+            <div key={heading} className="space-y-4">
+              <div className="flex items-center gap-2">
+                <span className="w-4 h-0.5 rounded-full bg-teal-500" />
+                <h6 className="text-xs font-bold uppercase tracking-[0.18em] text-white/60">
+                  {heading}
+                </h6>
+              </div>
+              <ul className="space-y-2.5">
+                {links.map((link) => (
+                  <li key={link.label}>
+                    <Link
+                      href={link.href}
+                      className="group flex items-center gap-1.5 text-sm text-white/45
+                                 hover:text-white transition-colors duration-200"
+                    >
+                      <ArrowRight
+                        size={11}
+                        className="opacity-0 group-hover:opacity-100 -translate-x-1
+                                   group-hover:translate-x-0 transition-all duration-200
+                                   text-teal-500 flex-shrink-0"
+                      />
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
       </div>
 
-      {/* Bottom Footer */}
-      <div className="footer sm:footer-horizontal footer-center  border-t border-gray-600 p-4">
-        <aside>
-          <p>
-            Copyright © {new Date().getFullYear()} - All right reserved by
-            E-Catalog Industries Ltd.
+      {/* ── Bottom bar ── */}
+      <div className="border-t border-white/[0.06]">
+        <div
+          className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12
+                        py-5 flex flex-col sm:flex-row items-center justify-between gap-3"
+        >
+          <p className="text-xs text-white/30">
+            © {new Date().getFullYear()} E-Catalog Industries Ltd. All rights
+            reserved.
           </p>
-        </aside>
+          <div className="flex items-center gap-4">
+            {["Terms", "Privacy", "Cookies"].map((item) => (
+              <Link
+                key={item}
+                href="#"
+                className="text-xs text-white/30 hover:text-white/70 transition-colors duration-200"
+              >
+                {item}
+              </Link>
+            ))}
+          </div>
+        </div>
       </div>
-    </div>
+    </footer>
   );
 };
 
