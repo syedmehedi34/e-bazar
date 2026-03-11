@@ -1,6 +1,5 @@
 "use client";
 
-// icons imports
 import { CiShoppingCart } from "react-icons/ci";
 import {
   User,
@@ -8,9 +7,11 @@ import {
   Box,
   LifeBuoy,
   LayoutDashboard,
+  Search,
+  X,
+  Menu,
 } from "lucide-react";
 import { FaArrowRightFromBracket } from "react-icons/fa6";
-import { FaSearch } from "react-icons/fa";
 
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
@@ -21,7 +22,7 @@ import { RootState } from "@/redux/store";
 import { AxiosError } from "axios";
 import Image from "next/image";
 import SearchInput from "../SearchInput";
-import { AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import Sidebar from "./Sidebar";
 import { toast } from "react-toastify";
 import DarkMode from "../DarkMode";
@@ -30,8 +31,10 @@ import { usePathname } from "next/navigation";
 const Navbar = () => {
   const [scrollY, setScrollY] = useState(0);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const shoppingCart = useSelector((state: RootState) => state.cart.value);
   const [searchBox, setSearchBox] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+
+  const shoppingCart = useSelector((state: RootState) => state.cart.value);
   const { data: session } = useSession();
   const pathname = usePathname();
 
@@ -39,6 +42,15 @@ const Navbar = () => {
     const handleScrollY = () => setScrollY(window.scrollY);
     window.addEventListener("scroll", handleScrollY);
     return () => window.removeEventListener("scroll", handleScrollY);
+  }, []);
+
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (!target.closest("#profile-dropdown")) setDropdownOpen(false);
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
   }, []);
 
   const handleLogout = async () => {
@@ -51,7 +63,6 @@ const Navbar = () => {
     }
   };
 
-  // general links
   const commonNavLinks = [
     { href: "/", label: "Home" },
     { href: "/shopping", label: "Shop" },
@@ -60,10 +71,8 @@ const Navbar = () => {
     { href: "/contact", label: "Contact Us" },
   ];
 
-  // Role-based extra links
   const getRoleBasedLinks = () => {
     if (!session?.user) return [];
-
     if (session.user.role?.includes("admin")) {
       return [
         {
@@ -73,14 +82,12 @@ const Navbar = () => {
         },
       ];
     }
-
     return [
       {
         href: "/dashboard/user/profile",
         label: "Dashboard",
         icon: LayoutDashboard,
       },
-
       { href: "/user_profile", label: "My Profile", icon: User },
       { href: "/shopping-cart", label: "My Cart", icon: ShoppingCart },
       { href: "/my_orders", label: "My Orders", icon: Box },
@@ -88,172 +95,244 @@ const Navbar = () => {
     ];
   };
 
-  // Desktop + Sidebar-এর জন্য common nav items
+  const isScrolled = scrollY > 50;
+  const isHome = pathname === "/";
+  // Homepage এ scroll করার আগে — icon bg দেখাবে
+  const showHeroBg = isHome && !isScrolled;
+
+  const navBg = isHome
+    ? isScrolled
+      ? "bg-white/95 dark:bg-gray-950/95 backdrop-blur-md shadow-md dark:shadow-black/30"
+      : "bg-transparent"
+    : isScrolled
+      ? "bg-white/95 dark:bg-gray-950/95 backdrop-blur-md shadow-md dark:shadow-black/30"
+      : "bg-white dark:bg-gray-950 shadow-sm dark:shadow-black/20";
+
   const commonNavItems = commonNavLinks.map((link) => {
     const isActive = link.partial
       ? pathname.startsWith(link.href)
       : pathname === link.href;
 
+    const textClass = isActive
+      ? "text-gray-900 dark:text-white"
+      : "text-gray-700 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white";
+
+    const darkHeroText = showHeroBg
+      ? "dark:!text-white/85 dark:group-hover:!text-white"
+      : "";
+
     return (
       <Link
         key={link.href}
         href={link.href}
-        className={`
-          group relative 
-          text-[15px] font-medium leading-6 
-          transition-colors duration-300 text-gray-700 dark:text-gray-300
-          ${isActive ? "font-semibold" : ""}
-        `}
+        className="relative group text-sm font-semibold tracking-wide uppercase"
       >
-        {link.label}
-
         <span
-          className={`
-            absolute left-1/2 -translate-x-1/2 bottom-[-6px]
-            h-[2.5px] bg-gray-700 dark:bg-gray-300
-            transition-all duration-300 ease-out
-            ${
-              isActive
-                ? "w-full scale-x-100"
-                : "w-0 scale-x-0 group-hover:w-full group-hover:scale-x-100"
-            }
-          `}
+          className={`transition-colors duration-200 ${textClass} ${darkHeroText}`}
+        >
+          {link.label}
+        </span>
+        <span
+          className={`absolute -bottom-1 left-0 h-[2px] bg-teal-500
+                          transition-all duration-300 ease-out
+                          ${isActive ? "w-full" : "w-0 group-hover:w-full"}`}
         />
       </Link>
     );
   });
 
+  const cartCount = shoppingCart?.length || 0;
+
+  // Icon button — homepage initial এ white/glass bg, scroll হলে সরে যায়
+  const iconBtnClass = showHeroBg
+    ? "p-2 rounded-lg transition-all duration-200 text-white bg-white/15 hover:bg-white/25"
+    : "p-2 rounded-lg transition-all duration-200 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800";
+
   return (
     <>
       <header
-        className={`z-100 ${
-          pathname === "/"
-            ? scrollY > 50
-              ? "fixed-nav bg-white/95 dark:bg-gray-900 dark:text-white shadow"
-              : "relative sm:absolute top-0 left-0 sm:bg-transparent text-black dark:text-white w-full bg-white"
-            : scrollY > 50
-              ? "fixed-nav bg-white/95 dark:bg-gray-800 dark:text-white shadow"
-              : "bg-white dark:bg-gray-800 dark:text-white dark:shadow-gray-700 shadow"
-        }`}
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${navBg}`}
       >
-        <div className="container-custom flex items-center justify-between py-4">
-          <div className="flex items-center gap-4">
-            {/* Mobile Menu Button */}
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden text-black dark:text-white cursor-pointer"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16">
+            {/* ── Left ── */}
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className={`lg:hidden ${iconBtnClass}`}
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d={
-                    mobileMenuOpen
-                      ? "M6 18L18 6M6 6l12 12"
-                      : "M4 6h16M4 12h16M4 18h16"
-                  }
-                />
-              </svg>
-            </button>
-
-            <Logo />
-          </div>
-
-          {/* Desktop Nav — শুধু common links */}
-          <nav className="hidden lg:flex gap-10">{commonNavItems}</nav>
-
-          {/* Right side icons + auth */}
-          <div className="flex items-center gap-4">
-            <button
-              className="bg-gray-200 sm:p-2 p-1 rounded-full cursor-pointer dark:text-white text-black dark:bg-gray-700 transition-all duration-300"
-              onClick={() => setSearchBox(!searchBox)}
-            >
-              <FaSearch className="text-xl max-sm:text-md" />
-            </button>
-
-            <div className="relative bg-gray-200 text-black sm:p-2 p-1 rounded-full cursor-pointer dark:text-white dark:bg-gray-700 transition-all duration-300">
-              <Link href="/shopping-cart">
-                <CiShoppingCart className="text-xl max-sm:text-md" />
-              </Link>
-              <span className="absolute -top-1 sm:right-1 right-1 font-bold text-sm">
-                {shoppingCart?.length || 0}
-              </span>
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={mobileMenuOpen ? "x" : "menu"}
+                    initial={{ opacity: 0, rotate: -90 }}
+                    animate={{ opacity: 1, rotate: 0 }}
+                    exit={{ opacity: 0, rotate: 90 }}
+                    transition={{ duration: 0.15 }}
+                  >
+                    {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+                  </motion.div>
+                </AnimatePresence>
+              </button>
+              <Logo logoColor={""} />
             </div>
 
-            <DarkMode />
+            {/* ── Center ── */}
+            <nav className="hidden lg:flex items-center gap-8">
+              {commonNavItems}
+            </nav>
 
-            {!session?.user ? (
-              <div className="hidden lg:flex items-center gap-2">
-                <Link
-                  href="/auth/login"
-                  className="btn btn-sm btn-outline border-gray-400 text-white bg-gray-900 hover:bg-gray-800 rounded-md hover:text-white transition-all duration-300"
-                >
-                  Login <FaArrowRightFromBracket />
-                </Link>
-                <Link
-                  href="/auth/register"
-                  className="btn btn-sm btn-outline text-white hover:bg-gray-800 rounded-md hover:text-white transition-all duration-300 bg-gray-900"
-                >
-                  Register <FaArrowRightFromBracket />
-                </Link>
-              </div>
-            ) : (
-              <div className="dropdown dropdown-end">
-                <div
-                  tabIndex={0}
-                  className="sm:btn btn-sm btn-ghost btn-circle avatar"
-                >
-                  <div className="sm:w-10 w-6 sm:h-10 h-6 rounded-full">
-                    <Image
-                      src={
-                        session?.user?.image ||
-                        "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
-                      }
-                      alt="Avatar"
-                      fill
-                      className="rounded-full"
-                    />
-                  </div>
+            {/* ── Right ── */}
+            <div className="flex items-center gap-1.5 sm:gap-2">
+              {/* Search */}
+              <button
+                onClick={() => setSearchBox(!searchBox)}
+                className={iconBtnClass}
+              >
+                <Search size={20} />
+              </button>
+
+              {/* Cart */}
+              <Link
+                href="/shopping-cart"
+                className={`relative ${iconBtnClass}`}
+              >
+                <CiShoppingCart size={22} />
+                {cartCount > 0 && (
+                  <motion.span
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px]
+                               bg-teal-500 text-white text-[10px] font-bold
+                               rounded-full flex items-center justify-center px-1"
+                  >
+                    {cartCount}
+                  </motion.span>
+                )}
+              </Link>
+
+              {/* Dark Mode */}
+              <DarkMode />
+
+              {/* Divider */}
+              <div
+                className={`hidden sm:block w-px h-5 mx-1 transition-colors duration-300
+                ${showHeroBg ? "bg-white/20" : "bg-gray-200 dark:bg-gray-700"}`}
+              />
+
+              {/* Auth */}
+              {!session?.user ? (
+                <div className="hidden lg:flex items-center gap-2">
+                  <Link
+                    href="/auth/login"
+                    className={`text-sm font-semibold px-4 py-2 rounded-lg transition-all duration-200
+                      ${
+                        showHeroBg
+                          ? "text-white bg-white/15 hover:bg-white/25"
+                          : "text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800"
+                      }`}
+                  >
+                    Login
+                  </Link>
+                  <Link
+                    href="/auth/register"
+                    className="text-sm font-semibold px-4 py-2 rounded-lg
+                               bg-teal-500 hover:bg-teal-600 text-white
+                               transition-all duration-200 shadow-sm shadow-teal-500/30
+                               flex items-center gap-1.5"
+                  >
+                    Register <FaArrowRightFromBracket size={12} />
+                  </Link>
                 </div>
-                <ul
-                  tabIndex={0}
-                  className="dropdown-content p-2 shadow bg-white dark:bg-gray-800 dark:text-white text-gray-800 rounded-box w-52 mt-4"
-                >
-                  {getRoleBasedLinks().map((link) => (
-                    <li key={link.href} className="mb-1">
-                      <Link
-                        href={link.href}
-                        className="flex items-center gap-2 p-2 hover:bg-gray-600 hover:text-white dark:hover:text-white rounded-box transition-all duration-300"
-                      >
-                        {link.icon && <link.icon className="text-sm" />}
-                        {link.label}
-                      </Link>
-                    </li>
-                  ))}
-
-                  <li className="mt-3 border-t border-gray-200 dark:border-gray-700 pt-2">
-                    <button
-                      onClick={handleLogout}
-                      className="btn btn-outline border-none w-full bg-gray-700 hover:bg-gray-600 text-white rounded-box"
+              ) : (
+                <div id="profile-dropdown" className="relative">
+                  <button
+                    onClick={() => setDropdownOpen(!dropdownOpen)}
+                    className={`flex items-center gap-2 p-1 rounded-xl transition-all duration-200 group
+                      ${showHeroBg ? "hover:bg-white/15" : "hover:bg-gray-100 dark:hover:bg-gray-800"}`}
+                  >
+                    <div
+                      className="w-8 h-8 rounded-lg overflow-hidden relative
+                                    ring-2 ring-teal-500/30 group-hover:ring-teal-500/60
+                                    transition-all duration-200"
                     >
-                      Logout
-                    </button>
-                  </li>
-                </ul>
-              </div>
-            )}
+                      <Image
+                        src={
+                          session?.user?.image ||
+                          "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+                        }
+                        alt="Avatar"
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+                  </button>
+
+                  <AnimatePresence>
+                    {dropdownOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, y: -8, scale: 0.96 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: -8, scale: 0.96 }}
+                        transition={{ duration: 0.18, ease: "easeOut" }}
+                        className="absolute right-0 mt-2 w-52 rounded-xl overflow-hidden
+                                   bg-white dark:bg-gray-900
+                                   border border-gray-200 dark:border-gray-700/60
+                                   shadow-xl dark:shadow-black/40 z-50"
+                      >
+                        <div className="px-4 py-3 border-b border-gray-100 dark:border-gray-800">
+                          <p className="text-sm font-bold text-gray-900 dark:text-white truncate">
+                            {session.user.name ?? "User"}
+                          </p>
+                          <p className="text-xs text-gray-400 dark:text-gray-500 truncate mt-0.5">
+                            {session.user.email}
+                          </p>
+                        </div>
+
+                        <div className="py-1.5">
+                          {getRoleBasedLinks().map((link) => (
+                            <Link
+                              key={link.href}
+                              href={link.href}
+                              onClick={() => setDropdownOpen(false)}
+                              className="flex items-center gap-2.5 px-4 py-2.5 text-sm
+                                         text-gray-600 dark:text-gray-300
+                                         hover:text-gray-900 dark:hover:text-white
+                                         hover:bg-gray-50 dark:hover:bg-gray-800/60
+                                         transition-colors duration-150"
+                            >
+                              {link.icon && (
+                                <link.icon
+                                  size={14}
+                                  className="flex-shrink-0 text-teal-500"
+                                />
+                              )}
+                              {link.label}
+                            </Link>
+                          ))}
+                        </div>
+
+                        <div className="border-t border-gray-100 dark:border-gray-800 p-2">
+                          <button
+                            onClick={handleLogout}
+                            className="w-full flex items-center justify-center gap-2
+                                       py-2 px-4 rounded-lg text-sm font-semibold
+                                       bg-gray-900 dark:bg-gray-700
+                                       hover:bg-gray-700 dark:hover:bg-gray-600
+                                       text-white transition-all duration-200"
+                          >
+                            Logout <FaArrowRightFromBracket size={12} />
+                          </button>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </header>
 
-      {/* Mobile Sidebar — শুধু common links */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <Sidebar
