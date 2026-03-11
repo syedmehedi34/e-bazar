@@ -1,4 +1,8 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import { addToCart, CartItem } from "@/redux/feature/addToCart/addToCart";
+import { RootState } from "@/redux/store";
 import { IProduct, TabType } from "./types";
 
 export const useProductDetail = (product: IProduct | null) => {
@@ -10,6 +14,10 @@ export const useProductDetail = (product: IProduct | null) => {
   const [wishlisted, setWishlisted] = useState(false);
   const [activeTab, setActiveTab] = useState<TabType>("description");
   const [copied, setCopied] = useState(false);
+
+  //
+  const cartItems = useSelector((s: RootState) => s.cart.value);
+  const dispatch = useDispatch();
 
   // ── Derived / computed values ─────────────────────────
   const reviewCount = product?.reviews?.length ?? 0;
@@ -88,15 +96,28 @@ export const useProductDetail = (product: IProduct | null) => {
     // TODO: call wishlist API
   };
 
-  const handleAddToCart = () => {
-    console.log("addToCart:", {
-      productId: product?._id,
-      selectedColor,
-      selectedSize,
+  //
+  const handleAddToCart = useCallback(() => {
+    if (!product) return;
+
+    if (cartItems.find((i) => i._id === product._id)) {
+      toast.info("Already in cart");
+      return;
+    }
+
+    const cartItem: CartItem = {
+      _id: product._id,
+      title: product.title,
+      brand: product.brand,
+      price: product.price,
+      discountPrice: product.discountPrice,
+      images: product.images,
       quantity,
-    });
-    // TODO: call cart API / dispatch cart action
-  };
+    };
+
+    dispatch(addToCart(cartItem));
+    toast.success("Added to cart!");
+  }, [product, cartItems, quantity, dispatch]);
 
   const handleBuyNow = () => {
     console.log("buyNow:", {
@@ -112,13 +133,12 @@ export const useProductDetail = (product: IProduct | null) => {
   const handleShare = async () => {
     await navigator.clipboard.writeText(window.location.href);
     setCopied(true);
-    console.log("handleShare: URL copied");
+    // console.log("handleShare: URL copied");
     setTimeout(() => setCopied(false), 2000);
   };
 
   const handleTabChange = (tab: TabType) => {
     setActiveTab(tab);
-    console.log("tabChange:", tab);
   };
 
   return {
