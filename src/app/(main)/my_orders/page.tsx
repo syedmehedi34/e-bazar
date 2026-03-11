@@ -11,7 +11,6 @@ import UserOrdersTable from "@/Components/UserOrders/UserOrdersTable/UserOrdersT
 import Pagination from "@/Components/Pagination/Pagination";
 import Swal from "sweetalert2";
 import { toast } from "react-toastify";
-import { Order } from "@/lib/orders";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useReactToPrint } from "react-to-print";
@@ -28,7 +27,7 @@ const MyOrdersPage = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageArry, setPageArray] = useState([]);
+  const [pageArray, setPageArray] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
   const [summary, setSummary] = useState<Summary>({
@@ -82,7 +81,7 @@ const MyOrdersPage = () => {
     );
   }
 
-  const handleCencelOrderById = (id: string) => {
+  const handleCancelOrderById = (id: string) => {
     Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this action!",
@@ -160,14 +159,14 @@ const MyOrdersPage = () => {
             <div ref={contentRef}>
               <UserOrdersTable
                 orders={orders}
-                onDelete={handleCencelOrderById}
+                onDelete={handleCancelOrderById}
                 onInvoice={handleInvoice}
               />
             </div>
             <Pagination
               currentPage={currentPage}
               setCurrentPage={setCurrentPage}
-              pageArray={pageArry}
+              pageArray={pageArray}
             />
           </div>
         )}

@@ -1,11 +1,11 @@
 "use client";
-import { Blog } from "@/Components/Blogs/blogsInterface";
 import BlogsPageCard from "@/Components/Blogs/BlogsPageCard";
 import { useFetchBlog } from "@/hook/useFetchBlog";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import Loader from "../loading";
+import { Blog } from "@/types/blogsInterface";
 
 const BlogPage = () => {
   // Assuming this hook fetches ALL blogs

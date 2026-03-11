@@ -103,8 +103,8 @@ const page = () => {
 
             <article className="space-y-4 leading-relaxed">
               <p>
-                At <span className="font-semibold">E-Catalogß</span>, our
-                mission is simple yet powerful — to redefine online shopping in
+                At <span className="font-semibold">E-Catalog</span>, our mission
+                is simple yet powerful — to redefine online shopping in
                 Bangladesh by making it more reliable, affordable, and
                 customer-focused. We believe that every person deserves access
                 to quality products and a smooth, trustworthy shopping

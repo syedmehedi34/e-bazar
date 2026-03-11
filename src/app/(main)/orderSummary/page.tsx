@@ -150,7 +150,7 @@ const PaymentProcess = () => {
                   id="name"
                   placeholder="Enter Your Name.."
                   className="input input-bordered w-full dark:bg-gray-700"
-                  value={session?.user?.email}
+                  value={session?.user?.name ?? ""}
                   onChange={(e) =>
                     setFormData({ ...formData, name: e.target.value })
                   }
@@ -182,7 +182,7 @@ const PaymentProcess = () => {
                   id="email"
                   placeholder="example@mail.com"
                   className="input input-bordered w-full dark:bg-gray-700"
-                  value={session?.user?.email}
+                  value={session?.user?.email ?? ""}
                   onChange={(e) =>
                     setFormData({ ...formData, email: e.target.value })
                   }
@@ -240,7 +240,7 @@ const PaymentProcess = () => {
                 />
               </div>
             </form>
-            {/* payment metod */}
+            {/* payment method */}
             <div>
               <h3 className="text-lg font-semibold mt-6 mb-4">
                 Select Payment Method

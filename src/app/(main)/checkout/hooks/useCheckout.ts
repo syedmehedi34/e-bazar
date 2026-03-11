@@ -24,14 +24,13 @@ export function useCheckout(mode: string) {
   const reduxBuyNow = useSelector((s: RootState) => s.buyNow.item);
   const reduxCart = useSelector((s: RootState) => s.cart.value);
 
-  // ── Order placed flag — cart check bypass করতে ──
+  // ── Order placed flag — cart check bypass  ──
   const [orderPlaced, setOrderPlaced] = useState(false);
 
   // ── Order Items ──────────────────────────────
   const [orderItems, setOrderItems] = useState<OrderItem[]>([]);
 
   useEffect(() => {
-    // Order placed হলে cart check করো না — redirect হচ্ছে
     if (orderPlaced) return;
 
     if (mode === "buynow") {
@@ -204,11 +203,9 @@ export function useCheckout(mode: string) {
 
       if (redirect) {
         // ── SSLCommerz / Stripe ──────────────────────────────────
-        // Cart clear করো না — /order-success page এ গিয়ে clear হবে
         window.location.href = redirect;
       } else {
         // ── COD ──────────────────────────────────────────────────
-        // আগে flag set করো → তারপর cleanup → তারপর redirect
         setOrderPlaced(true);
         cleanup();
         router.replace(`/order-success?id=${orderId}`);

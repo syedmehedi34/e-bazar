@@ -25,13 +25,6 @@ export const PAYMENT_OPTIONS: PaymentOption[] = [
     desc: "Visa / Mastercard / Amex",
     badge: "International",
   },
-  // {
-  //   id: "paypal",
-  //   label: "PayPal",
-  //   logo: "/payment/paypal.png",
-  //   desc: "Fast & secure global payments",
-  //   badge: "International",
-  // },
 ];
 
 export const fmt = (n: number) => `৳${n.toLocaleString("en-BD")}`;

@@ -68,7 +68,7 @@ const ContactPage = () => {
             Contact Us
           </h2>
           <p className="mt-3 md:mt-5 text-lg md:text-xl lg:text-2xl font-light opacity-90 max-w-2xl mx-auto">
-            We're here to help! Reach out with any questions, feedback, or
+            We&apos;re here to help! Reach out with any questions, feedback, or
             partnership inquiries.
           </p>
         </div>

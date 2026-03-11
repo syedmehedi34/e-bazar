@@ -20,11 +20,11 @@ const OrderInvoice = () => {
     if (res.status === 200) {
       setOrder(res.data);
     }
-  }, []);
+  }, [id]);
 
   useEffect(() => {
     getOrderById();
-  }, []);
+  }, [getOrderById]);
 
   return (
     <div className="container-custom my-10 min-h-screen">
@@ -41,7 +41,7 @@ const OrderInvoice = () => {
                   <h1 className="font-bold text-3xl  ">INVOICE</h1>
                   <div className="mt-4">
                     <p>
-                      <strong>Biling Number:</strong>
+                      <strong>Billing Number:</strong>
                       <span className="text-sm font-light">
                         {" "}
                         {Math.floor(Math.random() * 10000)}
@@ -145,7 +145,9 @@ const OrderInvoice = () => {
                         <Image
                           width={100}
                           height={100}
-                          src={order?.product?.image}
+                          src={
+                            order?.product?.image || "/placeholder-image.png"
+                          }
                           alt={"products images"}
                           className="w-10 h-10 object-cover rounded"
                         />
@@ -179,7 +181,7 @@ const OrderInvoice = () => {
                 <div className="text-center">
                   <p className="dark:text-gray-300">Signature</p>
                   <p className="font-semibold dark:text-white">
-                    Md Shamiul Islam
+                    Md Samiul Islam
                   </p>
                 </div>
               </div>
