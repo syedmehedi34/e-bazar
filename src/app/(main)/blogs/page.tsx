@@ -89,7 +89,7 @@ const BlogPage = () => {
           >
             <BookOpen size={12} className="text-teal-400" />
             <span className="text-[11px] font-semibold text-teal-300 tracking-widest uppercase">
-              E-Bazaar Editorial
+              E-Catalog Editorial
             </span>
           </div>
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight drop-shadow-2xl">

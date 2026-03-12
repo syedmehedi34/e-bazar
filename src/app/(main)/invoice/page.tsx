@@ -33,7 +33,7 @@ const OrderInvoice = () => {
         <div className="bg-white dark:bg-gray-800 dark:text-white md:w-[595px] w-full  h-[642px]  p-5 relative overflow-hidden border-2 border-dotted mb-10">
           <div>
             <p className="absolute inset-0 flex justify-center dark:text-white items-center text-[8vw] font-bold italic  ">
-              E-Bazaar
+              E-catalog
             </p>
             <div className="absolute inset-0 bg-white/90 dark:bg-gray-800/90 p-5">
               <div className="flex justify-between gap-4 border-b-2 pb-2 border-dotted">
@@ -59,7 +59,7 @@ const OrderInvoice = () => {
                 <div className="flex-1">
                   <aside className="flex flex-col items-start space-y-1">
                     <p className="text-sm ">
-                      E-Bazaar Industries Ltd.
+                      E-catalog Industries Ltd.
                       <br />
                       Providing reliable tech since 2000
                     </p>

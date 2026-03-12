@@ -138,7 +138,7 @@ const LoginPage = () => {
             </h1>
 
             <p className="text-gray-400 text-sm leading-relaxed max-w-[280px]">
-              Sign in to your E-Bazaar account to track orders, wishlist deals,
+              Sign in to your E-catalog account to track orders, wishlist deals,
               and enjoy exclusive offers.
             </p>
           </div>

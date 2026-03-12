@@ -3,7 +3,7 @@ import Loader from "@/Components/Loader";
 import ShoppingClient from "@/Components/Shopping/ShoppingClient";
 
 export const metadata = {
-  title: "Shop | E-Bazaar",
+  title: "Shop | E-catalog",
   description: "Browse our full collection of products.",
 };
 

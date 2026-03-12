@@ -1,16 +1,16 @@
-# 🛍️ E-Bazaar
+# 🛍️ E-catalog
 
-**E-Bazaar** is a modern, responsive, and high-performance **e-commerce web application** built with **Next.js** and **TypeScript**.  
+**E-catalog** is a modern, responsive, and high-performance **e-commerce web application** built with **Next.js** and **TypeScript**.  
 It provides a beautiful user experience with advanced features like product filtering, cart management, secure checkout, and role-based admin control.
 
 ---
 
 ## 🌐 Live Demo
 
-Check out the live version of **E-Bazaar** here:  
-[Visit E-Bazaar](https://e-bazaar-client.vercel.app/)
+Check out the live version of **E-catalog** here:  
+[Visit E-catalog](https://e-catalog-client.vercel.app/)
 
-![E-Bazaar Screenshot](https://i.postimg.cc/GhyKGgfB/e-bazaar.png)
+![E-catalog Screenshot](https://i.postimg.cc/GhyKGgfB/e-catalog.png)
 
 ## 🚀 Features
 

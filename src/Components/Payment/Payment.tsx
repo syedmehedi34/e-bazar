@@ -48,7 +48,7 @@ const Payment: React.FC<PaymentProps> = ({ onClose, products, formData }) => {
   const router = useRouter();
   const deliveryData = useDeliveryDate(3);
   const generateTransactionId = () => {
-    const prefix = "pay-e-bazaar";
+    const prefix = "pay-e-catalog";
     const randomNumber = Math.floor(1000 + Math.random() * 9000);
     const randomChars = Math.random()
       .toString(36)
