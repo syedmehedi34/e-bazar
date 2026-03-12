@@ -1,18 +1,13 @@
-import "./globals.css";
-
+// src/app/auth/layout.tsx
 import ToastProvider from "@/Components/ToastProvider";
-import BackButton from "@/Components/Button/BackButton";
 
-export default function DashboardLayout({
+export default function AuthLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
-    <div>
-      <div className="pt-4 bg-gray-50 pl-10 sm:pl-32">
-        <BackButton />
-      </div>
+    <div className="min-h-screen bg-white dark:bg-gray-950">
       <main>{children}</main>
       <ToastProvider />
     </div>

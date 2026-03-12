@@ -74,7 +74,7 @@ const missions = [
 
 const Page = () => {
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 rubik">
+    <div className="min-h-screen mt-[62px] bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 rubik">
       {/* ══ Hero Banner ══════════════════════════════════════════ */}
       <section
         className="relative w-full h-[260px] md:h-[360px] lg:h-[420px]

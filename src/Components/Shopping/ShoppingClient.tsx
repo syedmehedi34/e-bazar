@@ -73,7 +73,7 @@ export default function ShoppingClient() {
   };
 
   return (
-    <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-white">
+    <div className="min-h-screen mt-[62px] bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-white">
       {/* Mobile filter drawer */}
       <MobileDrawer
         open={drawer}
