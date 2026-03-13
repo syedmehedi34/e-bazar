@@ -766,7 +766,7 @@ const AddProductPage = () => {
               <div className="grid grid-cols-3 gap-3">
                 {(["length", "width", "height"] as const).map((dim) => (
                   <div key={dim} className="space-y-1">
-                    <p className="text-[10px] font-medium text-gray-400 uppercase tracking-wider capitalize">
+                    <p className="text-[10px] font-medium text-gray-400 tracking-wider capitalize">
                       {dim}
                     </p>
                     <input

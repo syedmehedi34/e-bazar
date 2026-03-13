@@ -32,6 +32,8 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "www.shutterstock.com",
       },
+      { protocol: "https", hostname: "res.cloudinary.com" },
+      { protocol: "https", hostname: "lh3.googleusercontent.com" },
       {
         protocol: "https",
         hostname: "ibb.co.com",
