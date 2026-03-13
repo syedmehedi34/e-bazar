@@ -1,5 +1,11 @@
 "use client";
-import React, { useState, useMemo } from "react";
+import React, {
+  useState,
+  useMemo,
+  useRef,
+  useEffect,
+  useCallback,
+} from "react";
 import Image from "next/image";
 import { useFetchProduct } from "@/hook/useFetchProduct";
 import {
@@ -19,6 +25,9 @@ import {
   Tag,
   Save,
   Loader2,
+  Upload,
+  X,
+  ImagePlus,
 } from "lucide-react";
 import { toast } from "react-toastify";
 import { IProduct } from "../../../../../models/Products";
@@ -33,6 +42,39 @@ type SortField =
   | "status";
 type SortDir = "asc" | "desc";
 type Product = IProduct & { _id: string };
+
+type EditableImage = {
+  id: string;
+  src: string; // blob URL (preview) or cloudinary URL
+  publicId: string; // cloudinary public_id — empty for pending uploads
+  loading: boolean;
+};
+
+/* ─── Cloudinary helpers ─────────────────────────────── */
+async function uploadToCloudinary(
+  file: File,
+): Promise<{ url: string; publicId: string }> {
+  const fd = new FormData();
+  fd.append("file", file);
+  const res = await fetch("/api/upload", { method: "POST", body: fd });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.message || "Upload failed");
+  return { url: data.url as string, publicId: data.publicId as string };
+}
+
+function deleteFromCloudinary(publicId: string) {
+  // fire-and-forget
+  fetch("/api/upload", {
+    method: "DELETE",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ publicId }),
+  }).catch(() => {});
+}
+
+function extractPublicId(url: string): string {
+  const m = url.match(/\/upload\/(?:v\d+\/)?(.+?)(?:\.[^.]+)?$/);
+  return m?.[1] ?? "";
+}
 
 /* ─── Status badge config ────────────────────────────── */
 const STATUS_CONFIG = {
@@ -79,7 +121,261 @@ const StatCard = ({
   </div>
 );
 
-/* ─── Edit Modal (daisyUI dialog) ────────────────────── */
+/* ─── Image Editor ───────────────────────────────────── */
+const ImageEditor = ({
+  initialImages,
+  onChange,
+}: {
+  initialImages: string[];
+  onChange: (urls: string[]) => void;
+}) => {
+  const [images, setImages] = useState<EditableImage[]>(() =>
+    initialImages.map((url) => ({
+      id: crypto.randomUUID(),
+      src: url,
+      publicId: extractPublicId(url),
+      loading: false,
+    })),
+  );
+  const [dragOver, setDragOver] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const onChangeRef = useRef(onChange);
+  onChangeRef.current = onChange; // always fresh, no effect needed
+
+  // Helper: update images state AND notify parent in one go
+  const updateImages = useCallback(
+    (updater: (prev: EditableImage[]) => EditableImage[]) => {
+      setImages((prev) => {
+        const next = updater(prev);
+        // Notify parent synchronously inside the updater is not safe,
+        // so schedule it as a microtask
+        const urls = next.filter((img) => !img.loading).map((img) => img.src);
+        Promise.resolve().then(() => onChangeRef.current(urls));
+        return next;
+      });
+    },
+    [],
+  );
+
+  const handleFiles = useCallback(
+    async (files: FileList | File[]) => {
+      const arr = Array.from(files).filter((f) => {
+        if (!f.type.startsWith("image/")) {
+          toast.error(`${f.name}: not an image`);
+          return false;
+        }
+        if (f.size > 5 * 1024 * 1024) {
+          toast.error(`${f.name}: exceeds 5 MB`);
+          return false;
+        }
+        return true;
+      });
+      if (!arr.length) return;
+      if (images.length + arr.length > 8) {
+        toast.error("Maximum 8 images allowed");
+        return;
+      }
+
+      const entries = arr.map((f) => ({
+        id: crypto.randomUUID(),
+        file: f,
+        objectUrl: URL.createObjectURL(f),
+      }));
+
+      updateImages((prev) => [
+        ...prev,
+        ...entries.map((e) => ({
+          id: e.id,
+          src: e.objectUrl,
+          publicId: "",
+          loading: true,
+        })),
+      ]);
+
+      await Promise.all(
+        entries.map(async ({ id, file }) => {
+          try {
+            const { url, publicId } = await uploadToCloudinary(file);
+            updateImages((prev) =>
+              prev.map((img) =>
+                img.id === id
+                  ? { ...img, src: url, publicId, loading: false }
+                  : img,
+              ),
+            );
+          } catch (err) {
+            toast.error(
+              `${file.name}: ${err instanceof Error ? err.message : "Upload failed"}`,
+            );
+            updateImages((prev) => prev.filter((img) => img.id !== id));
+          }
+        }),
+      );
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    },
+    [updateImages],
+  );
+
+  const removeImage = (id: string) => {
+    const target = images.find((img) => img.id === id);
+    updateImages((prev) => prev.filter((img) => img.id !== id));
+    if (target?.publicId) deleteFromCloudinary(target.publicId);
+  };
+
+  return (
+    <div className="space-y-3">
+      <p className="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-500">
+        Product Images
+      </p>
+
+      {/* Image grid */}
+      {images.length > 0 && (
+        <div className="grid grid-cols-4 gap-2">
+          {images.map((img, i) => (
+            <div
+              key={img.id}
+              className="relative group aspect-square rounded-xl overflow-hidden
+                         ring-1 ring-gray-200 dark:ring-gray-700 bg-gray-100 dark:bg-gray-800"
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={img.src}
+                alt=""
+                className="w-full h-full object-cover"
+              />
+
+              {/* Uploading overlay */}
+              {img.loading && (
+                <div className="absolute inset-0 bg-black/55 flex flex-col items-center justify-center gap-1">
+                  <Loader2 size={16} className="text-white animate-spin" />
+                  <p className="text-[9px] text-white/80 font-medium">
+                    Uploading…
+                  </p>
+                </div>
+              )}
+
+              {/* Main badge */}
+              {!img.loading && i === 0 && (
+                <span
+                  className="absolute top-1 left-1 px-1.5 py-0.5 rounded text-[9px]
+                                 font-bold bg-teal-500 text-white shadow-sm"
+                >
+                  Main
+                </span>
+              )}
+
+              {/* Remove button */}
+              {!img.loading && (
+                <button
+                  type="button"
+                  onClick={() => removeImage(img.id)}
+                  className="absolute top-1 right-1 w-5 h-5 rounded-full
+                             bg-black/60 hover:bg-red-500 text-white
+                             flex items-center justify-center
+                             opacity-0 group-hover:opacity-100
+                             transition-all duration-150"
+                >
+                  <X size={10} />
+                </button>
+              )}
+            </div>
+          ))}
+
+          {/* Add more slot — shown when < 8 images */}
+          {images.length < 8 && (
+            <button
+              type="button"
+              onClick={() => inputRef.current?.click()}
+              className="aspect-square rounded-xl border-2 border-dashed
+                         border-gray-200 dark:border-gray-700
+                         hover:border-teal-400 dark:hover:border-teal-500/60
+                         hover:bg-teal-50 dark:hover:bg-teal-500/5
+                         flex flex-col items-center justify-center gap-1
+                         transition-all duration-200 group"
+            >
+              <ImagePlus
+                size={16}
+                className="text-gray-300 dark:text-gray-600 group-hover:text-teal-500 transition-colors"
+              />
+              <span className="text-[10px] text-gray-400 group-hover:text-teal-500 transition-colors">
+                Add
+              </span>
+            </button>
+          )}
+        </div>
+      )}
+
+      {/* Drop zone — shown when no images yet */}
+      {images.length === 0 && (
+        <div
+          onDrop={(e) => {
+            e.preventDefault();
+            setDragOver(false);
+            if (e.dataTransfer.files.length) handleFiles(e.dataTransfer.files);
+          }}
+          onDragOver={(e) => {
+            e.preventDefault();
+            setDragOver(true);
+          }}
+          onDragLeave={() => setDragOver(false)}
+          onClick={() => inputRef.current?.click()}
+          className={[
+            "flex flex-col items-center justify-center gap-2 p-5 rounded-xl",
+            "border-2 border-dashed cursor-pointer transition-all duration-200",
+            dragOver
+              ? "border-teal-400 bg-teal-50 dark:bg-teal-500/8"
+              : "border-gray-200 dark:border-gray-700 hover:border-teal-400 hover:bg-gray-50 dark:hover:bg-gray-800/50",
+          ].join(" ")}
+        >
+          <Upload
+            size={20}
+            className={
+              dragOver ? "text-teal-500" : "text-gray-300 dark:text-gray-600"
+            }
+          />
+          <p className="text-xs text-gray-400">
+            Drop images or <span className="text-teal-500">browse</span>
+          </p>
+          <p className="text-[10px] text-gray-400">
+            PNG, JPG, WEBP — max 5 MB, up to 8
+          </p>
+        </div>
+      )}
+
+      <input
+        ref={inputRef}
+        type="file"
+        accept="image/*"
+        multiple
+        className="hidden"
+        onChange={(e) => {
+          if (e.target.files) handleFiles(e.target.files);
+          e.target.value = "";
+        }}
+      />
+
+      {images.length > 0 && (
+        <div className="flex items-center justify-between">
+          <p className="text-[11px] text-gray-400">
+            {images.filter((img) => !img.loading).length} / 8 images
+          </p>
+          {images.length < 8 && (
+            <button
+              type="button"
+              onClick={() => inputRef.current?.click()}
+              className="text-[11px] text-teal-500 hover:text-teal-400 flex items-center gap-1 transition-colors"
+            >
+              <Upload size={11} /> Upload more
+            </button>
+          )}
+        </div>
+      )}
+    </div>
+  );
+};
+
+/* ─── Edit Modal ─────────────────────────────────────── */
 const EditModal = ({
   product,
   modalId,
@@ -99,11 +395,11 @@ const EditModal = ({
     subCategory: string;
     brand: string;
     description: string;
+    images: string[];
   } | null>(null);
   const [saving, setSaving] = useState(false);
 
-  // Sync form when product changes
-  React.useEffect(() => {
+  useEffect(() => {
     if (product) {
       setForm({
         title: product.title,
@@ -115,6 +411,7 @@ const EditModal = ({
         subCategory: product.subCategory,
         brand: product.brand,
         description: product.description,
+        images: product.images ?? [],
       });
     }
   }, [product]);
@@ -124,7 +421,6 @@ const EditModal = ({
     setSaving(true);
     await onSave(product._id, form as Partial<Product>);
     setSaving(false);
-    // Close daisyUI modal
     (document.getElementById(modalId) as HTMLDialogElement)?.close();
   };
 
@@ -146,10 +442,10 @@ const EditModal = ({
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-5 border-b border-gray-100 dark:border-gray-800">
           <div className="flex items-center gap-3">
-            {product?.images?.[0] && (
+            {form.images[0] && (
               <div className="relative w-10 h-10 rounded-lg overflow-hidden ring-1 ring-gray-200 dark:ring-gray-700">
                 <Image
-                  src={product.images[0]}
+                  src={form.images[0]}
                   fill
                   alt=""
                   className="object-cover"
@@ -174,7 +470,16 @@ const EditModal = ({
         </div>
 
         {/* Form body */}
-        <div className="p-6 space-y-5 max-h-[60vh] overflow-y-auto">
+        <div className="p-6 space-y-5 max-h-[65vh] overflow-y-auto">
+          {/* ── Image Editor ── */}
+          <div className="pb-1 border-b border-gray-100 dark:border-gray-800">
+            <ImageEditor
+              initialImages={product?.images ?? []}
+              onChange={(urls) => setForm((p) => p && { ...p, images: urls })}
+            />
+          </div>
+
+          {/* ── Text fields ── */}
           <div className="space-y-1.5">
             <label className={labelCls}>Product Title</label>
             <input
@@ -295,9 +600,9 @@ const EditModal = ({
             onClick={handleEditProduct}
             disabled={saving}
             className="px-4 py-2 rounded-xl text-sm font-semibold text-white
-                             bg-teal-500 hover:bg-teal-400
-                             disabled:opacity-50 disabled:cursor-not-allowed
-                             flex items-center gap-2 transition-all duration-200"
+                       bg-teal-500 hover:bg-teal-400
+                       disabled:opacity-50 disabled:cursor-not-allowed
+                       flex items-center gap-2 transition-all duration-200"
           >
             {saving ? (
               <Loader2 size={14} className="animate-spin" />
@@ -309,7 +614,6 @@ const EditModal = ({
         </div>
       </div>
 
-      {/* Click outside to close */}
       <form method="dialog" className="modal-backdrop">
         <button>close</button>
       </form>
@@ -337,7 +641,6 @@ const AdminProductsPage = () => {
   const [editProd, setEditProd] = useState<Product | null>(null);
   const [showFilters, setShowFilters] = useState(false);
 
-  /* ── Derived data ── */
   const allProducts = useMemo(() => (products || []) as Product[], [products]);
 
   const stats = useMemo(
@@ -352,7 +655,6 @@ const AdminProductsPage = () => {
 
   const filtered = useMemo(() => {
     let list = [...allProducts];
-
     if (search)
       list = list.filter(
         (p) =>
@@ -360,13 +662,10 @@ const AdminProductsPage = () => {
           p.brand?.toLowerCase().includes(search.toLowerCase()) ||
           p.sku?.toLowerCase().includes(search.toLowerCase()),
       );
-
     if (catFilter !== "all")
       list = list.filter((p) => p.category === catFilter);
-
     if (statusFilter !== "all")
       list = list.filter((p) => p.status === statusFilter);
-
     list.sort((a, b) => {
       const av = a[sortField] ?? "";
       const bv = b[sortField] ?? "";
@@ -374,7 +673,6 @@ const AdminProductsPage = () => {
       if (av > bv) return sortDir === "asc" ? 1 : -1;
       return 0;
     });
-
     return list;
   }, [allProducts, search, catFilter, statusFilter, sortField, sortDir]);
 
@@ -407,13 +705,11 @@ const AdminProductsPage = () => {
     </span>
   );
 
-  /* ── Open edit modal ── */
   const openEdit = (product: Product) => {
     setEditProd(product);
     (document.getElementById(MODAL_ID) as HTMLDialogElement)?.showModal();
   };
 
-  /* ── Save handler ── */
   const handleEditProduct = async (id: string, data: Partial<Product>) => {
     try {
       const res = await fetch(`/api/products/${id}`, {
@@ -429,7 +725,6 @@ const AdminProductsPage = () => {
     }
   };
 
-  /* ── Delete handler with toast confirm ── */
   const handleDelete = (product: Product) => {
     toast(
       ({ closeToast }) => (
@@ -448,9 +743,7 @@ const AdminProductsPage = () => {
                     method: "DELETE",
                   });
                   if (!res.ok) throw new Error();
-                  toast.success("Product deleted.", {
-                    position: "top-center",
-                  });
+                  toast.success("Product deleted.", { position: "top-center" });
                   refetchProducts();
                 } catch {
                   toast.error("Failed to delete product.", {
@@ -466,8 +759,7 @@ const AdminProductsPage = () => {
             <button
               onClick={closeToast}
               className="flex-1 py-1.5 rounded-lg text-xs font-semibold
-                         bg-gray-100 dark:bg-gray-700
-                         text-gray-600 dark:text-gray-300
+                         bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300
                          hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
             >
               Cancel
@@ -484,7 +776,6 @@ const AdminProductsPage = () => {
     );
   };
 
-  /* ── Loading / Error ── */
   if (productsLoading) {
     return (
       <div className="flex-1 flex items-center justify-center min-h-[60vh]">
@@ -521,7 +812,7 @@ const AdminProductsPage = () => {
   return (
     <>
       <div className="space-y-6 p-6">
-        {/* ── Page Header ── */}
+        {/* Header */}
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
@@ -539,7 +830,7 @@ const AdminProductsPage = () => {
           </span>
         </div>
 
-        {/* ── Stats ── */}
+        {/* Stats */}
         <div className="grid grid-cols-2 xl:grid-cols-4 gap-4">
           <StatCard
             label="Total Products"
@@ -565,7 +856,7 @@ const AdminProductsPage = () => {
           />
         </div>
 
-        {/* ── Search + Filter bar ── */}
+        {/* Search + Filter */}
         <div className="flex flex-col sm:flex-row gap-3">
           <div className="relative flex-1">
             <Search
@@ -578,15 +869,11 @@ const AdminProductsPage = () => {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="w-full pl-10 pr-4 py-2.5 rounded-xl text-sm
-                         bg-white dark:bg-gray-900
-                         border border-gray-200 dark:border-gray-800
-                         text-gray-900 dark:text-white
-                         placeholder-gray-400 dark:placeholder-gray-600
-                         focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/15
-                         transition-all duration-200"
+                         bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800
+                         text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-600
+                         focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/15 transition-all duration-200"
             />
           </div>
-
           <button
             onClick={() => setShowFilters(!showFilters)}
             className="sm:hidden flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium
@@ -595,7 +882,6 @@ const AdminProductsPage = () => {
           >
             <SlidersHorizontal size={15} /> Filters
           </button>
-
           <div
             className={`flex flex-col sm:flex-row gap-3 ${showFilters ? "flex" : "hidden sm:flex"}`}
           >
@@ -603,10 +889,8 @@ const AdminProductsPage = () => {
               value={catFilter}
               onChange={(e) => setCatFilter(e.target.value)}
               className="px-3 py-2.5 rounded-xl text-sm bg-white dark:bg-gray-900
-                               border border-gray-200 dark:border-gray-800
-                               text-gray-700 dark:text-gray-300
-                               focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/15
-                               transition-all duration-200"
+                               border border-gray-200 dark:border-gray-800 text-gray-700 dark:text-gray-300
+                               focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/15 transition-all duration-200"
             >
               <option value="all">All Categories</option>
               {(categories as { name: string }[]).map((c) => (
@@ -615,15 +899,12 @@ const AdminProductsPage = () => {
                 </option>
               ))}
             </select>
-
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
               className="px-3 py-2.5 rounded-xl text-sm bg-white dark:bg-gray-900
-                               border border-gray-200 dark:border-gray-800
-                               text-gray-700 dark:text-gray-300
-                               focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/15
-                               transition-all duration-200"
+                               border border-gray-200 dark:border-gray-800 text-gray-700 dark:text-gray-300
+                               focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/15 transition-all duration-200"
             >
               <option value="all">All Status</option>
               <option value="active">Active</option>
@@ -634,12 +915,11 @@ const AdminProductsPage = () => {
           </div>
         </div>
 
-        {/* ── Table ── */}
+        {/* Table */}
         {filtered.length === 0 ? (
           <div
             className="flex flex-col items-center justify-center py-20 gap-3
-                          bg-white dark:bg-gray-900 rounded-2xl
-                          border border-gray-200 dark:border-gray-800"
+                          bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800"
           >
             <PackageOpen
               size={40}
@@ -661,65 +941,50 @@ const AdminProductsPage = () => {
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-950">
-                    <th className="text-left px-5 py-3.5">
-                      <button
-                        onClick={() => toggleSort("title")}
-                        className="flex items-center gap-1 text-xs font-semibold uppercase
-                                         tracking-wider text-gray-500 dark:text-gray-500
-                                         hover:text-teal-600 dark:hover:text-teal-400 transition-colors"
+                    {[
+                      { label: "Product", field: "title" as SortField },
+                      {
+                        label: "Category",
+                        field: null,
+                        hidden: "hidden md:table-cell",
+                      },
+                      { label: "Price", field: "price" as SortField },
+                      {
+                        label: "Stock",
+                        field: "stock" as SortField,
+                        hidden: "hidden sm:table-cell",
+                      },
+                      {
+                        label: "Rating",
+                        field: "averageRating" as SortField,
+                        hidden: "hidden lg:table-cell",
+                        icon: Star,
+                      },
+                      { label: "Status", field: "status" as SortField },
+                    ].map(({ label, field, hidden, icon: Icon }) => (
+                      <th
+                        key={label}
+                        className={`text-left px-4 py-3.5 ${hidden ?? ""}`}
                       >
-                        Product <SortIcon field="title" />
-                      </button>
-                    </th>
-                    <th className="text-left px-4 py-3.5 hidden md:table-cell">
-                      <span
-                        className="flex items-center gap-1 text-xs font-semibold uppercase
-                                       tracking-wider text-gray-500 dark:text-gray-500"
-                      >
-                        <Tag size={11} /> Category
-                      </span>
-                    </th>
-                    <th className="text-left px-4 py-3.5">
-                      <button
-                        onClick={() => toggleSort("price")}
-                        className="flex items-center gap-1 text-xs font-semibold uppercase
-                                         tracking-wider text-gray-500 dark:text-gray-500
-                                         hover:text-teal-600 dark:hover:text-teal-400 transition-colors"
-                      >
-                        Price <SortIcon field="price" />
-                      </button>
-                    </th>
-                    <th className="text-left px-4 py-3.5 hidden sm:table-cell">
-                      <button
-                        onClick={() => toggleSort("stock")}
-                        className="flex items-center gap-1 text-xs font-semibold uppercase
-                                         tracking-wider text-gray-500 dark:text-gray-500
-                                         hover:text-teal-600 dark:hover:text-teal-400 transition-colors"
-                      >
-                        Stock <SortIcon field="stock" />
-                      </button>
-                    </th>
-                    <th className="text-left px-4 py-3.5 hidden lg:table-cell">
-                      <button
-                        onClick={() => toggleSort("averageRating")}
-                        className="flex items-center gap-1 text-xs font-semibold uppercase
-                                         tracking-wider text-gray-500 dark:text-gray-500
-                                         hover:text-teal-600 dark:hover:text-teal-400 transition-colors"
-                      >
-                        <Star size={11} /> Rating{" "}
-                        <SortIcon field="averageRating" />
-                      </button>
-                    </th>
-                    <th className="text-left px-4 py-3.5">
-                      <button
-                        onClick={() => toggleSort("status")}
-                        className="flex items-center gap-1 text-xs font-semibold uppercase
-                                         tracking-wider text-gray-500 dark:text-gray-500
-                                         hover:text-teal-600 dark:hover:text-teal-400 transition-colors"
-                      >
-                        Status <SortIcon field="status" />
-                      </button>
-                    </th>
+                        {field ? (
+                          <button
+                            onClick={() => toggleSort(field)}
+                            className="flex items-center gap-1 text-xs font-semibold uppercase
+                                             tracking-wider text-gray-500 dark:text-gray-500
+                                             hover:text-teal-600 dark:hover:text-teal-400 transition-colors"
+                          >
+                            {Icon && <Icon size={11} />}
+                            {label}
+                            <SortIcon field={field} />
+                          </button>
+                        ) : (
+                          <span className="flex items-center gap-1 text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-500">
+                            <Tag size={11} />
+                            {label}
+                          </span>
+                        )}
+                      </th>
+                    ))}
                     <th className="px-4 py-3.5 text-right">
                       <span className="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-500">
                         Actions
@@ -727,14 +992,12 @@ const AdminProductsPage = () => {
                     </th>
                   </tr>
                 </thead>
-
                 <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
                   {filtered.map((product) => {
                     const statusCfg =
                       STATUS_CONFIG[product.status] ?? STATUS_CONFIG.inactive;
                     const StatusIcon = statusCfg.icon;
                     const isLow = product.stock > 0 && product.stock <= 5;
-
                     return (
                       <tr
                         key={product._id}
@@ -770,10 +1033,7 @@ const AdminProductsPage = () => {
                               <p className="text-xs text-gray-400 mt-0.5">
                                 {product.brand}
                                 {product.sku && (
-                                  <span
-                                    className="ml-2 font-mono text-[10px] bg-gray-100 dark:bg-gray-800
-                                                   px-1.5 py-0.5 rounded text-gray-500"
-                                  >
+                                  <span className="ml-2 font-mono text-[10px] bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded text-gray-500">
                                     {product.sku}
                                   </span>
                                 )}
@@ -781,33 +1041,26 @@ const AdminProductsPage = () => {
                             </div>
                           </div>
                         </td>
-
                         {/* Category */}
                         <td className="px-4 py-4 hidden md:table-cell">
-                          <div>
-                            <p className="text-xs font-medium text-gray-700 dark:text-gray-300">
-                              {product.category}
-                            </p>
-                            <p className="text-[11px] text-gray-400">
-                              {product.subCategory}
-                            </p>
-                          </div>
+                          <p className="text-xs font-medium text-gray-700 dark:text-gray-300">
+                            {product.category}
+                          </p>
+                          <p className="text-[11px] text-gray-400">
+                            {product.subCategory}
+                          </p>
                         </td>
-
                         {/* Price */}
                         <td className="px-4 py-4">
-                          <div>
-                            <p className="font-semibold text-gray-900 dark:text-white text-sm">
-                              ৳{product.discountPrice.toLocaleString()}
+                          <p className="font-semibold text-gray-900 dark:text-white text-sm">
+                            ৳{product.discountPrice.toLocaleString()}
+                          </p>
+                          {product.discountPrice < product.price && (
+                            <p className="text-[11px] text-gray-400 line-through">
+                              ৳{product.price.toLocaleString()}
                             </p>
-                            {product.discountPrice < product.price && (
-                              <p className="text-[11px] text-gray-400 line-through">
-                                ৳{product.price.toLocaleString()}
-                              </p>
-                            )}
-                          </div>
+                          )}
                         </td>
-
                         {/* Stock */}
                         <td className="px-4 py-4 hidden sm:table-cell">
                           <span
@@ -824,7 +1077,6 @@ const AdminProductsPage = () => {
                             {isLow && " ⚠"}
                           </span>
                         </td>
-
                         {/* Rating */}
                         <td className="px-4 py-4 hidden lg:table-cell">
                           <div className="flex items-center gap-1">
@@ -840,7 +1092,6 @@ const AdminProductsPage = () => {
                             </span>
                           </div>
                         </td>
-
                         {/* Status */}
                         <td className="px-4 py-4">
                           <span
@@ -851,16 +1102,15 @@ const AdminProductsPage = () => {
                             {statusCfg.label}
                           </span>
                         </td>
-
                         {/* Actions */}
                         <td className="px-4 py-4">
                           <div className="flex items-center justify-end gap-2">
                             <button
                               onClick={() => openEdit(product)}
                               className="p-2 rounded-lg text-gray-400
-                                         hover:bg-teal-50 dark:hover:bg-teal-500/10
-                                         hover:text-teal-600 dark:hover:text-teal-400
-                                         transition-all duration-150"
+                                               hover:bg-teal-50 dark:hover:bg-teal-500/10
+                                               hover:text-teal-600 dark:hover:text-teal-400
+                                               transition-all duration-150"
                               title="Edit"
                             >
                               <Pencil size={15} />
@@ -868,9 +1118,9 @@ const AdminProductsPage = () => {
                             <button
                               onClick={() => handleDelete(product)}
                               className="p-2 rounded-lg text-gray-400
-                                         hover:bg-red-50 dark:hover:bg-red-500/10
-                                         hover:text-red-500 dark:hover:text-red-400
-                                         transition-all duration-150"
+                                               hover:bg-red-50 dark:hover:bg-red-500/10
+                                               hover:text-red-500 dark:hover:text-red-400
+                                               transition-all duration-150"
                               title="Delete"
                             >
                               <Trash2 size={15} />
@@ -883,12 +1133,8 @@ const AdminProductsPage = () => {
                 </tbody>
               </table>
             </div>
-
             {/* Table footer */}
-            <div
-              className="px-5 py-3 border-t border-gray-100 dark:border-gray-800
-                            flex items-center justify-between"
-            >
+            <div className="px-5 py-3 border-t border-gray-100 dark:border-gray-800 flex items-center justify-between">
               <p className="text-xs text-gray-400">
                 Showing{" "}
                 <span className="font-semibold text-gray-600 dark:text-gray-300">
@@ -917,7 +1163,6 @@ const AdminProductsPage = () => {
         )}
       </div>
 
-      {/* ── daisyUI Edit Modal ── */}
       <EditModal
         product={editProd}
         modalId={MODAL_ID}

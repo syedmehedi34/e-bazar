@@ -1,10 +1,28 @@
 // app/api/products/[id]/route.ts
 import { NextResponse, NextRequest } from "next/server";
 import mongoose from "mongoose";
+import { v2 as cloudinary } from "cloudinary";
 import dbConnect from "../../../../../lib/mongodb";
 import Products from "../../../../../models/Products";
 
-// get single product data [get method, by ID]
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
+/* ── Extract Cloudinary public_id from secure_url ────── */
+function extractPublicId(url: string): string | null {
+  try {
+    // e.g. https://res.cloudinary.com/<cloud>/image/upload/v123/e-catalog/products/abc.jpg
+    const match = url.match(/\/upload\/(?:v\d+\/)?(.+?)(?:\.[^.]+)?$/);
+    return match?.[1] ?? null;
+  } catch {
+    return null;
+  }
+}
+
+// ── GET /api/products/[id] ────────────────────────────
 export async function GET(
   req: NextRequest,
   { params }: { params: { id: string } },
@@ -14,7 +32,6 @@ export async function GET(
   try {
     const { id } = await params;
 
-    // valid MongoDB ObjectId কিনা check
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return NextResponse.json(
         { error: "Invalid product ID" },
@@ -29,10 +46,7 @@ export async function GET(
     }
 
     return NextResponse.json(
-      {
-        message: "Product fetched successfully",
-        product,
-      },
+      { message: "Product fetched successfully", product },
       { status: 200 },
     );
   } catch (error: unknown) {
@@ -45,7 +59,7 @@ export async function GET(
   }
 }
 
-// edit product data (patch method)
+// ── PATCH /api/products/[id] ──────────────────────────
 export async function PATCH(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> },
@@ -56,7 +70,6 @@ export async function PATCH(
     const { id } = await params;
     const body = await req.json();
 
-    // Fields admin is allowed to update
     const allowedFields = [
       "title",
       "description",
@@ -79,12 +92,9 @@ export async function PATCH(
       "countryOfOrigin",
     ];
 
-    // Strip out any fields not in allowedFields
     const updateData: Record<string, unknown> = {};
     for (const key of allowedFields) {
-      if (key in body) {
-        updateData[key] = body[key];
-      }
+      if (key in body) updateData[key] = body[key];
     }
 
     if (Object.keys(updateData).length === 0) {
@@ -120,7 +130,7 @@ export async function PATCH(
   }
 }
 
-// ── DELETE a product data (delete method) ─────────────────────────
+// ── DELETE /api/products/[id] ─────────────────────────
 export async function DELETE(
   _req: NextRequest,
   { params }: { params: Promise<{ id: string }> },
@@ -130,13 +140,34 @@ export async function DELETE(
 
     const { id } = await params;
 
-    const deleted = await Products.findByIdAndDelete(id);
+    const product = await Products.findByIdAndDelete(id);
 
-    if (!deleted) {
+    if (!product) {
       return NextResponse.json(
         { message: "Product not found" },
         { status: 404 },
       );
+    }
+
+    // ── Delete all images from Cloudinary ─────────────
+    const imageUrls: string[] = Array.isArray(product.images)
+      ? product.images
+      : [];
+
+    if (imageUrls.length > 0) {
+      const publicIds = imageUrls
+        .map(extractPublicId)
+        .filter((pid): pid is string => pid !== null);
+
+      if (publicIds.length > 0) {
+        // delete_resources handles up to 100 IDs at once — non-blocking
+        cloudinary.api.delete_resources(publicIds).catch((err) => {
+          console.warn(
+            "Cloudinary image cleanup warning:",
+            err?.message ?? err,
+          );
+        });
+      }
     }
 
     return NextResponse.json(
