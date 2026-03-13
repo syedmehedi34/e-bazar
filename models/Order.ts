@@ -83,7 +83,7 @@ const OrderSchema = new Schema<IOrder>(
       total: Number,
     },
     transactionId: String,
-    gatewayData: Schema.Types.Mixed, // ← Mixed type — যেকোনো object রাখা যাবে
+    gatewayData: Schema.Types.Mixed,
     note: String,
   },
   { timestamps: true },
