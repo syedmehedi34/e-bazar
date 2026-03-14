@@ -7,12 +7,12 @@ const UserSchema = new mongoose.Schema(
     photo: {
       type: String,
       default:
-        "uhttps://img.icons8.com/?size=100&id=undefined&format=png&color=000000r",
+        "https://img.icons8.com/?size=100&id=21441&format=png&color=000000",
     },
     password: { type: String, required: true },
     role: {
       type: String,
-      enum: ["user", "doctor", "admin"],
+      enum: ["user", "admin"],
       default: "user",
       required: true,
     },
