@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import Sidebar from "./sidebar";
 import Topbar from "./topbar";
+import { ToastContainer } from "react-toastify";
 
 type DashboardLayoutClientProps = {
   children: React.ReactNode;
@@ -60,43 +61,46 @@ const DashboardLayoutClient = ({ children }: DashboardLayoutClientProps) => {
   const userRole = session?.user?.role ?? "user";
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-[#0b0e14]">
-      {/* Sidebar */}
-      <Sidebar
-        isSidebarOpen={isSidebarOpen}
-        toggleSidebar={toggleSidebar}
-        userRole={userRole}
-        isMobile={isMobile}
-      />
-
-      {/* Mobile overlay */}
-      {isMobile && isSidebarOpen && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className="fixed inset-0 bg-black/40 dark:bg-black/60 backdrop-blur-sm z-40"
-          onClick={toggleSidebar}
+    <>
+      <div className="min-h-screen bg-gray-50 dark:bg-[#0b0e14]">
+        {/* Sidebar */}
+        <Sidebar
+          isSidebarOpen={isSidebarOpen}
+          toggleSidebar={toggleSidebar}
+          userRole={userRole}
+          isMobile={isMobile}
         />
-      )}
 
-      {/* Topbar */}
-      <Topbar
-        isSidebarOpen={isSidebarOpen}
-        isMobile={isMobile}
-        userRole={userRole}
-        session={session}
-      />
+        {/* Mobile overlay */}
+        {isMobile && isSidebarOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/40 dark:bg-black/60 backdrop-blur-sm z-40"
+            onClick={toggleSidebar}
+          />
+        )}
 
-      {/* Page content */}
-      <motion.main
-        animate={{ marginLeft: isMobile ? 64 : isSidebarOpen ? 240 : 64 }}
-        transition={{ duration: 0.25, ease: "easeInOut" }}
-        className="pt-16 min-h-screen"
-      >
-        <div className="p-4 sm:p-6">{children}</div>
-      </motion.main>
-    </div>
+        {/* Topbar */}
+        <Topbar
+          isSidebarOpen={isSidebarOpen}
+          isMobile={isMobile}
+          userRole={userRole}
+          session={session}
+        />
+
+        {/* Page content */}
+        <motion.main
+          animate={{ marginLeft: isMobile ? 64 : isSidebarOpen ? 240 : 64 }}
+          transition={{ duration: 0.25, ease: "easeInOut" }}
+          className="pt-16 min-h-screen"
+        >
+          <div className="p-4 sm:p-6">{children}</div>
+        </motion.main>
+      </div>
+      <ToastContainer position="top-right" />
+    </>
   );
 };
 

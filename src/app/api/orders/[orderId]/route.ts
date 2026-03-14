@@ -13,15 +13,16 @@ export async function GET(
   await dbConnect();
   const { orderId } = await params;
   const order = await Order.findOne({ orderId }).lean();
-
   if (!order) {
     return NextResponse.json({ error: "Order not found" }, { status: 404 });
   }
-
   return NextResponse.json({ order }, { status: 200 });
 }
 
-/* ── PATCH /api/orders/[orderId] — admin only ──────────── */
+/* ── PATCH /api/orders/[orderId] ───────────────────────────
+   Admin  → update anything
+   User   → update orderStatus only
+─────────────────────────────────────────────────────────── */
 export async function PATCH(
   req: NextRequest,
   { params }: { params: Promise<{ orderId: string }> },
@@ -30,95 +31,31 @@ export async function PATCH(
     await dbConnect();
 
     const session = await getServerSession(authOptions);
-    const isAdmin = session?.user?.role?.includes("admin");
-    if (!isAdmin) {
-      return NextResponse.json({ message: "Forbidden" }, { status: 403 });
+    if (!session?.user) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
 
+    const isAdmin = session.user.role?.includes("admin");
     const { orderId } = await params;
     const body = await req.json();
 
-    const ALLOWED = [
-      "orderStatus",
-      "paymentStatus",
-      "note",
-      "deliveryAddress",
-      "items",
-    ] as const;
-    const update: Record<string, unknown> = {};
+    let update: Record<string, unknown>;
 
-    for (const field of ALLOWED) {
-      if (field in body && body[field] !== undefined) {
-        update[field] = body[field];
+    if (isAdmin) {
+      // Admin can update anything
+      update = body;
+    } else {
+      // User can only update orderStatus
+      if (!body.orderStatus) {
+        return NextResponse.json({ message: "Forbidden" }, { status: 403 });
       }
-    }
-
-    if (Object.keys(update).length === 0) {
-      return NextResponse.json(
-        { message: "No valid fields to update" },
-        { status: 400 },
-      );
-    }
-
-    // Validate enums
-    const validOrderStatus = [
-      "processing",
-      "confirmed",
-      "shipped",
-      "delivered",
-      "cancelled",
-    ];
-    const validPaymentStatus = ["cod_pending", "pending", "paid", "failed"];
-
-    if (
-      update.orderStatus &&
-      !validOrderStatus.includes(update.orderStatus as string)
-    ) {
-      return NextResponse.json(
-        { message: "Invalid orderStatus" },
-        { status: 400 },
-      );
-    }
-    if (
-      update.paymentStatus &&
-      !validPaymentStatus.includes(update.paymentStatus as string)
-    ) {
-      return NextResponse.json(
-        { message: "Invalid paymentStatus" },
-        { status: 400 },
-      );
-    }
-
-    // If items changed → recalculate pricing.subtotal and pricing.total
-    if (update.items && Array.isArray(update.items)) {
-      const existing = (await Order.findOne({ orderId }).lean()) as {
-        pricing: { shippingCharge: number; couponDiscount: number };
-      } | null;
-
-      if (!existing) {
-        return NextResponse.json(
-          { message: "Order not found" },
-          { status: 404 },
-        );
-      }
-
-      const newSubtotal = (update.items as { subtotal: number }[]).reduce(
-        (sum, it) => sum + (it.subtotal ?? 0),
-        0,
-      );
-      const newTotal =
-        newSubtotal +
-        existing.pricing.shippingCharge -
-        (existing.pricing.couponDiscount ?? 0);
-
-      update["pricing.subtotal"] = newSubtotal;
-      update["pricing.total"] = newTotal;
+      update = { orderStatus: body.orderStatus };
     }
 
     const updated = await Order.findOneAndUpdate(
       { orderId },
       { $set: update },
-      { new: true, runValidators: true },
+      { new: true },
     ).lean();
 
     if (!updated) {
