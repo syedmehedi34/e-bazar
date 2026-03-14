@@ -14,6 +14,7 @@ import {
   Palette,
   Ruler,
   ThumbsUp,
+  Loader2,
 } from "lucide-react";
 import { IProduct } from "./types";
 import StarRating from "./StarRating";
@@ -22,19 +23,17 @@ import StatusBadge from "./StatusBadge";
 
 interface Props {
   p: IProduct;
-  // computed
   discount: number;
   savings: number;
   avgRating: number;
   reviewCount: number;
   positivePercent: number;
-  // states
   selectedColor: string | null;
   selectedSize: string | null;
   quantity: number;
   wishlisted: boolean;
+  wishlistLoadingId: string | null;
   copied: boolean;
-  // handlers
   onSelectColor: (c: string) => void;
   onSelectSize: (s: string) => void;
   onIncrease: () => void;
@@ -56,6 +55,7 @@ const ProductInfo = ({
   selectedSize,
   quantity,
   wishlisted,
+  wishlistLoadingId,
   copied,
   onSelectColor,
   onSelectSize,
@@ -66,6 +66,8 @@ const ProductInfo = ({
   onBuyNow,
   onShare,
 }: Props) => {
+  const wishLoading = wishlistLoadingId === p._id;
+
   return (
     <div className="flex flex-col gap-5">
       {/* Brand + Status */}
@@ -236,19 +238,30 @@ const ProductInfo = ({
         >
           <ShoppingCart size={16} /> Add to Cart
         </button>
+
+        {/* Wishlist button with loading */}
         <button
           onClick={onToggleWishlist}
-          className={`w-12 rounded-xl border-2 flex items-center justify-center transition-all active:scale-95 ${
+          disabled={wishLoading}
+          className={`w-12 rounded-xl border-2 flex items-center justify-center transition-all active:scale-95 disabled:cursor-not-allowed ${
             wishlisted
               ? "bg-red-500 border-red-500 shadow-md shadow-red-500/20"
               : "border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 hover:border-red-300"
           }`}
         >
-          <Heart
-            size={16}
-            className={wishlisted ? "fill-white text-white" : "text-gray-400"}
-          />
+          {wishLoading ? (
+            <Loader2
+              size={16}
+              className={`animate-spin ${wishlisted ? "text-white" : "text-gray-400"}`}
+            />
+          ) : (
+            <Heart
+              size={16}
+              className={wishlisted ? "fill-white text-white" : "text-gray-400"}
+            />
+          )}
         </button>
+
         <button
           onClick={onShare}
           className="w-12 rounded-xl border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 flex items-center justify-center hover:border-gray-400 transition-all active:scale-95"

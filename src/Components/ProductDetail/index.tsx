@@ -20,6 +20,7 @@ const ProductDetailPage = ({ params }: { params: Promise<{ id: string }> }) => {
     selectedColor,
     quantity,
     wishlisted,
+    wishlistLoadingId,
     activeTab,
     copied,
     reviewCount,
@@ -113,6 +114,7 @@ const ProductDetailPage = ({ params }: { params: Promise<{ id: string }> }) => {
             selectedSize={selectedSize}
             quantity={quantity}
             wishlisted={wishlisted}
+            wishlistLoadingId={wishlistLoadingId}
             copied={copied}
             onSelectColor={selectColor}
             onSelectSize={selectSize}
