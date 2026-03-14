@@ -39,6 +39,7 @@ export default function ShoppingClient() {
     openCat,
     setOpenCat,
     wishlist,
+    wishlistLoadingId,
     searchRef,
     setParam,
     reset,
@@ -46,7 +47,6 @@ export default function ShoppingClient() {
     handleAddToCart,
   } = useShoppingLogic();
 
-  // ── Sidebar event handlers ─────────────────────────────────────────────
   const handleSelectCategory = (cat: string | null, sub: string | null) => {
     setParam("category", cat);
     setParam("subCategory", sub);
@@ -57,7 +57,6 @@ export default function ShoppingClient() {
     setParam(key, val > 0 ? String(val) : null);
   };
 
-  // Shared sidebar props
   const sidebarProps = {
     categories: categories as CategoryGroup[],
     qCat,
@@ -74,7 +73,6 @@ export default function ShoppingClient() {
 
   return (
     <div className="min-h-screen mt-[62px] bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-white">
-      {/* Mobile filter drawer */}
       <MobileDrawer
         open={drawer}
         onClose={() => setDrawer(false)}
@@ -131,8 +129,7 @@ export default function ShoppingClient() {
               onClick={reset}
               className="hidden sm:flex items-center gap-1.5 text-xs font-semibold text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors"
             >
-              <X size={12} />
-              Clear filters
+              <X size={12} /> Clear filters
             </button>
           )}
         </div>
@@ -232,6 +229,7 @@ export default function ShoppingClient() {
                         product={p}
                         qSearch={qSearch}
                         wished={wishlist.has(p._id)}
+                        wishlistLoadingId={wishlistLoadingId}
                         onToggleWishlist={toggleWishlist}
                         onAddToCart={handleAddToCart}
                       />
@@ -245,6 +243,7 @@ export default function ShoppingClient() {
                         product={p}
                         qSearch={qSearch}
                         wished={wishlist.has(p._id)}
+                        wishlistLoadingId={wishlistLoadingId}
                         onToggleWishlist={toggleWishlist}
                         onAddToCart={handleAddToCart}
                       />

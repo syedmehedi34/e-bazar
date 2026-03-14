@@ -4,19 +4,19 @@ import { addToCart } from "@/redux/feature/addToCart/addToCart";
 import { RootState } from "@/redux/store";
 import { useFetchProduct } from "@/hook/useFetchProduct";
 import useWishList from "@/hook/user/useAddToWishList";
-import { useSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { Product } from "./types";
+import useUser from "@/hook/useUser";
 
 export function useShoppingLogic() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const dispatch = useDispatch();
   const cartItems = useSelector((s: RootState) => s.cart.value);
-  const { data: session } = useSession();
+  const { user } = useUser();
 
   const { products, categories, productsLoading, refetchProducts } =
     useFetchProduct();
@@ -37,11 +37,7 @@ export function useShoppingLogic() {
   const [page, setPage] = useState<Product[]>([]);
   const [drawer, setDrawer] = useState(false);
   const [openCat, setOpenCat] = useState<string | null>(qCat || null);
-
-  // Wishlist — initialise from session user's wishList array
-  const [wishlist, setWishlist] = useState<Set<string>>(
-    () => new Set((session?.user?.wishList as string[] | undefined) ?? []),
-  );
+  const [wishlist, setWishlist] = useState<Set<string>>(new Set());
 
   const searchRef = useRef<HTMLInputElement>(null);
 
@@ -49,12 +45,12 @@ export function useShoppingLogic() {
     Boolean,
   ).length;
 
-  // ── Sync wishlist when session loads/changes ───────────────────────────
+  // ── Sync wishlist when user loads ──────────────────────────────────────
   useEffect(() => {
-    if (session?.user?.wishList) {
-      setWishlist(new Set(session.user.wishList as string[]));
+    if (user?.wishList) {
+      setWishlist(new Set(user.wishList));
     }
-  }, [session?.user?.wishList]);
+  }, [user?.wishList]);
 
   // ── Sync search input when URL changes ────────────────────────────────
   useEffect(() => {
@@ -95,14 +91,13 @@ export function useShoppingLogic() {
   // ── Wishlist ───────────────────────────────────────────────────────────
   const toggleWishlist = useCallback(
     async (productId: string) => {
-      if (!session?.user) {
+      if (!user) {
         toast.error("Please login to manage your wishlist.");
         return;
       }
 
       const isWishlisted = wishlist.has(productId);
 
-      // Optimistic update
       setWishlist((prev) => {
         const next = new Set(prev);
         if (isWishlisted) next.delete(productId);
@@ -112,7 +107,6 @@ export function useShoppingLogic() {
 
       const success = await toggleWishList(productId, isWishlisted);
 
-      // Revert if API failed
       if (!success) {
         setWishlist((prev) => {
           const next = new Set(prev);
@@ -122,7 +116,7 @@ export function useShoppingLogic() {
         });
       }
     },
-    [session?.user, wishlist, toggleWishList],
+    [user, wishlist, toggleWishList],
   );
 
   // ── Cart ───────────────────────────────────────────────────────────────
@@ -139,13 +133,11 @@ export function useShoppingLogic() {
   );
 
   return {
-    // data
     products,
     categories,
     productsLoading,
     page,
     setPage,
-    // url params
     qSearch,
     qCat,
     qSub,
@@ -153,7 +145,6 @@ export function useShoppingLogic() {
     qMax,
     qSort,
     activeCount,
-    // local state
     search,
     setSearch,
     view,
@@ -167,7 +158,6 @@ export function useShoppingLogic() {
     wishlist,
     wishlistLoadingId,
     searchRef,
-    // actions
     setParam,
     reset,
     toggleWishlist,

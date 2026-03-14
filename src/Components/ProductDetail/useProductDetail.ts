@@ -1,19 +1,19 @@
-import { useState, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
 import { toast } from "react-toastify";
 import { addToCart, CartItem } from "@/redux/feature/addToCart/addToCart";
 import { setBuyNowItem, BuyNowItem } from "@/redux/feature/buyNow/buyNow";
 import { RootState } from "@/redux/store";
 import useWishList from "@/hook/user/useAddToWishList";
+import useUser from "@/hook/useUser";
 import { IProduct, TabType } from "./types";
 
 export const useProductDetail = (product: IProduct | null) => {
   const dispatch = useDispatch();
   const router = useRouter();
   const cartItems = useSelector((s: RootState) => s.cart.value);
-  const { data: session } = useSession();
+  const { user } = useUser();
   const { toggleWishList, loadingId: wishlistLoadingId } = useWishList();
 
   // ── UI States ──────────────────────────────────────────
@@ -23,14 +23,13 @@ export const useProductDetail = (product: IProduct | null) => {
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState<TabType>("description");
   const [copied, setCopied] = useState(false);
+  const [wishlisted, setWishlisted] = useState(false);
 
-  // Seed wishlisted from session
-  const [wishlisted, setWishlisted] = useState(
-    () =>
-      !!((session?.user?.wishList as string[] | undefined) ?? []).includes(
-        product?._id ?? "",
-      ),
-  );
+  // Sync when user or product loads (whichever arrives last)
+  useEffect(() => {
+    if (!product?._id) return;
+    setWishlisted((user?.wishList ?? []).includes(product._id));
+  }, [user?.wishList, product?._id]);
 
   // ── Derived / computed values ─────────────────────────
   const reviewCount = product?.reviews?.length ?? 0;
@@ -62,7 +61,7 @@ export const useProductDetail = (product: IProduct | null) => {
         : 0,
   }));
 
-  // ── Image Gallery Handlers ────────────────────────────
+  // ── Image Gallery ─────────────────────────────────────
   const prevImage = () => {
     if (!product) return;
     setActiveImage((i) => (i === 0 ? product.images.length - 1 : i - 1));
@@ -73,7 +72,7 @@ export const useProductDetail = (product: IProduct | null) => {
   };
   const selectImage = (index: number) => setActiveImage(index);
 
-  // ── Product Option Handlers ───────────────────────────
+  // ── Product Options ───────────────────────────────────
   const selectColor = (color: string) => setSelectedColor(color);
   const selectSize = (size: string) => setSelectedSize(size);
   const increaseQty = () => {
@@ -85,14 +84,12 @@ export const useProductDetail = (product: IProduct | null) => {
   // ── Wishlist ──────────────────────────────────────────
   const toggleWishlist = async () => {
     if (!product) return;
-    if (!session?.user) {
+    if (!user) {
       toast.error("Please login to manage your wishlist.");
       return;
     }
-    // Optimistic update
     setWishlisted((prev) => !prev);
     const success = await toggleWishList(product._id, wishlisted);
-    // Revert if API failed
     if (!success) setWishlisted((prev) => !prev);
   };
 
@@ -145,7 +142,6 @@ export const useProductDetail = (product: IProduct | null) => {
   const handleTabChange = (tab: TabType) => setActiveTab(tab);
 
   return {
-    // states
     activeImage,
     selectedSize,
     selectedColor,
@@ -154,14 +150,12 @@ export const useProductDetail = (product: IProduct | null) => {
     wishlistLoadingId,
     activeTab,
     copied,
-    // computed
     reviewCount,
     avgRating,
     discount,
     savings,
     positivePercent,
     ratingBreakdown,
-    // handlers
     prevImage,
     nextImage,
     selectImage,

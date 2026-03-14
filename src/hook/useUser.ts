@@ -10,6 +10,7 @@ interface User {
   photo: string;
   role: "user" | "admin";
   mobileNumber?: string;
+  wishList: string[];
   fullAddress?: string;
   createdAt: string;
   updatedAt: string;

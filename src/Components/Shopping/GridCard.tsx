@@ -3,7 +3,7 @@
 import { memo } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Heart, ShoppingBag, Zap } from "lucide-react";
+import { Heart, ShoppingBag, Zap, Loader2 } from "lucide-react";
 import Stars from "./Stars";
 import Highlight from "./Highlight";
 import ColorDots from "./ColorDots";
@@ -14,6 +14,7 @@ interface GridCardProps {
   product: Product;
   qSearch: string;
   wished: boolean;
+  wishlistLoadingId: string | null;
   onToggleWishlist: (id: string) => void;
   onAddToCart: (product: Product) => void;
 }
@@ -22,12 +23,14 @@ function GridCard({
   product: p,
   qSearch,
   wished,
+  wishlistLoadingId,
   onToggleWishlist,
   onAddToCart,
 }: GridCardProps) {
   const disc = calcDiscountPct(p.price, p.discountPrice);
   const price = effectivePrice(p.price, p.discountPrice);
   const oos = p.stock === 0;
+  const wishLoading = wishlistLoadingId === p._id;
 
   return (
     <div className="group relative flex flex-col bg-white dark:bg-zinc-900 rounded-2xl overflow-hidden border border-zinc-100 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-600 hover:shadow-[0_12px_40px_-10px_rgba(0,0,0,0.12)] dark:hover:shadow-[0_12px_40px_-10px_rgba(0,0,0,0.5)] transition-all duration-300">
@@ -40,9 +43,7 @@ function GridCard({
           src={p.images[0] || FALLBACK_IMAGE}
           alt={p.title}
           fill
-          className={`object-contain p-4 transition-transform duration-500 ${
-            !oos ? "group-hover:scale-[1.07]" : "opacity-40"
-          }`}
+          className={`object-contain p-4 transition-transform duration-500 ${!oos ? "group-hover:scale-[1.07]" : "opacity-40"}`}
         />
 
         {/* Badges */}
@@ -71,20 +72,28 @@ function GridCard({
         {/* Wishlist button */}
         <button
           onClick={() => onToggleWishlist(p._id)}
+          disabled={wishLoading}
           aria-label={wished ? "Remove from wishlist" : "Add to wishlist"}
-          className={`absolute top-3 right-3 w-8 h-8 rounded-full flex items-center justify-center backdrop-blur-sm shadow-sm transition-all duration-200 opacity-0 group-hover:opacity-100 hover:scale-110 active:scale-95 ${
+          className={`absolute top-3 right-3 w-8 h-8 rounded-full flex items-center justify-center backdrop-blur-sm shadow-sm transition-all duration-200 opacity-0 group-hover:opacity-100 hover:scale-110 active:scale-95 disabled:cursor-not-allowed disabled:scale-100 ${
             wished
               ? "bg-red-500 shadow-red-500/30"
               : "bg-white/90 dark:bg-zinc-900/90"
           }`}
         >
-          <Heart
-            size={13}
-            className={wished ? "fill-white text-white" : "text-zinc-400"}
-          />
+          {wishLoading ? (
+            <Loader2
+              size={13}
+              className={`animate-spin ${wished ? "text-white" : "text-zinc-400"}`}
+            />
+          ) : (
+            <Heart
+              size={13}
+              className={wished ? "fill-white text-white" : "text-zinc-400"}
+            />
+          )}
         </button>
 
-        {/* Quick View — slides up inside image area only, no overlap with card body */}
+        {/* Quick View */}
         <div className="absolute inset-x-0 bottom-0 translate-y-full group-hover:translate-y-0 transition-transform duration-200 ease-out">
           <Link
             href={`/products/${p._id}`}
@@ -97,7 +106,6 @@ function GridCard({
 
       {/* ── Card body ── */}
       <div className="flex flex-col flex-1 p-4 gap-2">
-        {/* Category + free shipping */}
         <div className="flex items-center justify-between">
           <p className="text-[10px] font-semibold tracking-[0.12em] uppercase text-zinc-400 dark:text-zinc-500">
             {p.category}
@@ -109,7 +117,6 @@ function GridCard({
           )}
         </div>
 
-        {/* Brand + title */}
         {p.brand && (
           <p className="text-[10px] text-zinc-400 dark:text-zinc-500 font-medium -mt-1">
             {p.brand}
@@ -119,7 +126,6 @@ function GridCard({
           <Highlight text={p.title} q={qSearch} />
         </h3>
 
-        {/* Rating + sold */}
         <div className="flex items-center justify-between">
           {p.averageRating > 0 ? (
             <div className="flex items-center gap-1.5">
@@ -144,10 +150,8 @@ function GridCard({
           )}
         </div>
 
-        {/* Color swatches */}
         <ColorDots colors={p.colors} max={6} />
 
-        {/* Price + Add to cart */}
         <div className="flex items-center justify-between mt-auto pt-2.5 border-t border-zinc-50 dark:border-zinc-800/80">
           <div>
             <span className="text-[15px] font-black text-zinc-900 dark:text-white tracking-tight">
@@ -169,8 +173,7 @@ function GridCard({
                 : "bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 hover:bg-zinc-700 dark:hover:bg-zinc-100 shadow-sm hover:shadow-md"
             }`}
           >
-            <ShoppingBag size={12} strokeWidth={2.5} />
-            Add
+            <ShoppingBag size={12} strokeWidth={2.5} /> Add
           </button>
         </div>
       </div>
