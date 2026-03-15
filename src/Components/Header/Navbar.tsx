@@ -10,9 +10,9 @@ import {
   Search,
   X,
   Menu,
+  Heart,
 } from "lucide-react";
 import { FaArrowRightFromBracket } from "react-icons/fa6";
-
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import Logo from "../Logo";
@@ -27,6 +27,7 @@ import Sidebar from "./Sidebar";
 import { toast } from "react-toastify";
 import DarkMode from "../DarkMode";
 import { usePathname } from "next/navigation";
+import useUser from "@/hook/useUser";
 
 const Navbar = () => {
   const [scrollY, setScrollY] = useState(0);
@@ -36,6 +37,8 @@ const Navbar = () => {
 
   const shoppingCart = useSelector((state: RootState) => state.cart.value);
   const { data: session } = useSession();
+  const { user } = useUser();
+  const wishlistCount = (user?.wishList ?? []).length;
   const pathname = usePathname();
 
   useEffect(() => {
@@ -97,7 +100,6 @@ const Navbar = () => {
 
   const isScrolled = scrollY > 50;
   const isHome = pathname === "/";
-  // Homepage এ scroll করার আগে — icon bg দেখাবে
   const showHeroBg = isHome && !isScrolled;
 
   const navBg = isHome
@@ -112,11 +114,9 @@ const Navbar = () => {
     const isActive = link.partial
       ? pathname.startsWith(link.href)
       : pathname === link.href;
-
     const textClass = isActive
       ? "text-gray-900 dark:text-white"
       : "text-gray-700 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white";
-
     const darkHeroText = showHeroBg
       ? "dark:!text-white/85 dark:group-hover:!text-white"
       : "";
@@ -133,9 +133,7 @@ const Navbar = () => {
           {link.label}
         </span>
         <span
-          className={`absolute -bottom-1 left-0 h-[2px] bg-teal-500
-                          transition-all duration-300 ease-out
-                          ${isActive ? "w-full" : "w-0 group-hover:w-full"}`}
+          className={`absolute -bottom-1 left-0 h-[2px] bg-teal-500 transition-all duration-300 ease-out ${isActive ? "w-full" : "w-0 group-hover:w-full"}`}
         />
       </Link>
     );
@@ -143,7 +141,6 @@ const Navbar = () => {
 
   const cartCount = shoppingCart?.length || 0;
 
-  // Icon button — homepage initial এ white/glass bg, scroll হলে সরে যায়
   const iconBtnClass = showHeroBg
     ? "p-2 rounded-lg transition-all duration-200 text-white bg-white/15 hover:bg-white/25"
     : "p-2 rounded-lg transition-all duration-200 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800";
@@ -201,22 +198,38 @@ const Navbar = () => {
                   <motion.span
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
-                    className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px]
-                               bg-teal-500 text-white text-[10px] font-bold
-                               rounded-full flex items-center justify-center px-1"
+                    className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] bg-teal-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center px-1"
                   >
                     {cartCount}
                   </motion.span>
                 )}
               </Link>
 
+              {/* Wishlist — only for logged in users */}
+              {session?.user && (
+                <Link
+                  href="/dashboard/user/wishlist"
+                  className={`relative ${iconBtnClass}`}
+                >
+                  <Heart size={20} />
+                  {wishlistCount > 0 && (
+                    <motion.span
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center px-1"
+                    >
+                      {wishlistCount}
+                    </motion.span>
+                  )}
+                </Link>
+              )}
+
               {/* Dark Mode */}
               <DarkMode />
 
               {/* Divider */}
               <div
-                className={`hidden sm:block w-px h-5 mx-1 transition-colors duration-300
-                ${showHeroBg ? "bg-white/20" : "bg-gray-200 dark:bg-gray-700"}`}
+                className={`hidden sm:block w-px h-5 mx-1 transition-colors duration-300 ${showHeroBg ? "bg-white/20" : "bg-gray-200 dark:bg-gray-700"}`}
               />
 
               {/* Auth */}
@@ -224,21 +237,17 @@ const Navbar = () => {
                 <div className="hidden lg:flex items-center gap-2">
                   <Link
                     href="/auth/login"
-                    className={`text-sm font-semibold px-4 py-2 rounded-lg transition-all duration-200
-                      ${
-                        showHeroBg
-                          ? "text-white bg-white/15 hover:bg-white/25"
-                          : "text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800"
-                      }`}
+                    className={`text-sm font-semibold px-4 py-2 rounded-lg transition-all duration-200 ${
+                      showHeroBg
+                        ? "text-white bg-white/15 hover:bg-white/25"
+                        : "text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800"
+                    }`}
                   >
                     Login
                   </Link>
                   <Link
                     href="/auth/register"
-                    className="text-sm font-semibold px-4 py-2 rounded-lg
-                               bg-teal-500 hover:bg-teal-600 text-white
-                               transition-all duration-200 shadow-sm shadow-teal-500/30
-                               flex items-center gap-1.5"
+                    className="text-sm font-semibold px-4 py-2 rounded-lg bg-teal-500 hover:bg-teal-600 text-white transition-all duration-200 shadow-sm shadow-teal-500/30 flex items-center gap-1.5"
                   >
                     Register <FaArrowRightFromBracket size={12} />
                   </Link>
@@ -247,14 +256,9 @@ const Navbar = () => {
                 <div id="profile-dropdown" className="relative">
                   <button
                     onClick={() => setDropdownOpen(!dropdownOpen)}
-                    className={`flex items-center gap-2 p-1 rounded-xl transition-all duration-200 group
-                      ${showHeroBg ? "hover:bg-white/15" : "hover:bg-gray-100 dark:hover:bg-gray-800"}`}
+                    className={`flex items-center gap-2 p-1 rounded-xl transition-all duration-200 group ${showHeroBg ? "hover:bg-white/15" : "hover:bg-gray-100 dark:hover:bg-gray-800"}`}
                   >
-                    <div
-                      className="w-8 h-8 rounded-lg overflow-hidden relative
-                                    ring-2 ring-teal-500/30 group-hover:ring-teal-500/60
-                                    transition-all duration-200"
-                    >
+                    <div className="w-8 h-8 rounded-lg overflow-hidden relative ring-2 ring-teal-500/30 group-hover:ring-teal-500/60 transition-all duration-200">
                       <Image
                         src={
                           session?.user?.image ||
@@ -274,10 +278,7 @@ const Navbar = () => {
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: -8, scale: 0.96 }}
                         transition={{ duration: 0.18, ease: "easeOut" }}
-                        className="absolute right-0 mt-2 w-52 rounded-xl overflow-hidden
-                                   bg-white dark:bg-gray-900
-                                   border border-gray-200 dark:border-gray-700/60
-                                   shadow-xl dark:shadow-black/40 z-50"
+                        className="absolute right-0 mt-2 w-52 rounded-xl overflow-hidden bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700/60 shadow-xl dark:shadow-black/40 z-50"
                       >
                         <div className="px-4 py-3 border-b border-gray-100 dark:border-gray-800">
                           <p className="text-sm font-bold text-gray-900 dark:text-white truncate">
@@ -294,11 +295,7 @@ const Navbar = () => {
                               key={link.href}
                               href={link.href}
                               onClick={() => setDropdownOpen(false)}
-                              className="flex items-center gap-2.5 px-4 py-2.5 text-sm
-                                         text-gray-600 dark:text-gray-300
-                                         hover:text-gray-900 dark:hover:text-white
-                                         hover:bg-gray-50 dark:hover:bg-gray-800/60
-                                         transition-colors duration-150"
+                              className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800/60 transition-colors duration-150"
                             >
                               {link.icon && (
                                 <link.icon
@@ -314,11 +311,7 @@ const Navbar = () => {
                         <div className="border-t border-gray-100 dark:border-gray-800 p-2">
                           <button
                             onClick={handleLogout}
-                            className="w-full flex items-center justify-center gap-2
-                                       py-2 px-4 rounded-lg text-sm font-semibold
-                                       bg-gray-900 dark:bg-gray-700
-                                       hover:bg-gray-700 dark:hover:bg-gray-600
-                                       text-white transition-all duration-200"
+                            className="w-full flex items-center justify-center gap-2 py-2 px-4 rounded-lg text-sm font-semibold bg-gray-900 dark:bg-gray-700 hover:bg-gray-700 dark:hover:bg-gray-600 text-white transition-all duration-200"
                           >
                             Logout <FaArrowRightFromBracket size={12} />
                           </button>
