@@ -112,22 +112,10 @@ const navItems: NavItem[] = [
     icon: <Logs size={16} />,
     roles: ["admin"],
   },
-  // {
-  //   path: "/dashboard/admin/categories",
-  //   label: "Categories",
-  //   icon: <Tag size={16} />,
-  //   roles: ["admin"],
-  // },
   {
     path: "/dashboard/admin/orders",
     label: "Orders",
     icon: <ShoppingBag size={16} />,
-    roles: ["admin"],
-  },
-  {
-    path: "/dashboard/admin/analytics",
-    label: "Analytics",
-    icon: <BarChart2 size={16} />,
     roles: ["admin"],
   },
   {
