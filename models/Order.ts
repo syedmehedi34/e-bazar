@@ -73,8 +73,16 @@ const OrderSchema = new Schema<IOrder>(
       addressType: String,
     },
     paymentMethod: { type: String, enum: ["cod", "sslcommerz", "stripe"] },
-    paymentStatus: { type: String, default: "pending" },
-    orderStatus: { type: String, default: "processing" },
+    paymentStatus: {
+      type: String,
+      enum: ["cod_pending", "pending", "paid", "failed"],
+      default: "pending",
+    },
+    orderStatus: {
+      type: String,
+      enum: ["delivered", "cancelled", "shipped", "confirmed", "processing"],
+      default: "processing",
+    },
     pricing: {
       subtotal: Number,
       shippingCharge: Number,

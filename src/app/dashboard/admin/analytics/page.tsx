@@ -200,7 +200,7 @@ const AdminAnalyticsPage = () => {
     products: Product[];
     productsLoading: boolean;
   };
-  const { blogs, blogsLoading } = useFetchBlog() as {
+  const { blogs, blogsLoading } = useFetchBlog() as unknown as {
     blogs: Blog[];
     blogsLoading: boolean;
   };
@@ -217,13 +217,17 @@ const AdminAnalyticsPage = () => {
   }, [products]);
 
   // ── Revenue stats ──────────────────────────────────────────────
+  // ── Revenue: count only when paid OR delivered (same rule as profit) ──
+  const isConfirmedOrder = (o: Order) => o.paymentStatus === "paid";
+  // || o.orderStatus === "delivered";
+
   const revenue = useMemo(() => {
-    const paid = orders.filter((o) => o.paymentStatus === "paid");
-    const total = paid.reduce((s, o) => s + o.pricing.total, 0);
-    const thisM = paid
+    const confirmed = orders.filter(isConfirmedOrder);
+    const total = confirmed.reduce((s, o) => s + o.pricing.total, 0);
+    const thisM = confirmed
       .filter((o) => isThisMonth(o.createdAt))
       .reduce((s, o) => s + o.pricing.total, 0);
-    const lastM = paid
+    const lastM = confirmed
       .filter((o) => isLastMonth(o.createdAt))
       .reduce((s, o) => s + o.pricing.total, 0);
     return { total, thisM, lastM, growth: pctGrowth(thisM, lastM) };
@@ -238,7 +242,8 @@ const AdminAnalyticsPage = () => {
     let lastMProfit = 0;
 
     orders.forEach((o) => {
-      if (o.orderStatus === "cancelled") return; // skip cancelled
+      // Same rule: paid OR delivered
+      if (!isConfirmedOrder(o)) return;
       let orderProfit = 0;
       o.items.forEach((item) => {
         const cost = costMap[item.productId] ?? 0;
@@ -308,15 +313,57 @@ const AdminAnalyticsPage = () => {
   const productStats = useMemo(() => {
     const lowStock = products.filter((p) => p.stock > 0 && p.stock <= 5);
     const outOfStock = products.filter((p) => p.stock === 0).length;
-    const topSelling = [...products]
-      .sort((a, b) => b.totalSold - a.totalSold)
-      .slice(0, 5);
     const catBreakdown = [...new Set(products.map((p) => p.category))].map(
       (cat) => ({
         name: cat,
         value: products.filter((p) => p.category === cat).length,
       }),
     );
+
+    // ── Top selling: calculated from actual orders data (by total quantity sold) ──
+    const soldMap: Record<
+      string,
+      {
+        productId: string;
+        title: string;
+        brand: string;
+        qty: number;
+        unitPrice: number;
+      }
+    > = {};
+    orders.forEach((o) => {
+      if (o.orderStatus === "cancelled") return; // skip cancelled
+      o.items.forEach((item) => {
+        if (!soldMap[item.productId]) {
+          soldMap[item.productId] = {
+            productId: item.productId,
+            title: item.title,
+            brand: "",
+            qty: 0,
+            unitPrice: item.unitPrice,
+          };
+        }
+        soldMap[item.productId].qty += item.quantity;
+      });
+    });
+
+    // Enrich with product data (costPrice, discountPrice, images)
+    const topSelling = Object.values(soldMap)
+      .sort((a, b) => b.qty - a.qty)
+      .slice(0, 5)
+      .map((item) => {
+        const product = products.find((p) => p._id === item.productId);
+        return {
+          _id: item.productId,
+          title: item.title,
+          brand: product?.brand ?? "",
+          totalSold: item.qty,
+          discountPrice: item.unitPrice,
+          costPrice: product?.costPrice ?? 0,
+          images: product?.images ?? [],
+        };
+      });
+
     return {
       total: products.length,
       active: products.filter((p) => p.status === "active").length,
@@ -325,7 +372,7 @@ const AdminAnalyticsPage = () => {
       topSelling,
       catBreakdown,
     };
-  }, [products]);
+  }, [products, orders]);
 
   // ── Blog stats ─────────────────────────────────────────────────
   const blogStats = useMemo(() => {
@@ -349,10 +396,9 @@ const AdminAnalyticsPage = () => {
     () =>
       last6Months().map(({ key, label }) => {
         const mo = orders.filter((o) => monthKey(o.createdAt) === key);
-        const paid = mo.filter((o) => o.paymentStatus === "paid");
         let profit = 0;
-        paid.forEach((o) => {
-          if (o.orderStatus === "cancelled") return;
+        mo.forEach((o) => {
+          if (!isConfirmedOrder(o)) return; // same rule: paid OR delivered
           o.items.forEach((item) => {
             profit +=
               (item.unitPrice - (costMap[item.productId] ?? 0)) * item.quantity;
@@ -360,7 +406,9 @@ const AdminAnalyticsPage = () => {
         });
         return {
           label,
-          revenue: paid.reduce((s, o) => s + o.pricing.total, 0),
+          revenue: mo
+            .filter(isConfirmedOrder)
+            .reduce((s, o) => s + o.pricing.total, 0),
           orders: mo.length,
           profit,
         };
@@ -816,6 +864,7 @@ const AdminAnalyticsPage = () => {
               productStats.topSelling.map((p, i) => {
                 const maxSold = productStats.topSelling[0]?.totalSold || 1;
                 const pct = Math.round((p.totalSold / maxSold) * 100);
+                // profit = (actual order unitPrice - costPrice from products model) × qty sold from orders
                 const itemProfit =
                   (p.discountPrice - (p.costPrice ?? 0)) * p.totalSold;
                 return (
