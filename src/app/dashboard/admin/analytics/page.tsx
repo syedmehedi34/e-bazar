@@ -23,7 +23,6 @@ import {
   ShoppingBag,
   Package,
   FileText,
-  CreditCard,
   Star,
   ArrowUpRight,
   ArrowDownRight,
@@ -218,8 +217,8 @@ const AdminAnalyticsPage = () => {
 
   // ── Revenue stats ──────────────────────────────────────────────
   // ── Revenue: count only when paid OR delivered (same rule as profit) ──
-  const isConfirmedOrder = (o: Order) => o.paymentStatus === "paid";
-  // || o.orderStatus === "delivered";
+  const isConfirmedOrder = (o: Order) =>
+    o.paymentStatus === "paid" || o.orderStatus === "delivered";
 
   const revenue = useMemo(() => {
     const confirmed = orders.filter(isConfirmedOrder);
@@ -773,7 +772,7 @@ const AdminAnalyticsPage = () => {
                     <Cell key={i} fill={e.color} />
                   ))}
                 </Pie>
-                <Tooltip formatter={(v: number, n: string) => [v, n]} />
+                <Tooltip formatter={(v, n) => [v, n]} />
               </PieChart>
             </ResponsiveContainer>
             <div className="space-y-1.5 mt-2">
@@ -818,7 +817,7 @@ const AdminAnalyticsPage = () => {
                   <Cell key={i} fill={e.color} />
                 ))}
               </Pie>
-              <Tooltip formatter={(v: number, n: string) => [v, n]} />
+              <Tooltip formatter={(v, n) => [v, n]} />
             </PieChart>
           </ResponsiveContainer>
           <div className="space-y-1.5 mt-2">
