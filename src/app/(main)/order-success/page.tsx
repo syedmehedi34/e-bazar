@@ -184,7 +184,7 @@ export default function OrderSuccessPage() {
   );
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-slate-50 pt-16">
       <div className="max-w-2xl mx-auto px-4 py-10 space-y-4">
         {/* ── Hero ── */}
         <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
