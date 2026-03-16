@@ -79,7 +79,7 @@ const Navbar = () => {
     if (session.user.role?.includes("admin")) {
       return [
         {
-          href: "/dashboard/admin/profile",
+          href: "/dashboard/admin",
           label: "Dashboard",
           icon: LayoutDashboard,
         },
@@ -87,14 +87,14 @@ const Navbar = () => {
     }
     return [
       {
-        href: "/dashboard/user/profile",
+        href: "/dashboard/user",
         label: "Dashboard",
         icon: LayoutDashboard,
       },
-      { href: "/user_profile", label: "My Profile", icon: User },
+      { href: "/dashboard/user/profile", label: "My Profile", icon: User },
       { href: "/shopping-cart", label: "My Cart", icon: ShoppingCart },
-      { href: "/my_orders", label: "My Orders", icon: Box },
-      { href: "#", label: "Support", icon: LifeBuoy },
+      { href: "/dashboard/user/orders", label: "My Orders", icon: Box },
+      { href: "/dashboard/user/support", label: "Support", icon: LifeBuoy },
     ];
   };
 

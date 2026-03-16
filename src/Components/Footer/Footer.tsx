@@ -30,7 +30,7 @@ const footerLinks = {
     { label: "FAQ", href: "#" },
     { label: "Shipping Policy", href: "#" },
     { label: "Return Policy", href: "#" },
-    { label: "Track Order", href: "/my_orders" },
+    { label: "Track Order", href: "#" },
     { label: "Privacy Policy", href: "#" },
   ],
 };
