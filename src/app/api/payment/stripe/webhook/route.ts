@@ -14,7 +14,8 @@ export async function POST(req: NextRequest) {
   if (!signature) {
     return NextResponse.json({ error: "No signature" }, { status: 400 });
   }
-
+  //
+  //
   let event: Stripe.Event;
   try {
     event = stripe.webhooks.constructEvent(
