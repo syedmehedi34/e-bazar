@@ -81,6 +81,15 @@ const OrderSchema = new Schema<IOrder>(
     orderStatus: {
       type: String,
       enum: ["delivered", "cancelled", "shipped", "confirmed", "processing"],
+      // enum: [
+      //   "delivered",
+      //   "cancelledByAdmin",
+      //   "cancelledByUser",
+      //   "shipped",
+      //   "confirmed",
+      //   "processing",
+      //   "returned",
+      // ],
       default: "processing",
     },
     pricing: {
@@ -90,6 +99,7 @@ const OrderSchema = new Schema<IOrder>(
       couponDiscount: Number,
       total: Number,
     },
+
     transactionId: String,
     gatewayData: Schema.Types.Mixed,
     note: String,
