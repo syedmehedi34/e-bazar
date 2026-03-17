@@ -29,6 +29,7 @@ import {
   Ban,
   AlertTriangle,
   Loader2,
+  AlertCircle,
 } from "lucide-react";
 
 // ── Types ─────────────────────────────────────────────────────────
@@ -87,7 +88,12 @@ const ORDER_STATUSES = [
     icon: CheckCircle2,
     color: "text-blue-500",
   },
-  { value: "shipped", label: "Shipped", icon: Truck, color: "text-violet-500" },
+  {
+    value: "shipped",
+    label: "Shipped",
+    icon: Truck,
+    color: "text-violet-500",
+  },
   {
     value: "delivered",
     label: "Delivered",
@@ -95,10 +101,28 @@ const ORDER_STATUSES = [
     color: "text-teal-500",
   },
   {
-    value: "cancelled",
-    label: "Cancelled",
+    value: "cancelled_by_customer",
+    label: "Cancelled (Customer)",
     icon: XCircle,
     color: "text-red-500",
+  },
+  {
+    value: "cancelled_by_admin",
+    label: "Cancelled (Admin)",
+    icon: XCircle,
+    color: "text-red-500",
+  },
+  {
+    value: "returned",
+    label: "Returned",
+    icon: RotateCcw,
+    color: "text-orange-500",
+  },
+  {
+    value: "failed",
+    label: "Failed",
+    icon: AlertCircle,
+    color: "text-rose-500",
   },
 ];
 
@@ -334,7 +358,7 @@ const UserOrdersPage = () => {
     }
   };
 
-  const canCancel = selectedOrder?.orderStatus === "processing";
+  const canCancel = selectedOrder?.orderStatus === "pending";
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950 rubik">

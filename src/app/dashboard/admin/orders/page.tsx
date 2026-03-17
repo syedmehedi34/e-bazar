@@ -41,11 +41,6 @@ type SortField =
   | "paymentStatus";
 
 const ORDER_STATUS = {
-  pending: {
-    label: "Pending",
-    icon: Clock,
-    cls: "bg-gray-100 text-gray-700 dark:bg-gray-500/10 dark:text-gray-400",
-  },
   processing: {
     label: "Processing",
     icon: Clock,
