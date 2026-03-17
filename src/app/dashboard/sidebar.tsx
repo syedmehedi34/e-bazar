@@ -11,8 +11,6 @@ import {
   Headphones,
   Package,
   PackagePlus,
-  Tag,
-  BarChart2,
   Users,
   Ticket,
   Star,

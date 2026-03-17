@@ -4,7 +4,7 @@ import dbConnect from "../../../../lib/mongodb";
 import Blog from "../../../../models/Blogs";
 
 /* ── GET /api/blogs ──────────────────────────────────────── */
-export async function GET(req: NextRequest) {
+export async function GET() {
   await dbConnect();
   try {
     const blogs = await Blog.find({}).sort({ createdAt: -1 }).lean();

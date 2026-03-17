@@ -25,12 +25,13 @@ function extractPublicId(url: string): string | null {
 // ── GET /api/products/[id] ────────────────────────────
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } },
+  context: { params: Promise<{ id: string }> },
 ) {
   await dbConnect();
 
   try {
-    const { id } = await params;
+    const params = await context.params;
+    const { id } = params;
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return NextResponse.json(
