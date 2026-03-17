@@ -24,7 +24,7 @@ export async function initiateStripe(order: {
   const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] =
     order.items.map((item) => ({
       price_data: {
-        currency: "usd",
+        currency: "bdt",
         unit_amount: Math.round(item.unitPrice * 100), // Stripe paisa তে নেয়
         product_data: {
           name: item.title,
@@ -38,7 +38,7 @@ export async function initiateStripe(order: {
   if (order.pricing.couponDiscount > 0) {
     lineItems.push({
       price_data: {
-        currency: "usd",
+        currency: "bdt",
         unit_amount: -Math.round(order.pricing.couponDiscount * 100), // negative = discount
         product_data: { name: "Coupon Discount" },
       },
@@ -58,7 +58,7 @@ export async function initiateStripe(order: {
           type: "fixed_amount",
           fixed_amount: {
             amount: Math.round(order.pricing.shippingCharge * 100),
-            currency: "usd",
+            currency: "bdt",
           },
           display_name: "Standard Delivery",
         },
