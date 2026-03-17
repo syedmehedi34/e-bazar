@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 import dbConnect from "../../../../../../lib/mongodb";
@@ -5,36 +6,30 @@ import Order from "../../../../../../models/Order";
 
 export const runtime = "nodejs";
 
-// Stripe initialize
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: "2024-06-20" as any, // latest stable, adjust if needed
-});
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
-// IMPORTANT: Disable body parsing for this route (raw body দরকার)
 export const config = {
   api: {
-    bodyParser: false, // ← এটা মূল ফিক্স! Vercel/Next.js body parse করবে না
+    bodyParser: false,
   },
 };
 
 export async function POST(req: NextRequest) {
-  // Get raw body as text (string)
   const body = await req.text();
 
-  // Get signature from header
+  // Stripe signature header
   const signature = req.headers.get("stripe-signature");
 
   if (!signature) {
-    console.error("No stripe-signature header");
+    console.error("No stripe-signature header received");
     return NextResponse.json({ error: "No signature" }, { status: 400 });
   }
 
   let event: Stripe.Event;
 
   try {
-    // Use raw body + signature to verify
     event = stripe.webhooks.constructEvent(
-      body, // raw string
+      body,
       signature,
       process.env.STRIPE_WEBHOOK_SECRET!,
     );
@@ -46,12 +41,12 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  // DB connect
+  // Database connect
   await dbConnect();
 
   console.log("Stripe webhook event received:", event.type);
 
-  // Handle specific event
+  // Handle checkout.session.completed
   if (event.type === "checkout.session.completed") {
     const session = event.data.object as Stripe.Checkout.Session;
     const orderId = session.metadata?.orderId;
@@ -59,7 +54,7 @@ export async function POST(req: NextRequest) {
     console.log("Order ID from metadata:", orderId);
 
     if (!orderId) {
-      console.error("No orderId in metadata");
+      console.error("No orderId found in metadata");
       return NextResponse.json(
         { error: "No orderId in metadata" },
         { status: 400 },
@@ -91,14 +86,14 @@ export async function POST(req: NextRequest) {
           updated.paymentStatus,
         );
       } else {
-        console.warn("Order not found for update:", orderId);
+        console.warn("No order found to update for ID:", orderId);
       }
-    } catch (dbErr) {
-      console.error("Database update failed:", dbErr);
-      // Still return 200 to Stripe — don't let DB error block webhook ack
+    } catch (dbErr: any) {
+      console.error("Database update error in webhook:", dbErr.message);
+      // DB error হলেও Stripe-কে 200 দিতে হবে (retry avoid করতে)
     }
   }
 
-  // Always return 200 OK to acknowledge receipt (Stripe retry করবে না)
+  // Stripe-কে acknowledge করো
   return NextResponse.json({ received: true });
 }
