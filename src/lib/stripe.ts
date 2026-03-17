@@ -1,8 +1,9 @@
 import Stripe from "stripe";
 
+// Initialize Stripe with the secret key from environment variables
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
-export async function initiateStripe(order: {
+interface OrderPayload {
   orderId: string;
   pricing: {
     total: number;
@@ -16,30 +17,44 @@ export async function initiateStripe(order: {
     unitPrice: number;
     quantity: number;
   }[];
-  deliveryAddress: { fullName: string; phone: string };
-}) {
+  deliveryAddress: {
+    fullName: string;
+    phone: string;
+  };
+}
+
+/**
+ * Creates a Stripe Checkout Session and returns the hosted payment URL.
+ * The orderId is stored in session metadata so the webhook can identify
+ * and update the correct order after payment succeeds.
+ */
+export async function initiateStripe(order: OrderPayload): Promise<string> {
   const base_url = process.env.NEXT_PUBLIC_BASE_URL!;
 
-  // ── Line items: প্রতিটা product আলাদা ──
+  // Build line items — one entry per product in the cart
   const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] =
     order.items.map((item) => ({
       price_data: {
-        currency: "bdt",
-        unit_amount: Math.round(item.unitPrice * 100), // Stripe paisa তে নেয়
+        currency: "usd",
+        // Stripe expects amounts in the smallest currency unit (cents)
+        unit_amount: Math.round(item.unitPrice * 100),
         product_data: {
           name: item.title,
-          images: [item.image].filter((img) => img?.startsWith("http")), // local image দিলে error হয়
+          // Only pass absolute URLs — local paths cause Stripe to reject the session
+          images: [item.image].filter(
+            (img) => typeof img === "string" && img.startsWith("http"),
+          ),
         },
       },
       quantity: item.quantity,
     }));
 
-  // ── Coupon discount থাকলে আলাদা line item ──
+  // If a coupon was applied, add a negative line item to show the discount
   if (order.pricing.couponDiscount > 0) {
     lineItems.push({
       price_data: {
-        currency: "bdt",
-        unit_amount: -Math.round(order.pricing.couponDiscount * 100), // negative = discount
+        currency: "usd",
+        unit_amount: -Math.round(order.pricing.couponDiscount * 100),
         product_data: { name: "Coupon Discount" },
       },
       quantity: 1,
@@ -51,39 +66,47 @@ export async function initiateStripe(order: {
     mode: "payment",
     line_items: lineItems,
 
-    // ── Shipping charge ──
+    // Shipping charge is handled as a shipping_option so it appears separately
+    // on the Stripe-hosted checkout page
     shipping_options: [
       {
         shipping_rate_data: {
           type: "fixed_amount",
           fixed_amount: {
             amount: Math.round(order.pricing.shippingCharge * 100),
-            currency: "bdt",
+            currency: "usd",
           },
           display_name: "Standard Delivery",
         },
       },
     ],
 
-    // ── Customer info pre-fill ──
-    customer_email: undefined, // email থাকলে এখানে দাও
-    phone_number_collection: { enabled: false },
-
-    // ── orderId metadata তে রাখো — webhook এ দরকার হবে ──
+    // Store the orderId in metadata — the webhook reads this to update the DB
     metadata: {
       orderId: order.orderId,
     },
 
-    // ── Redirect URLs ──
+    // Redirect the user here after a successful payment
     success_url: `${base_url}/order-success?id=${order.orderId}`,
+
+    // Redirect the user here if they close/cancel the checkout page
     cancel_url: `${base_url}/checkout?cancelled=true`,
   });
 
-  return session.url!;
+  // session.url is the hosted Stripe Checkout page URL
+  if (!session.url) {
+    throw new Error("Stripe did not return a checkout URL");
+  }
+
+  return session.url;
 }
-// stripe listen --forward-to localhost:3000/api/payment/stripe/webhook
-// enabled-events=
-// checkout.session.completed,
-// checkout.session.expired
-// invoice.payment_succeeded
-// payment_intent.payment_failed
+
+/*
+  Local webhook testing:
+    stripe listen --forward-to localhost:3000/api/payment/stripe/webhook
+
+  Events to enable in Stripe Dashboard (Production Webhook):
+    - checkout.session.completed
+    - checkout.session.expired
+    - payment_intent.payment_failed
+*/
