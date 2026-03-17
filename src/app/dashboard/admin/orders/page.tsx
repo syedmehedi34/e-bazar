@@ -28,6 +28,8 @@ import {
   Edit3,
   ChevronRight,
   RefreshCw,
+  RotateCcw,
+  XCircle,
 } from "lucide-react";
 
 type Order = IOrder & { _id: string; createdAt: string };
@@ -38,7 +40,40 @@ type SortField =
   | "orderStatus"
   | "paymentStatus";
 
+// const ORDER_STATUS = {
+//   processing: {
+//     label: "Processing",
+//     icon: Clock,
+//     cls: "bg-amber-100 text-amber-700 dark:bg-amber-500/10 dark:text-amber-400",
+//   },
+//   confirmed: {
+//     label: "Confirmed",
+//     icon: CheckCircle2,
+//     cls: "bg-blue-100 text-blue-700 dark:bg-blue-500/10 dark:text-blue-400",
+//   },
+//   shipped: {
+//     label: "Shipped",
+//     icon: Truck,
+//     cls: "bg-violet-100 text-violet-700 dark:bg-violet-500/10 dark:text-violet-400",
+//   },
+//   delivered: {
+//     label: "Delivered",
+//     icon: CheckCircle2,
+//     cls: "bg-emerald-100 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400",
+//   },
+//   cancelled: {
+//     label: "Cancelled",
+//     icon: Ban,
+//     cls: "bg-red-100 text-red-700 dark:bg-red-500/10 dark:text-red-400",
+//   },
+// } as const;
+
 const ORDER_STATUS = {
+  pending: {
+    label: "Pending",
+    icon: Clock,
+    cls: "bg-gray-100 text-gray-700 dark:bg-gray-500/10 dark:text-gray-400",
+  },
   processing: {
     label: "Processing",
     icon: Clock,
@@ -59,10 +94,25 @@ const ORDER_STATUS = {
     icon: CheckCircle2,
     cls: "bg-emerald-100 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400",
   },
-  cancelled: {
-    label: "Cancelled",
+  cancelled_by_customer: {
+    label: "Cancelled (Customer)",
     icon: Ban,
     cls: "bg-red-100 text-red-700 dark:bg-red-500/10 dark:text-red-400",
+  },
+  cancelled_by_admin: {
+    label: "Cancelled (Admin)",
+    icon: Ban,
+    cls: "bg-red-100 text-red-700 dark:bg-red-500/10 dark:text-red-400",
+  },
+  returned: {
+    label: "Returned",
+    icon: RotateCcw,
+    cls: "bg-orange-100 text-orange-700 dark:bg-orange-500/10 dark:text-orange-400",
+  },
+  failed: {
+    label: "Failed",
+    icon: XCircle,
+    cls: "bg-rose-100 text-rose-700 dark:bg-rose-500/10 dark:text-rose-400",
   },
 } as const;
 

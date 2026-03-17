@@ -55,7 +55,7 @@ export async function PATCH(
     const updated = await Order.findOneAndUpdate(
       { orderId },
       { $set: update },
-      { new: true },
+      { returnDocument: "after" },
     ).lean();
 
     if (!updated) {

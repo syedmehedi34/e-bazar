@@ -134,7 +134,7 @@ async function handleCheckoutSessionCompleted(
           currency: session.currency,
         },
       },
-      { new: true }, // return the updated document
+      , // return the updated document
     );
 
     if (updatedOrder) {
