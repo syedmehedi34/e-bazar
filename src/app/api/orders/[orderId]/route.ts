@@ -21,7 +21,7 @@ export async function GET(
 
 /* ── PATCH /api/orders/[orderId] ───────────────────────────
    Admin  → update anything
-   User   → update orderStatus only
+   User   → only orderStatus + returnDetails
 ─────────────────────────────────────────────────────────── */
 export async function PATCH(
   req: NextRequest,
@@ -39,23 +39,40 @@ export async function PATCH(
     const { orderId } = await params;
     const body = await req.json();
 
-    let update: Record<string, unknown>;
+    let update: Record<string, unknown> = {};
 
     if (isAdmin) {
-      // Admin can update anything
+      // ── Admin → full control ─────────────────────────
       update = body;
     } else {
-      // User can only update orderStatus
-      if (!body.orderStatus) {
+      // ── User → limited fields only ──────────────────
+
+      // ❌ check if data available or not
+      if (!body.orderStatus && !body.returnDetails) {
         return NextResponse.json({ message: "Forbidden" }, { status: 403 });
       }
-      update = { orderStatus: body.orderStatus };
+
+      // ✅ Allow only these two fields
+      if (body.orderStatus) {
+        update.orderStatus = body.orderStatus;
+      }
+
+      if (body.returnDetails) {
+        update.returnDetails = {
+          requestedAt: new Date(), // auto set
+          reason: body.returnDetails.reason,
+          description: body.returnDetails.description || "",
+        };
+      }
     }
 
     const updated = await Order.findOneAndUpdate(
       { orderId },
       { $set: update },
-      { returnDocument: "after" },
+      {
+        returnDocument: "after",
+        runValidators: true,
+      },
     ).lean();
 
     if (!updated) {

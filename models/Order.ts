@@ -5,11 +5,6 @@ export interface IReturnDetails {
   requestedAt: Date;
   reason: string;
   description?: string;
-  status: "requested" | "approved" | "rejected" | "picked_up" | "refunded";
-  resolvedAt?: Date;
-  refundAmount?: number;
-  refundMethod?: string;
-  adminNote?: string;
 }
 
 export interface IDeliveryUpdate {
@@ -85,15 +80,6 @@ const ReturnDetailsSchema = new Schema<IReturnDetails>(
     requestedAt: { type: Date, default: Date.now },
     reason: { type: String, required: true, trim: true },
     description: { type: String, trim: true },
-    status: {
-      type: String,
-      enum: ["requested", "approved", "rejected", "picked_up", "refunded"],
-      default: "requested",
-    },
-    resolvedAt: { type: Date },
-    refundAmount: { type: Number },
-    refundMethod: { type: String },
-    adminNote: { type: String, trim: true },
   },
   { _id: false },
 );
