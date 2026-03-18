@@ -83,10 +83,10 @@ export async function POST(req: NextRequest) {
       if (orderId) {
         await Order.findOneAndUpdate(
           { orderId },
-          { paymentStatus: "failed", orderStatus: "cancelled" },
+          { paymentStatus: "failed", orderStatus: "failed" },
         );
         console.log(
-          "[Stripe Webhook] Session expired — order cancelled:",
+          "[Stripe Webhook] Session expired — order failed:",
           orderId,
         );
       }
@@ -134,7 +134,7 @@ async function handleCheckoutSessionCompleted(
           currency: session.currency,
         },
       },
-      , // return the updated document
+      { new: true }, // return the updated document
     );
 
     if (updatedOrder) {
