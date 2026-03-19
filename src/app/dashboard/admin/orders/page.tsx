@@ -30,6 +30,8 @@ import {
   RefreshCw,
   RotateCcw,
   XCircle,
+  Activity,
+  Plus,
 } from "lucide-react";
 
 type Order = IOrder & { _id: string; createdAt: string };
@@ -39,6 +41,14 @@ type SortField =
   | "pricing.total"
   | "orderStatus"
   | "paymentStatus";
+type TabType = "details" | "edit" | "delivery";
+
+interface DeliveryUpdate {
+  status: string;
+  message: string;
+  location?: string;
+  timestamp: string;
+}
 
 const ORDER_STATUS = {
   processing: {
@@ -100,6 +110,10 @@ const PAYMENT_STATUS = {
     label: "Failed",
     cls: "bg-red-100 text-red-700 dark:bg-red-500/10 dark:text-red-400",
   },
+  refunded: {
+    label: "Refunded",
+    cls: "bg-teal-100 text-teal-700 dark:bg-teal-500/10 dark:text-teal-400",
+  },
 } as const;
 
 const PAYMENT_METHOD = {
@@ -119,7 +133,7 @@ const PAYMENT_METHOD = {
 
 const inp = `w-full px-3 py-2.5 rounded-xl text-sm bg-gray-50 dark:bg-gray-800
   border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white
-  focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/15 transition-all`;
+  placeholder-gray-400 focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/15 transition-all`;
 const lbl =
   "block text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1.5";
 
@@ -140,7 +154,6 @@ const Badge = ({
   </span>
 );
 
-/* ─────────────────────────────────────────────────────── */
 const AdminOrdersPage = () => {
   const [search, setSearch] = useState("");
   const [filterOS, setFilterOS] = useState("");
@@ -154,8 +167,14 @@ const AdminOrdersPage = () => {
 
   // Modal state
   const [order, setOrder] = useState<Order | null>(null);
-  const [tab, setTab] = useState<"details" | "edit">("details");
+  const [tab, setTab] = useState<TabType>("details");
   const [saving, setSaving] = useState(false);
+  const [addingUpdate, setAddingUpdate] = useState(false);
+  const [deliveryForm, setDeliveryForm] = useState({
+    status: "",
+    message: "",
+    location: "",
+  });
   const [form, setForm] = useState<{
     orderStatus: string;
     paymentStatus: string;
@@ -222,10 +241,10 @@ const AdminOrdersPage = () => {
     }
   };
 
-  // Open modal
   const openOrder = (o: Order) => {
     setOrder(o);
     setTab("details");
+    setDeliveryForm({ status: "", message: "", location: "" });
     setForm({
       orderStatus: o.orderStatus,
       paymentStatus: o.paymentStatus,
@@ -246,7 +265,6 @@ const AdminOrdersPage = () => {
   const closeModal = () =>
     (document.getElementById("order-modal") as HTMLDialogElement)?.close();
 
-  // Update item qty/price
   const updateItem = (
     i: number,
     field: "quantity" | "unitPrice",
@@ -267,7 +285,34 @@ const AdminOrdersPage = () => {
     });
   };
 
-  // Save changes
+  // ── Add delivery update ──────────────────────────────────────
+  const handleAddDeliveryUpdate = async () => {
+    if (!order) return;
+    if (!deliveryForm.status.trim() || !deliveryForm.message.trim()) {
+      toast.error("Status and message are required.");
+      return;
+    }
+    setAddingUpdate(true);
+    try {
+      const res = await fetch(`/api/orders/${order.orderId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ deliveryUpdate: deliveryForm }),
+      });
+      if (!res.ok) throw new Error();
+      const data = await res.json();
+      setOrder(data.order as Order); // refresh local order so timeline updates immediately
+      setDeliveryForm({ status: "", message: "", location: "" });
+      // toast.success("Delivery update added!");
+      refetchOrders();
+    } catch {
+      toast.error("Failed to add delivery update.");
+    } finally {
+      setAddingUpdate(false);
+    }
+  };
+
+  // ── Save order edits ─────────────────────────────────────────
   const handleSave = async () => {
     if (!order || !form) return;
     setSaving(true);
@@ -290,14 +335,10 @@ const AdminOrdersPage = () => {
         }),
       });
       if (res.ok) {
-        console.log("print");
         toast.success("Order updated successfully!");
         closeModal();
         refetchOrders();
-      } else {
-        throw new Error();
-        // toast.error("Order error detected!");
-      }
+      } else throw new Error();
     } catch {
       toast.error("Failed to update order.");
     } finally {
@@ -329,7 +370,6 @@ const AdminOrdersPage = () => {
       PAYMENT_METHOD.cod)
     : null;
 
-  /* ── Loading / Error ── */
   if (ordersLoading)
     return (
       <div className="flex-1 flex items-center justify-center min-h-[60vh]">
@@ -425,9 +465,7 @@ const AdminOrdersPage = () => {
                 <p className="text-xs font-semibold uppercase tracking-wider text-gray-400">
                   {label}
                 </p>
-                <div
-                  className={`w-8 h-8 rounded-lg flex items-center justify-center bg-opacity-10`}
-                >
+                <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-opacity-10">
                   <Icon size={14} className={color} />
                 </div>
               </div>
@@ -777,6 +815,11 @@ const AdminOrdersPage = () => {
             pm &&
             (() => {
               const OsIcon = os.icon;
+              const deliveryUpdates =
+                (order.deliveryUpdates as unknown as
+                  | DeliveryUpdate[]
+                  | undefined) ?? [];
+
               return (
                 <>
                   {/* Header */}
@@ -805,20 +848,26 @@ const AdminOrdersPage = () => {
 
                   {/* Tabs */}
                   <div className="flex border-b border-gray-100 dark:border-gray-800 px-6">
-                    {(["details", "edit"] as const).map((t) => (
+                    {(["details", "edit", "delivery"] as const).map((t) => (
                       <button
                         key={t}
                         onClick={() => setTab(t)}
-                        className={`px-4 py-3 text-xs font-semibold uppercase tracking-wider border-b-2 -mb-px transition-all
-                      ${tab === t ? "border-teal-500 text-teal-600 dark:text-teal-400" : "border-transparent text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"}`}
+                        className={`px-4 py-3 text-xs font-semibold uppercase tracking-wider border-b-2 -mb-px transition-all flex items-center gap-1.5
+                        ${tab === t ? "border-teal-500 text-teal-600 dark:text-teal-400" : "border-transparent text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"}`}
                       >
-                        {t === "details" ? "Order Details" : "Edit Order"}
+                        {t === "delivery" && <Activity size={11} />}
+                        {t === "details"
+                          ? "Order Details"
+                          : t === "edit"
+                            ? "Edit Order"
+                            : `Delivery ${deliveryUpdates.length > 0 ? `(${deliveryUpdates.length})` : ""}`}
                       </button>
                     ))}
                   </div>
 
                   {/* Body */}
                   <div className="max-h-[65vh] overflow-y-auto p-6 space-y-6">
+                    {/* ── DETAILS TAB ── */}
                     {tab === "details" && (
                       <>
                         <div className="grid grid-cols-3 gap-3">
@@ -1012,6 +1061,7 @@ const AdminOrdersPage = () => {
                       </>
                     )}
 
+                    {/* ── EDIT TAB ── */}
                     {tab === "edit" && (
                       <div className="space-y-6">
                         <div className="grid grid-cols-2 gap-4">
@@ -1201,6 +1251,147 @@ const AdminOrdersPage = () => {
                             placeholder="Internal note or customer instruction..."
                             className={`${inp} resize-none`}
                           />
+                        </div>
+                      </div>
+                    )}
+
+                    {/* ── DELIVERY TAB ── */}
+                    {tab === "delivery" && (
+                      <div className="space-y-5">
+                        {/* Add update form */}
+                        <div className="p-4 rounded-xl bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 space-y-3">
+                          <p className="text-xs font-semibold uppercase tracking-wider text-gray-500 flex items-center gap-1.5">
+                            <Plus size={12} /> Add New Update
+                          </p>
+                          <div className="grid grid-cols-2 gap-3">
+                            <div>
+                              <label className={lbl}>Status *</label>
+                              <input
+                                type="text"
+                                value={deliveryForm.status}
+                                onChange={(e) =>
+                                  setDeliveryForm((p) => ({
+                                    ...p,
+                                    status: e.target.value,
+                                  }))
+                                }
+                                placeholder="e.g. dispatched_to_hub"
+                                className={inp}
+                              />
+                            </div>
+                            <div>
+                              <label className={lbl}>Location</label>
+                              <input
+                                type="text"
+                                value={deliveryForm.location}
+                                onChange={(e) =>
+                                  setDeliveryForm((p) => ({
+                                    ...p,
+                                    location: e.target.value,
+                                  }))
+                                }
+                                placeholder="e.g. Dhaka Sorting Hub"
+                                className={inp}
+                              />
+                            </div>
+                          </div>
+                          <div>
+                            <label className={lbl}>Message *</label>
+                            <input
+                              type="text"
+                              value={deliveryForm.message}
+                              onChange={(e) =>
+                                setDeliveryForm((p) => ({
+                                  ...p,
+                                  message: e.target.value,
+                                }))
+                              }
+                              placeholder="e.g. Parcel received at Dhaka sorting hub"
+                              className={inp}
+                            />
+                          </div>
+                          <button
+                            onClick={handleAddDeliveryUpdate}
+                            disabled={addingUpdate}
+                            className="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold text-white bg-teal-500 hover:bg-teal-400 disabled:opacity-50 transition-all"
+                          >
+                            {addingUpdate ? (
+                              <Loader2 size={12} className="animate-spin" />
+                            ) : (
+                              <Plus size={12} />
+                            )}
+                            {addingUpdate ? "Adding…" : "Add Update"}
+                          </button>
+                        </div>
+
+                        {/* Timeline */}
+                        <div>
+                          <p className="text-xs font-semibold uppercase tracking-wider text-gray-500 flex items-center gap-1.5 mb-4">
+                            <Activity size={12} /> Delivery Timeline (
+                            {deliveryUpdates.length})
+                          </p>
+
+                          {deliveryUpdates.length === 0 ? (
+                            <div className="text-center py-10">
+                              <Activity
+                                size={32}
+                                className="mx-auto text-gray-200 dark:text-gray-700 mb-2"
+                              />
+                              <p className="text-sm text-gray-400">
+                                No delivery updates yet
+                              </p>
+                              <p className="text-xs text-gray-300 dark:text-gray-600 mt-1">
+                                Use the form above to add the first update
+                              </p>
+                            </div>
+                          ) : (
+                            <div className="relative">
+                              {/* Vertical connecting line */}
+                              <div className="absolute left-[17px] top-2 bottom-2 w-0.5 bg-gray-100 dark:bg-gray-800" />
+                              <div className="space-y-0">
+                                {[...deliveryUpdates].reverse().map((u, i) => (
+                                  <div
+                                    key={i}
+                                    className="relative flex gap-4 pb-5 last:pb-0"
+                                  >
+                                    <div className="relative z-10 w-9 h-9 rounded-full bg-teal-50 dark:bg-teal-500/10 border-2 border-teal-200 dark:border-teal-500/30 flex items-center justify-center shrink-0">
+                                      <Truck
+                                        size={13}
+                                        className="text-teal-500"
+                                      />
+                                    </div>
+                                    <div className="flex-1 pt-1.5 min-w-0">
+                                      <div className="flex items-start justify-between gap-2 flex-wrap mb-1">
+                                        <span className="inline-block px-2 py-0.5 rounded-full text-[10px] font-bold bg-teal-50 dark:bg-teal-500/10 text-teal-600 dark:text-teal-400 font-mono">
+                                          {u.status}
+                                        </span>
+                                        <span className="text-[10px] text-gray-400 shrink-0">
+                                          {new Date(u.timestamp).toLocaleString(
+                                            "en-BD",
+                                            {
+                                              day: "numeric",
+                                              month: "short",
+                                              year: "numeric",
+                                              hour: "2-digit",
+                                              minute: "2-digit",
+                                            },
+                                          )}
+                                        </span>
+                                      </div>
+                                      <p className="text-sm font-semibold text-gray-800 dark:text-white">
+                                        {u.message}
+                                      </p>
+                                      {u.location && (
+                                        <p className="text-xs text-gray-400 flex items-center gap-1 mt-0.5">
+                                          <MapPin size={10} /> {u.location}
+                                        </p>
+                                      )}
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
                         </div>
                       </div>
                     )}
