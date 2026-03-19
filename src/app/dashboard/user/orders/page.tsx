@@ -31,6 +31,7 @@ import {
   AlertTriangle,
   Loader2,
   AlertCircle,
+  Activity,
 } from "lucide-react";
 
 // ── Types ─────────────────────────────────────────────────────────
@@ -44,6 +45,12 @@ interface OrderItem {
   quantity: number;
   unitPrice: number;
   subtotal: number;
+}
+interface DeliveryUpdate {
+  status: string;
+  message: string;
+  location?: string;
+  timestamp: string;
 }
 interface Order {
   _id: string;
@@ -72,6 +79,7 @@ interface Order {
   transactionId?: string;
   note?: string;
   createdAt: string;
+  deliveryUpdates?: DeliveryUpdate[];
 }
 
 // ── Config ────────────────────────────────────────────────────────
@@ -89,12 +97,7 @@ const ORDER_STATUSES = [
     icon: CheckCircle2,
     color: "text-blue-500",
   },
-  {
-    value: "shipped",
-    label: "Shipped",
-    icon: Truck,
-    color: "text-violet-500",
-  },
+  { value: "shipped", label: "Shipped", icon: Truck, color: "text-violet-500" },
   {
     value: "delivered",
     label: "Delivered",
@@ -156,43 +159,36 @@ const ORDER_STATUS_CFG: Record<
     icon: Clock,
     cls: "bg-amber-50 dark:bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-200 dark:border-amber-500/20",
   },
-
   confirmed: {
     label: "Confirmed",
     icon: CheckCircle2,
     cls: "bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-200 dark:border-blue-500/20",
   },
-
   shipped: {
     label: "Shipped",
     icon: Truck,
     cls: "bg-violet-50 dark:bg-violet-500/10 text-violet-600 dark:text-violet-400 border-violet-200 dark:border-violet-500/20",
   },
-
   delivered: {
     label: "Delivered",
     icon: Package,
     cls: "bg-teal-50 dark:bg-teal-500/10 text-teal-600 dark:text-teal-400 border-teal-200 dark:border-teal-500/20",
   },
-
   cancelled_by_customer: {
     label: "Cancelled (You)",
     icon: Ban,
     cls: "bg-red-50 dark:bg-red-500/10 text-red-600 dark:text-red-400 border-red-200 dark:border-red-500/20",
   },
-
   cancelled_by_admin: {
     label: "Cancelled (Admin)",
     icon: Ban,
     cls: "bg-red-50 dark:bg-red-500/10 text-red-600 dark:text-red-400 border-red-200 dark:border-red-500/20",
   },
-
   returned: {
     label: "Returned",
     icon: RotateCcw,
     cls: "bg-orange-50 dark:bg-orange-500/10 text-orange-600 dark:text-orange-400 border-orange-200 dark:border-orange-500/20",
   },
-
   failed: {
     label: "Failed",
     icon: AlertCircle,
@@ -247,7 +243,7 @@ const StatusBadge = ({
 
 const OrderProgress = ({ status }: { status: string }) => {
   const steps = ["processing", "confirmed", "shipped", "delivered"];
-  const cancelled = status === "cancelled";
+  const cancelled = status.startsWith("cancelled");
   const currentIdx = cancelled ? -1 : steps.indexOf(status);
   return (
     <div className="flex items-center w-full">
@@ -293,12 +289,9 @@ const UserOrdersPage = () => {
   const [sortBy, setSortBy] = useState("newest");
   const [showFilters, setShowFilters] = useState(false);
 
-  // Modal state
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [cancelling, setCancelling] = useState(false);
   const [confirmCancel, setConfirmCancel] = useState(false);
-
-  // return states
   const [returning, setReturning] = useState(false);
   const [showReturnForm, setShowReturnForm] = useState(false);
   const [returnReason, setReturnReason] = useState("");
@@ -357,13 +350,12 @@ const UserOrdersPage = () => {
   const openDetail = (order: Order) => {
     setSelectedOrder(order);
     setConfirmCancel(false);
+    setShowReturnForm(false);
     (document.getElementById(MODAL_ID) as HTMLDialogElement)?.showModal();
   };
-
   const closeModal = () =>
     (document.getElementById(MODAL_ID) as HTMLDialogElement)?.close();
 
-  // handle cancel
   const handleCancel = async () => {
     if (!selectedOrder) return;
     setCancelling(true);
@@ -371,15 +363,12 @@ const UserOrdersPage = () => {
       const res = await fetch(`/api/orders/${selectedOrder.orderId}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ orderStatus: "cancelled" }),
+        body: JSON.stringify({ orderStatus: "cancelled_by_customer" }),
       });
       if (!res.ok) throw new Error();
       closeModal();
       toast.success("Order cancelled successfully.");
       refetchOrders();
-      setSelectedOrder((prev) =>
-        prev ? { ...prev, orderStatus: "cancelled" } : null,
-      );
     } catch {
       toast.error("Failed to cancel order. Please try again.");
     } finally {
@@ -388,17 +377,13 @@ const UserOrdersPage = () => {
     }
   };
 
-  // ? handle return function .
   const handleReturn = async () => {
     if (!selectedOrder) return;
-
     if (!returnReason.trim()) {
       toast.error("Please select a return reason.");
       return;
     }
-
     setReturning(true);
-
     try {
       const res = await fetch(`/api/orders/${selectedOrder.orderId}`, {
         method: "PATCH",
@@ -411,11 +396,8 @@ const UserOrdersPage = () => {
           },
         }),
       });
-
       if (!res.ok) throw new Error();
-
       toast.success("Return request submitted successfully.");
-
       setShowReturnForm(false);
       closeModal();
       refetchOrders();
@@ -427,7 +409,6 @@ const UserOrdersPage = () => {
   };
 
   const canCancel = selectedOrder?.orderStatus === "processing";
-  // const canReturn = selectedOrder?.orderStatus === "delivered";
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950 rubik">
@@ -724,6 +705,15 @@ const UserOrdersPage = () => {
                             {PM_LABEL[order.paymentMethod] ||
                               order.paymentMethod}
                           </span>
+                          {/* Delivery updates indicator */}
+                          {order.deliveryUpdates &&
+                            order.deliveryUpdates.length > 0 && (
+                              <span className="flex items-center gap-1 text-teal-500 font-semibold">
+                                <Activity size={10} />
+                                {order.deliveryUpdates.length} update
+                                {order.deliveryUpdates.length !== 1 ? "s" : ""}
+                              </span>
+                            )}
                         </div>
                       </div>
                     </div>
@@ -801,7 +791,7 @@ const UserOrdersPage = () => {
                     Order Progress
                   </p>
                   <OrderProgress status={selectedOrder.orderStatus} />
-                  {selectedOrder.orderStatus === "cancelled" && (
+                  {selectedOrder.orderStatus.startsWith("cancelled") && (
                     <p className="mt-2 text-xs text-red-500 flex items-center gap-1.5">
                       <Ban size={11} /> This order has been cancelled.
                     </p>
@@ -993,6 +983,7 @@ const UserOrdersPage = () => {
                   </div>
                 </div>
 
+                {/* Note */}
                 {selectedOrder.note && (
                   <div className="p-3 rounded-xl bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/20">
                     <p className="text-xs font-bold text-amber-700 dark:text-amber-400 mb-1">
@@ -1003,6 +994,63 @@ const UserOrdersPage = () => {
                     </p>
                   </div>
                 )}
+
+                {/* ── Delivery Updates Timeline ── */}
+                {selectedOrder.deliveryUpdates &&
+                  selectedOrder.deliveryUpdates.length > 0 && (
+                    <div>
+                      <p className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-4 flex items-center gap-1.5">
+                        <Activity size={12} className="text-teal-500" />
+                        Delivery Updates ({selectedOrder.deliveryUpdates.length}
+                        )
+                      </p>
+                      <div className="relative">
+                        {/* Vertical line */}
+                        <div className="absolute left-[17px] top-2 bottom-2 w-0.5 bg-gray-100 dark:bg-gray-800" />
+                        <div className="space-y-0">
+                          {[...selectedOrder.deliveryUpdates]
+                            .reverse()
+                            .map((u, i) => (
+                              <div
+                                key={i}
+                                className="relative flex gap-4 pb-4 last:pb-0"
+                              >
+                                <div className="relative z-10 w-9 h-9 rounded-full bg-teal-50 dark:bg-teal-500/10 border-2 border-teal-200 dark:border-teal-500/30 flex items-center justify-center shrink-0">
+                                  <Truck size={13} className="text-teal-500" />
+                                </div>
+                                <div className="flex-1 pt-1.5 min-w-0">
+                                  <div className="flex items-start justify-between gap-2 flex-wrap mb-1">
+                                    <span className="inline-block px-2 py-0.5 rounded-full text-[10px] font-bold bg-teal-50 dark:bg-teal-500/10 text-teal-600 dark:text-teal-400 font-mono">
+                                      {u.status}
+                                    </span>
+                                    <span className="text-[10px] text-gray-400 shrink-0">
+                                      {new Date(u.timestamp).toLocaleString(
+                                        "en-BD",
+                                        {
+                                          day: "numeric",
+                                          month: "short",
+                                          year: "numeric",
+                                          hour: "2-digit",
+                                          minute: "2-digit",
+                                        },
+                                      )}
+                                    </span>
+                                  </div>
+                                  <p className="text-sm font-semibold text-gray-800 dark:text-white">
+                                    {u.message}
+                                  </p>
+                                  {u.location && (
+                                    <p className="text-xs text-gray-400 flex items-center gap-1 mt-0.5">
+                                      <MapPin size={10} /> {u.location}
+                                    </p>
+                                  )}
+                                </div>
+                              </div>
+                            ))}
+                        </div>
+                      </div>
+                    </div>
+                  )}
 
                 {/* Cancel section */}
                 {canCancel && (
@@ -1054,40 +1102,26 @@ const UserOrdersPage = () => {
                     )}
                   </div>
                 )}
-              </div>
 
-              {/* Footer */}
-              <div className="flex items-center justify-between px-6 py-4 border-t border-gray-100 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-950/50">
-                {/* {selectedOrder?.orderStatus === "delivered" ? (
-                  <button
-                    onClick={() => handleReturn()}
-                    className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold text-teal-600 dark:text-teal-400 bg-teal-50 dark:bg-teal-500/10 hover:bg-teal-100 transition-colors"
-                  >
-                    <RotateCcw size={12} /> Return / Exchange
-                  </button>
-                ) : (
-                  <div />
-                )} */}
-                {selectedOrder?.orderStatus === "delivered" && (
-                  <div className="border border-teal-200 dark:border-teal-500/20 rounded-xl p-4 space-y-3">
+                {/* Return section */}
+                {selectedOrder.orderStatus === "delivered" && (
+                  <div className="border border-teal-200 dark:border-teal-500/20 rounded-xl overflow-hidden">
                     {!showReturnForm ? (
                       <button
                         onClick={() => setShowReturnForm(true)}
-                        className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold text-teal-600 dark:text-teal-400 bg-teal-50 dark:bg-teal-500/10 hover:bg-teal-100 transition-colors"
+                        className="w-full flex items-center justify-center gap-2 px-4 py-3 text-sm font-bold text-teal-600 dark:text-teal-400 bg-teal-50 dark:bg-teal-500/10 hover:bg-teal-100 dark:hover:bg-teal-500/20 transition-colors"
                       >
-                        <RotateCcw size={12} /> Return / Exchange
+                        <RotateCcw size={14} /> Request Return / Exchange
                       </button>
                     ) : (
-                      <div className="space-y-3">
+                      <div className="p-4 space-y-3">
                         <p className="text-sm font-bold text-gray-800 dark:text-white">
                           Return Request
                         </p>
-
-                        {/* Reason */}
                         <select
                           value={returnReason}
                           onChange={(e) => setReturnReason(e.target.value)}
-                          className="w-full px-3 py-2 rounded-lg text-sm bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700"
+                          className="w-full px-3 py-2 rounded-lg text-sm bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-200 focus:outline-none focus:border-teal-500/60"
                         >
                           <option value="">Select reason</option>
                           <option value="defective">Defective product</option>
@@ -1096,29 +1130,31 @@ const UserOrdersPage = () => {
                           </option>
                           <option value="size_issue">Size issue</option>
                           <option value="changed_mind">Changed my mind</option>
-                          <option value="other">Any other reason</option>
+                          <option value="other">Other reason</option>
                         </select>
-
-                        {/* Description */}
                         <textarea
                           value={returnDescription}
                           onChange={(e) => setReturnDescription(e.target.value)}
                           placeholder="Optional description..."
-                          className="w-full px-3 py-2 rounded-lg text-sm bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700"
+                          rows={2}
+                          className="w-full px-3 py-2 rounded-lg text-sm bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-200 focus:outline-none focus:border-teal-500/60 resize-none"
                         />
-
                         <div className="flex gap-2">
                           <button
                             onClick={handleReturn}
                             disabled={returning}
-                            className="flex-1 py-2 rounded-lg text-xs font-bold text-white bg-teal-500 hover:bg-teal-600"
+                            className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-xs font-bold text-white bg-teal-500 hover:bg-teal-400 disabled:opacity-50 transition-colors"
                           >
-                            {returning ? "Submitting..." : "Submit Return"}
+                            {returning ? (
+                              <Loader2 size={12} className="animate-spin" />
+                            ) : (
+                              <RotateCcw size={12} />
+                            )}{" "}
+                            Submit Return
                           </button>
-
                           <button
                             onClick={() => setShowReturnForm(false)}
-                            className="flex-1 py-2 rounded-lg text-xs font-bold bg-gray-200 dark:bg-gray-700"
+                            className="flex-1 py-2.5 rounded-xl text-xs font-bold text-gray-600 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 transition-colors"
                           >
                             Cancel
                           </button>
@@ -1127,6 +1163,10 @@ const UserOrdersPage = () => {
                     )}
                   </div>
                 )}
+              </div>
+
+              {/* Footer */}
+              <div className="flex items-center justify-end px-6 py-4 border-t border-gray-100 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-950/50">
                 <button
                   onClick={closeModal}
                   className="px-4 py-2 rounded-xl text-sm font-semibold text-gray-600 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 transition-colors"
