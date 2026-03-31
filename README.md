@@ -1,16 +1,16 @@
-# 🛍️ E-catalog
+# 🛍️ E-Catalog
 
-**E-catalog** is a modern, responsive, and high-performance **e-commerce web application** built with **Next.js** and **TypeScript**.  
+**E-Catalog** is a modern, responsive, and high-performance **e-commerce web application** built with **Next.js** and **TypeScript**.  
 It provides a beautiful user experience with advanced features like product filtering, cart management, secure checkout, and role-based admin control.
 
 ---
 
 ## 🌐 Live Demo
 
-Check out the live version of **E-catalog** here:  
-[Visit E-catalog](https://e-catalog-client.vercel.app/)
+Check out the live version of **E-Catalog** here:  
+[Visit E-Catalog](https://e-catalog-shop.vercel.app/)
 
-![E-catalog Screenshot](https://i.ibb.co.com/nNz63D8g/banner.png)
+![E-Catalog Screenshot](https://i.ibb.co.com/nNz63D8g/banner.png)
 
 ## 🚀 Features
 
