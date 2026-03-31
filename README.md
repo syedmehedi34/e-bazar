@@ -10,7 +10,7 @@ It provides a beautiful user experience with advanced features like product filt
 Check out the live version of **E-catalog** here:  
 [Visit E-catalog](https://e-catalog-client.vercel.app/)
 
-![E-catalog Screenshot](https://i.postimg.cc/GhyKGgfB/e-catalog.png)
+![E-catalog Screenshot](https://i.ibb.co.com/nNz63D8g/banner.png)
 
 ## 🚀 Features
 
@@ -136,3 +136,8 @@ Frontend Developer | React | Next.js | TypeScript | Tailwind CSS
 🔗 LinkedIn: https://www.linkedin.com/in/syedmehedi34/
 
 🌐 Portfolio: https://syedmehedi.netlify.app/
+
+<!-- https://i.ibb.co.com/nNz63D8g/banner.png
+https://i.ibb.co.com/vCCdY2m1/all-products-page.png
+https://i.ibb.co.com/FkqJkmPC/register-page.png
+https://i.ibb.co.com/t5QzzzW/admin-dashboard.png -->
