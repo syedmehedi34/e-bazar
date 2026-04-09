@@ -65,12 +65,12 @@ const navItems: NavItem[] = [
     icon: <Truck size={16} />,
     roles: ["user"],
   },
-  {
-    path: "/dashboard/user/returns",
-    label: "Returns",
-    icon: <RotateCcw size={16} />,
-    roles: ["user"],
-  },
+  // {
+  //   path: "/dashboard/user/returns",
+  //   label: "Returns",
+  //   icon: <RotateCcw size={16} />,
+  //   roles: ["user"],
+  // },
   {
     path: "/dashboard/user/support",
     label: "Support",
@@ -116,12 +116,12 @@ const navItems: NavItem[] = [
     icon: <ShoppingBag size={16} />,
     roles: ["admin"],
   },
-  {
-    path: "/dashboard/admin/returns",
-    label: "Returns",
-    icon: <RotateCcw size={16} />,
-    roles: ["admin"],
-  },
+  // {
+  //   path: "/dashboard/admin/returns",
+  //   label: "Returns",
+  //   icon: <RotateCcw size={16} />,
+  //   roles: ["admin"],
+  // },
   {
     path: "/dashboard/admin/users",
     label: "Users",
@@ -134,24 +134,24 @@ const navItems: NavItem[] = [
     icon: <Ticket size={16} />,
     roles: ["admin"],
   },
-  {
-    path: "/dashboard/admin/reviews",
-    label: "Reviews",
-    icon: <Star size={16} />,
-    roles: ["admin"],
-  },
-  {
-    path: "/dashboard/admin/payments",
-    label: "Payments",
-    icon: <CreditCard size={16} />,
-    roles: ["admin"],
-  },
-  {
-    path: "/dashboard/admin/settings",
-    label: "Settings",
-    icon: <Settings size={16} />,
-    roles: ["admin"],
-  },
+  // {
+  //   path: "/dashboard/admin/reviews",
+  //   label: "Reviews",
+  //   icon: <Star size={16} />,
+  //   roles: ["admin"],
+  // },
+  // {
+  //   path: "/dashboard/admin/payments",
+  //   label: "Payments",
+  //   icon: <CreditCard size={16} />,
+  //   roles: ["admin"],
+  // },
+  // {
+  //   path: "/dashboard/admin/settings",
+  //   label: "Settings",
+  //   icon: <Settings size={16} />,
+  //   roles: ["admin"],
+  // },
   {
     path: "/dashboard/admin/support",
     label: "Support Tickets",
