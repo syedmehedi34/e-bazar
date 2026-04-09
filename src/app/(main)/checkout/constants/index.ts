@@ -14,14 +14,14 @@ export const PAYMENT_OPTIONS: PaymentOption[] = [
   {
     id: "sslcommerz",
     label: "SSLCommerz",
-    logo: "/payment/ssl.png",
+    logo: "/sslcommerz.png",
     desc: "All BD cards, bKash, Nagad, Rocket",
     badge: "All BD Methods",
   },
   {
     id: "stripe",
     label: "Stripe",
-    logo: "/payment/stripe.png",
+    logo: "/stripe-logo.png",
     desc: "Visa / Mastercard / Amex",
     badge: "International",
   },

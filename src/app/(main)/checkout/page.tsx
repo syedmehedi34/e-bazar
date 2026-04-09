@@ -52,13 +52,13 @@ export default function CheckoutPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#f8f9fb]">
+    <div className="min-h-screen pt-[75px]">
       {/* ── Header ── */}
       <header className="bg-white border-b border-gray-100 sticky top-0 z-30">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center gap-4">
           <button
             onClick={() => router.back()}
-            className="p-2 rounded-xl hover:bg-gray-100 transition-colors group"
+            className="p-2 rounded-xl hover:bg-gray-100 transition-colors group cursor-pointer"
           >
             <ArrowLeft className="w-5 h-5 text-gray-500 group-hover:text-gray-800 transition-colors" />
           </button>
