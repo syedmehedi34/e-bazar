@@ -18,7 +18,6 @@ import {
   ToggleRight,
   Calendar,
   Users,
-  ShoppingBag,
   Percent,
   DollarSign,
   Truck,
@@ -27,7 +26,13 @@ import {
   Check,
   AlertTriangle,
   Eye,
+  ShoppingBag,
+  Layers,
+  CheckSquare,
+  Square,
 } from "lucide-react";
+import { useFetchProduct } from "@/hook/useFetchProduct";
+// import { useFetchProduct } from "@/hooks/useFetchProduct"; // adjust path as needed
 
 // ── Types ──────────────────────────────────────────────────────────
 interface IUsageRecord {
@@ -55,6 +60,22 @@ interface ICoupon {
   usedCount: number;
   usageRecords: IUsageRecord[];
   createdAt: string;
+}
+
+// Product type from useFetchProduct
+interface IProduct {
+  _id: string;
+  title: string;
+  category?: string;
+  subCategory?: string;
+  price?: number;
+  images?: string[];
+}
+
+// Category group type from useFetchProduct
+interface ICategoryGroup {
+  name: string;
+  subCategories?: string[];
 }
 
 type ModalMode = "view" | "add" | "edit";
@@ -106,8 +127,9 @@ const emptyForm = () => ({
   getQuantity: "" as string | number,
   minOrderAmount: 0,
   applicableTo: "all" as ICoupon["applicableTo"],
-  productIds: "",
-  categories: "",
+  // Now arrays, not comma-separated strings
+  selectedProductIds: [] as string[],
+  selectedCategories: [] as string[],
   startDate: "",
   endDate: "",
   isActive: true,
@@ -169,6 +191,281 @@ const discountLabel = (c: ICoupon) => {
   }
 };
 
+// ── Product Selector Component ─────────────────────────────────────
+interface ProductSelectorProps {
+  products: IProduct[];
+  selected: string[];
+  onChange: (ids: string[]) => void;
+  loading: boolean;
+}
+
+const ProductSelector = ({
+  products,
+  selected,
+  onChange,
+  loading,
+}: ProductSelectorProps) => {
+  const [search, setSearch] = useState("");
+
+  const filtered = useMemo(
+    () =>
+      products.filter((p) =>
+        (p.title ?? "").toLowerCase().includes(search.toLowerCase()),
+      ),
+    [products, search],
+  );
+
+  const toggle = (id: string) => {
+    onChange(
+      selected.includes(id)
+        ? selected.filter((s) => s !== id)
+        : [...selected, id],
+    );
+  };
+
+  const toggleAll = () => {
+    if (selected.length === filtered.length) {
+      // deselect all filtered
+      onChange(selected.filter((id) => !filtered.some((p) => p._id === id)));
+    } else {
+      // select all filtered
+      const newIds = filtered.map((p) => p._id);
+      onChange([...new Set([...selected, ...newIds])]);
+    }
+  };
+
+  const allFilteredSelected =
+    filtered.length > 0 && filtered.every((p) => selected.includes(p._id));
+
+  return (
+    <div className="border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
+      {/* Search bar */}
+      <div className="p-2 border-b border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/50">
+        <div className="relative">
+          <Search
+            size={13}
+            className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"
+          />
+          <input
+            type="text"
+            placeholder="Search products…"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="w-full pl-8 pr-3 py-1.5 text-xs rounded-lg bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 text-gray-800 dark:text-white placeholder-gray-400 focus:outline-none focus:border-teal-500 transition-all"
+          />
+        </div>
+      </div>
+
+      {/* Select all row */}
+      {filtered.length > 0 && (
+        <div
+          className="flex items-center gap-2 px-3 py-2 border-b border-gray-100 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-800/30 cursor-pointer hover:bg-teal-50 dark:hover:bg-teal-500/5 transition-colors"
+          onClick={toggleAll}
+        >
+          {allFilteredSelected ? (
+            <CheckSquare size={14} className="text-teal-500 shrink-0" />
+          ) : (
+            <Square size={14} className="text-gray-400 shrink-0" />
+          )}
+          <span className="text-xs font-semibold text-gray-600 dark:text-gray-400">
+            {allFilteredSelected ? "Deselect all" : "Select all"} (
+            {filtered.length})
+          </span>
+        </div>
+      )}
+
+      {/* Product list */}
+      <div className="max-h-52 overflow-y-auto divide-y divide-gray-100 dark:divide-gray-800">
+        {loading ? (
+          <div className="flex items-center justify-center py-8 gap-2 text-xs text-gray-400">
+            <Loader2 size={14} className="animate-spin" /> Loading products…
+          </div>
+        ) : filtered.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-8 gap-2">
+            <ShoppingBag
+              size={20}
+              className="text-gray-300 dark:text-gray-700"
+            />
+            <p className="text-xs text-gray-400">No products found</p>
+          </div>
+        ) : (
+          filtered.map((product) => {
+            const isSelected = selected.includes(product._id);
+            return (
+              <div
+                key={product._id}
+                onClick={() => toggle(product._id)}
+                className={`flex items-center gap-3 px-3 py-2.5 cursor-pointer transition-colors ${
+                  isSelected
+                    ? "bg-teal-50 dark:bg-teal-500/10"
+                    : "hover:bg-gray-50 dark:hover:bg-gray-800/50"
+                }`}
+              >
+                {isSelected ? (
+                  <CheckSquare size={14} className="text-teal-500 shrink-0" />
+                ) : (
+                  <Square size={14} className="text-gray-400 shrink-0" />
+                )}
+                <div className="min-w-0 flex-1">
+                  <p
+                    className={`text-xs font-medium truncate ${
+                      isSelected
+                        ? "text-teal-700 dark:text-teal-400"
+                        : "text-gray-800 dark:text-white"
+                    }`}
+                  >
+                    {product.title}
+                  </p>
+                  {(product.category || product.subCategory) && (
+                    <p className="text-[10px] text-gray-400 truncate mt-0.5">
+                      {[product.category, product.subCategory]
+                        .filter(Boolean)
+                        .join(" › ")}
+                    </p>
+                  )}
+                </div>
+                {product.price !== undefined && (
+                  <span className="text-[10px] font-semibold text-gray-500 shrink-0">
+                    {fmt(product.price)}
+                  </span>
+                )}
+              </div>
+            );
+          })
+        )}
+      </div>
+
+      {/* Selected count footer */}
+      {selected.length > 0 && (
+        <div className="px-3 py-2 border-t border-gray-100 dark:border-gray-800 bg-teal-50 dark:bg-teal-500/10 flex items-center justify-between">
+          <span className="text-xs font-semibold text-teal-600 dark:text-teal-400">
+            {selected.length} product{selected.length !== 1 ? "s" : ""} selected
+          </span>
+          <button
+            type="button"
+            onClick={() => onChange([])}
+            className="text-[10px] font-semibold text-red-400 hover:text-red-600 transition-colors"
+          >
+            Clear all
+          </button>
+        </div>
+      )}
+    </div>
+  );
+};
+
+// ── Category Selector Component ────────────────────────────────────
+interface CategorySelectorProps {
+  categoryGroups: ICategoryGroup[];
+  selected: string[];
+  onChange: (cats: string[]) => void;
+  loading: boolean;
+}
+
+const CategorySelector = ({
+  categoryGroups,
+  selected,
+  onChange,
+  loading,
+}: CategorySelectorProps) => {
+  const toggle = (name: string) => {
+    onChange(
+      selected.includes(name)
+        ? selected.filter((s) => s !== name)
+        : [...selected, name],
+    );
+  };
+
+  // Flatten: top-level categories + subCategories
+  const allCategories = useMemo(() => {
+    const result: { name: string; parent?: string }[] = [];
+    for (const group of categoryGroups) {
+      result.push({ name: group.name });
+      if (group.subCategories) {
+        for (const sub of group.subCategories) {
+          result.push({ name: sub, parent: group.name });
+        }
+      }
+    }
+    return result;
+  }, [categoryGroups]);
+
+  return (
+    <div className="border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
+      <div className="max-h-52 overflow-y-auto divide-y divide-gray-100 dark:divide-gray-800">
+        {loading ? (
+          <div className="flex items-center justify-center py-8 gap-2 text-xs text-gray-400">
+            <Loader2 size={14} className="animate-spin" /> Loading categories…
+          </div>
+        ) : allCategories.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-8 gap-2">
+            <Layers size={20} className="text-gray-300 dark:text-gray-700" />
+            <p className="text-xs text-gray-400">No categories found</p>
+          </div>
+        ) : (
+          allCategories.map((cat) => {
+            const isSelected = selected.includes(cat.name);
+            return (
+              <div
+                key={cat.name}
+                onClick={() => toggle(cat.name)}
+                className={`flex items-center gap-3 cursor-pointer transition-colors ${
+                  cat.parent ? "pl-7 pr-3 py-2" : "px-3 py-2.5"
+                } ${
+                  isSelected
+                    ? "bg-teal-50 dark:bg-teal-500/10"
+                    : "hover:bg-gray-50 dark:hover:bg-gray-800/50"
+                }`}
+              >
+                {isSelected ? (
+                  <CheckSquare size={14} className="text-teal-500 shrink-0" />
+                ) : (
+                  <Square size={14} className="text-gray-400 shrink-0" />
+                )}
+                <div className="flex items-center gap-2 min-w-0">
+                  {cat.parent && (
+                    <span className="text-[9px] text-gray-400 shrink-0">↳</span>
+                  )}
+                  <span
+                    className={`text-xs truncate ${
+                      cat.parent
+                        ? "text-gray-600 dark:text-gray-400"
+                        : "font-semibold"
+                    } ${isSelected ? "text-teal-700 dark:text-teal-400" : "text-gray-800 dark:text-white"}`}
+                  >
+                    {cat.name}
+                  </span>
+                  {!cat.parent && (
+                    <span className="text-[9px] font-bold uppercase tracking-wider text-gray-400 bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded-full shrink-0">
+                      Category
+                    </span>
+                  )}
+                </div>
+              </div>
+            );
+          })
+        )}
+      </div>
+
+      {selected.length > 0 && (
+        <div className="px-3 py-2 border-t border-gray-100 dark:border-gray-800 bg-teal-50 dark:bg-teal-500/10 flex items-center justify-between">
+          <span className="text-xs font-semibold text-teal-600 dark:text-teal-400">
+            {selected.length} categor{selected.length !== 1 ? "ies" : "y"}{" "}
+            selected
+          </span>
+          <button
+            type="button"
+            onClick={() => onChange([])}
+            className="text-[10px] font-semibold text-red-400 hover:text-red-600 transition-colors"
+          >
+            Clear all
+          </button>
+        </div>
+      )}
+    </div>
+  );
+};
+
 // ── Main Page ──────────────────────────────────────────────────────
 const AdminCouponsPage = () => {
   const [coupons, setCoupons] = useState<ICoupon[]>([]);
@@ -190,7 +487,14 @@ const AdminCouponsPage = () => {
   const [deleting, setDeleting] = useState<string | null>(null);
   const [copied, setCopied] = useState<string | null>(null);
 
-  // ── Fetch ────────────────────────────────────────────────────
+  // Fetch products & categories for selector
+  const {
+    products,
+    categories: categoryGroups,
+    productsLoading,
+  } = useFetchProduct();
+
+  // ── Fetch coupons ────────────────────────────────────────────
   const fetchCoupons = useCallback(async () => {
     setLoading(true);
     setError(false);
@@ -213,7 +517,7 @@ const AdminCouponsPage = () => {
     fetchCoupons();
   }, [fetchCoupons]);
 
-  // ── Client-side filter by status + sort ──────────────────────
+  // ── Client-side filter + sort ──────────────────────────────
   const filtered = useMemo(() => {
     let list = [...coupons];
     if (filterStatus === "active")
@@ -284,8 +588,8 @@ const AdminCouponsPage = () => {
       getQuantity: c.getQuantity ?? "",
       minOrderAmount: c.minOrderAmount,
       applicableTo: c.applicableTo,
-      productIds: c.productIds.join(", "),
-      categories: c.categories.join(", "),
+      selectedProductIds: c.productIds ?? [],
+      selectedCategories: c.categories ?? [],
       startDate: c.startDate ? c.startDate.slice(0, 10) : "",
       endDate: c.endDate ? c.endDate.slice(0, 10) : "",
       isActive: c.isActive,
@@ -306,6 +610,20 @@ const AdminCouponsPage = () => {
       toast.error("Value is required.");
       return;
     }
+    if (
+      form.applicableTo === "specific_products" &&
+      form.selectedProductIds.length === 0
+    ) {
+      toast.error("Please select at least one product.");
+      return;
+    }
+    if (
+      form.applicableTo === "specific_categories" &&
+      form.selectedCategories.length === 0
+    ) {
+      toast.error("Please select at least one category.");
+      return;
+    }
 
     const payload = {
       code: form.code.toUpperCase().trim(),
@@ -317,18 +635,14 @@ const AdminCouponsPage = () => {
       getQuantity: form.getQuantity !== "" ? Number(form.getQuantity) : null,
       minOrderAmount: Number(form.minOrderAmount),
       applicableTo: form.applicableTo,
-      productIds: form.productIds
-        ? form.productIds
-            .split(",")
-            .map((s) => s.trim())
-            .filter(Boolean)
-        : [],
-      categories: form.categories
-        ? form.categories
-            .split(",")
-            .map((s) => s.trim())
-            .filter(Boolean)
-        : [],
+      productIds:
+        form.applicableTo === "specific_products"
+          ? form.selectedProductIds
+          : [],
+      categories:
+        form.applicableTo === "specific_categories"
+          ? form.selectedCategories
+          : [],
       startDate: form.startDate || null,
       endDate: form.endDate || null,
       isActive: form.isActive,
@@ -399,7 +713,7 @@ const AdminCouponsPage = () => {
     setTimeout(() => setCopied(null), 1500);
   };
 
-  // ── Loading ───────────────────────────────────────────────────
+  // ── Loading skeleton ──────────────────────────────────────────
   if (loading && coupons.length === 0)
     return (
       <div className="p-6 space-y-4 animate-pulse">
@@ -878,7 +1192,7 @@ const AdminCouponsPage = () => {
                         },
                         {
                           label: "Applies To",
-                          value: selected.applicableTo.replace("_", " "),
+                          value: selected.applicableTo.replace(/_/g, " "),
                         },
                         {
                           label: "Start Date",
@@ -923,7 +1237,7 @@ const AdminCouponsPage = () => {
                       </div>
                     )}
 
-                    {/* Categories / Products */}
+                    {/* Categories pills */}
                     {selected.categories.length > 0 && (
                       <div>
                         <p className="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">
@@ -938,6 +1252,31 @@ const AdminCouponsPage = () => {
                               {c}
                             </span>
                           ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Product IDs pills */}
+                    {selected.productIds.length > 0 && (
+                      <div>
+                        <p className="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2 flex items-center gap-1.5">
+                          <ShoppingBag size={11} /> Products (
+                          {selected.productIds.length})
+                        </p>
+                        <div className="flex flex-wrap gap-1.5">
+                          {selected.productIds.map((id) => {
+                            const prod = (products as IProduct[]).find(
+                              (p) => p._id === id,
+                            );
+                            return (
+                              <span
+                                key={id}
+                                className="px-2.5 py-1 rounded-lg text-xs font-semibold bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300"
+                              >
+                                {prod ? prod.title : id}
+                              </span>
+                            );
+                          })}
                         </div>
                       </div>
                     )}
@@ -1132,6 +1471,9 @@ const AdminCouponsPage = () => {
                           ...p,
                           applicableTo: e.target
                             .value as ICoupon["applicableTo"],
+                          // Reset selections when switching scope
+                          selectedProductIds: [],
+                          selectedCategories: [],
                         }))
                       }
                       className={inp}
@@ -1147,32 +1489,52 @@ const AdminCouponsPage = () => {
                   </div>
                 </div>
 
-                {/* Scope inputs */}
+                {/* ── Category Selector ── */}
                 {form.applicableTo === "specific_categories" && (
                   <div>
-                    <label className={lbl}>Categories (comma separated)</label>
-                    <input
-                      type="text"
-                      value={form.categories}
-                      onChange={(e) =>
-                        setForm((p) => ({ ...p, categories: e.target.value }))
+                    <label className={lbl}>
+                      <span className="flex items-center gap-1.5">
+                        <Layers size={11} />
+                        Select Categories *
+                        {form.selectedCategories.length > 0 && (
+                          <span className="ml-1 px-1.5 py-0.5 rounded-full bg-teal-500 text-white text-[9px] font-bold">
+                            {form.selectedCategories.length}
+                          </span>
+                        )}
+                      </span>
+                    </label>
+                    <CategorySelector
+                      categoryGroups={categoryGroups as ICategoryGroup[]}
+                      selected={form.selectedCategories}
+                      onChange={(cats) =>
+                        setForm((p) => ({ ...p, selectedCategories: cats }))
                       }
-                      className={inp}
-                      placeholder="Electronics, Clothing, Books"
+                      loading={productsLoading}
                     />
                   </div>
                 )}
+
+                {/* ── Product Selector ── */}
                 {form.applicableTo === "specific_products" && (
                   <div>
-                    <label className={lbl}>Product IDs (comma separated)</label>
-                    <input
-                      type="text"
-                      value={form.productIds}
-                      onChange={(e) =>
-                        setForm((p) => ({ ...p, productIds: e.target.value }))
+                    <label className={lbl}>
+                      <span className="flex items-center gap-1.5">
+                        <ShoppingBag size={11} />
+                        Select Products *
+                        {form.selectedProductIds.length > 0 && (
+                          <span className="ml-1 px-1.5 py-0.5 rounded-full bg-teal-500 text-white text-[9px] font-bold">
+                            {form.selectedProductIds.length}
+                          </span>
+                        )}
+                      </span>
+                    </label>
+                    <ProductSelector
+                      products={products as IProduct[]}
+                      selected={form.selectedProductIds}
+                      onChange={(ids) =>
+                        setForm((p) => ({ ...p, selectedProductIds: ids }))
                       }
-                      className={inp}
-                      placeholder="productId1, productId2"
+                      loading={productsLoading}
                     />
                   </div>
                 )}
