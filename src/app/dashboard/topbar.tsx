@@ -166,11 +166,11 @@ const Topbar = ({
 
       {/* ── Right actions ── */}
       <div className="flex items-center gap-1 sm:gap-2 ml-auto">
-        {/* DarkMode toggle — তোমার existing component */}
+        {/* DarkMode toggle — existing component */}
         <DarkMode />
 
-        {/* Notifications */}
-        <div ref={notificationRef} className="relative">
+        {/* //! Notifications */}
+        {/* <div ref={notificationRef} className="relative">
           <button
             onClick={() => {
               setShowNotifications(!showNotifications);
@@ -257,7 +257,8 @@ const Topbar = ({
               </motion.div>
             )}
           </AnimatePresence>
-        </div>
+        </div> */}
+        {/* //! Notifications */}
 
         {/* Divider */}
         <div className="w-px h-5 bg-gray-200 dark:bg-white/[0.08] mx-1" />
