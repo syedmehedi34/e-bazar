@@ -17,6 +17,7 @@ import {
   Lock,
 } from "lucide-react";
 
+//
 const perks = [
   { icon: ShoppingBag, label: "10,000+ curated products" },
   { icon: Star, label: "Exclusive member discounts" },
