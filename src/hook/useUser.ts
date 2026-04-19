@@ -5,15 +5,15 @@ import { useSession } from "next-auth/react";
 
 interface User {
   _id: string;
-  name: string;
-  email: string;
-  photo: string;
-  role: "user" | "admin";
+  name?: string;
+  email?: string;
+  photo?: string;
+  role?: "user" | "admin";
   mobileNumber?: string;
-  wishList: string[];
+  wishList?: string[];
   fullAddress?: string;
-  createdAt: string;
-  updatedAt: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 interface UseUserReturn {

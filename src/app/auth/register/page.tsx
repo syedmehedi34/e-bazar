@@ -100,14 +100,14 @@ const Register = () => {
     }
   };
 
-  // const handleLoginWithGoogle = async () => {
-  //   try {
-  //     await signIn("google", { callbackUrl: "/" });
-  //   } catch (error) {
-  //     console.error("Google login failed:", error);
-  //     toast.error("Google sign-in failed. Please try again.");
-  //   }
-  // };
+  const handleLoginWithGoogle = async () => {
+    try {
+      await signIn("google", { callbackUrl: "/" });
+    } catch (error) {
+      console.error("Google login failed:", error);
+      toast.error("Google sign-in failed. Please try again.");
+    }
+  };
 
   return (
     <div className="min-h-screen flex">
@@ -248,7 +248,7 @@ const Register = () => {
 
           {/* Google Sign Up */}
           <button
-            // onClick={handleLoginWithGoogle}
+            onClick={handleLoginWithGoogle}
             disabled={loading}
             className="w-full flex items-center justify-center gap-3
                        py-3 px-4 rounded-xl text-sm font-semibold

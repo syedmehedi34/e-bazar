@@ -9,7 +9,7 @@ const UserSchema = new mongoose.Schema(
       default:
         "https://img.icons8.com/?size=100&id=21441&format=png&color=000000",
     },
-    password: { type: String, required: true },
+    password: { type: String, required: false, default: null },
     role: {
       type: String,
       enum: ["user", "admin"],

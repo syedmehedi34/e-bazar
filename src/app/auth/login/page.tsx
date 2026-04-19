@@ -1,3 +1,4 @@
+// src/app/auth/login/page.tsx
 "use client";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
@@ -26,6 +27,7 @@ const LoginPage = () => {
   const router = useRouter();
   const callbackUrl = searchParams.get("callbackUrl") || "/";
 
+  // demo login handlers
   const handleUserLogin = () => {
     setEmail("mehedihasan@email.com");
     setPassword("user@123Login");
@@ -35,6 +37,7 @@ const LoginPage = () => {
     setPassword("admin@123Login");
   };
 
+  // login with credentials handler
   const handleCredentialsLogin = async (
     e: React.FormEvent<HTMLFormElement>,
   ) => {
@@ -71,6 +74,7 @@ const LoginPage = () => {
     }
   };
 
+  // login with google handler
   const handleLoginWithGoogle = async () => {
     try {
       await signIn("google", { callbackUrl: "/" });
