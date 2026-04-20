@@ -56,7 +56,7 @@ const Pagination = <T,>({
             ${
               currentPage === 1
                 ? "bg-gray-100 text-gray-400 cursor-not-allowed border-gray-200"
-                : "bg-white text-indigo-600 hover:bg-indigo-50 border-indigo-200"
+                : "bg-white text-teal-600 hover:bg-teal-50 border-teal-200"
             }`}
         >
           Prev
@@ -72,8 +72,8 @@ const Pagination = <T,>({
               className={`w-10 h-10 rounded-lg font-medium transition-all
                 ${
                   currentPage === page
-                    ? "bg-linear-to-r from-indigo-600 to-indigo-700 text-white shadow-md"
-                    : "bg-white text-gray-700 hover:bg-indigo-50 border border-gray-200"
+                    ? "bg-linear-to-r from-teal-600 to-teal-700 text-white shadow-md"
+                    : "bg-white text-gray-700 hover:bg-teal-50 border border-gray-200"
                 }`}
             >
               {page}
@@ -89,7 +89,7 @@ const Pagination = <T,>({
             ${
               currentPage === totalPages
                 ? "bg-gray-100 text-gray-400 cursor-not-allowed border-gray-200"
-                : "bg-white text-indigo-600 hover:bg-indigo-50 border-indigo-200"
+                : "bg-white text-teal-600 hover:bg-teal-50 border-teal-200"
             }`}
         >
           Next

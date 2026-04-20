@@ -25,6 +25,9 @@ import {
   User as UserIcon,
 } from "lucide-react";
 
+// Import Pagination Component
+import Pagination from "@/Components/Pagination2"; // ← Adjust path if needed
+
 // ── Types ──────────────────────────────────────────────────────────
 interface IUser {
   _id: string;
@@ -59,6 +62,7 @@ const closeModal = () =>
 // ── Main Component ─────────────────────────────────────────────────
 const AdminUsersPage = () => {
   const [allUsers, setAllUsers] = useState<IUser[]>([]);
+  const [paginatedUsers, setPaginatedUsers] = useState<IUser[]>([]); // ← Added back
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -397,7 +401,7 @@ const AdminUsersPage = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
-                {sortedUsers.length === 0 && !loading ? (
+                {paginatedUsers.length === 0 && !loading ? (
                   <tr>
                     <td colSpan={6} className="py-20 text-center">
                       <Users
@@ -410,7 +414,7 @@ const AdminUsersPage = () => {
                     </td>
                   </tr>
                 ) : (
-                  sortedUsers.map((user) => (
+                  paginatedUsers.map((user) => (
                     <tr
                       key={user._id}
                       onClick={() => openView(user)}
@@ -510,6 +514,15 @@ const AdminUsersPage = () => {
                 )}
               </tbody>
             </table>
+          </div>
+
+          {/* Pagination Component Added Here */}
+          <div className="px-5 py-4 border-t border-gray-100 dark:border-gray-800">
+            <Pagination
+              data={sortedUsers}
+              itemsPerPage={10} // You can change this number if you want
+              onPageDataChange={setPaginatedUsers}
+            />
           </div>
         </div>
       </div>
