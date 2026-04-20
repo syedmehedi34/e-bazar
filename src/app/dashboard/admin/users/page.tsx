@@ -169,6 +169,10 @@ const AdminUsersPage = () => {
     role: "user" as "user" | "admin",
   });
 
+  // ?
+  console.log(allUsers);
+  // ?
+
   // ── Fetch Users (No pagination) ────────────────────────────────
   const fetchUsers = useCallback(async () => {
     setLoading(true);
