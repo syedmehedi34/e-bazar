@@ -56,98 +56,9 @@ const openModal = () =>
 const closeModal = () =>
   (document.getElementById(MODAL_ID) as HTMLDialogElement)?.close();
 
-// ── Pagination Component ───────────────────────────────────────────
-interface PaginationProps<T> {
-  data?: T[];
-  itemsPerPage?: number;
-  onPageDataChange: (items: T[]) => void;
-}
-
-const Pagination = <T,>({
-  data = [],
-  itemsPerPage = 15,
-  onPageDataChange,
-}: PaginationProps<T>) => {
-  const [currentPage, setCurrentPage] = useState<number>(1);
-
-  const totalPages = Math.ceil(data.length / itemsPerPage);
-
-  const startItem =
-    data.length === 0 ? 0 : (currentPage - 1) * itemsPerPage + 1;
-  const endItem = Math.min(currentPage * itemsPerPage, data.length);
-
-  useEffect(() => {
-    const currentItems = data.slice(
-      (currentPage - 1) * itemsPerPage,
-      currentPage * itemsPerPage,
-    );
-    onPageDataChange(currentItems);
-  }, [currentPage, data, itemsPerPage, onPageDataChange]);
-
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [data]);
-
-  if (totalPages <= 1) return null;
-
-  return (
-    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mt-8 gap-5 flex-wrap">
-      <div className="text-sm text-gray-600 text-center sm:text-left">
-        Showing <span className="font-semibold">{startItem}</span> to{" "}
-        <span className="font-semibold">{endItem}</span> of{" "}
-        <span className="font-semibold">{data.length}</span> users
-      </div>
-
-      <div className="flex items-center gap-2 flex-wrap justify-center">
-        <button
-          onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
-          disabled={currentPage === 1}
-          className={`px-4 py-2 rounded-lg border font-medium transition-colors ${
-            currentPage === 1
-              ? "bg-gray-100 text-gray-400 cursor-not-allowed border-gray-200"
-              : "bg-white text-teal-600 hover:bg-teal-50 border-teal-200"
-          }`}
-        >
-          Prev
-        </button>
-
-        {Array.from({ length: totalPages }).map((_, index) => {
-          const page = index + 1;
-          return (
-            <button
-              key={page}
-              onClick={() => setCurrentPage(page)}
-              className={`w-10 h-10 rounded-lg font-medium transition-all ${
-                currentPage === page
-                  ? "bg-teal-600 text-white shadow-md"
-                  : "bg-white text-gray-700 hover:bg-teal-50 border border-gray-200"
-              }`}
-            >
-              {page}
-            </button>
-          );
-        })}
-
-        <button
-          onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
-          disabled={currentPage === totalPages}
-          className={`px-4 py-2 rounded-lg border font-medium transition-colors ${
-            currentPage === totalPages
-              ? "bg-gray-100 text-gray-400 cursor-not-allowed border-gray-200"
-              : "bg-white text-teal-600 hover:bg-teal-50 border-teal-200"
-          }`}
-        >
-          Next
-        </button>
-      </div>
-    </div>
-  );
-};
-
 // ── Main Component ─────────────────────────────────────────────────
 const AdminUsersPage = () => {
   const [allUsers, setAllUsers] = useState<IUser[]>([]);
-  const [paginatedUsers, setPaginatedUsers] = useState<IUser[]>([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -169,11 +80,7 @@ const AdminUsersPage = () => {
     role: "user" as "user" | "admin",
   });
 
-  // ?
-  console.log(allUsers);
-  // ?
-
-  // ── Fetch Users (No pagination) ────────────────────────────────
+  // ── Fetch Users ───────────────────────────────────────────────────
   const fetchUsers = useCallback(async () => {
     setLoading(true);
     setError(false);
@@ -490,7 +397,7 @@ const AdminUsersPage = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
-                {paginatedUsers.length === 0 && !loading ? (
+                {sortedUsers.length === 0 && !loading ? (
                   <tr>
                     <td colSpan={6} className="py-20 text-center">
                       <Users
@@ -503,7 +410,7 @@ const AdminUsersPage = () => {
                     </td>
                   </tr>
                 ) : (
-                  paginatedUsers.map((user) => (
+                  sortedUsers.map((user) => (
                     <tr
                       key={user._id}
                       onClick={() => openView(user)}
@@ -603,15 +510,6 @@ const AdminUsersPage = () => {
                 )}
               </tbody>
             </table>
-          </div>
-
-          {/* Client Side Pagination */}
-          <div className="px-5 py-4 border-t border-gray-100 dark:border-gray-800">
-            <Pagination
-              data={sortedUsers}
-              itemsPerPage={15}
-              onPageDataChange={setPaginatedUsers}
-            />
           </div>
         </div>
       </div>
